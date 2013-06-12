@@ -1,1 +1,1 @@
-Dieses Verzeichnis enthält Ressourcen.
+Dieses Verzeichnis enthält JUnit-Testfälle.
