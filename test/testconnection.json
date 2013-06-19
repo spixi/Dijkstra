@@ -19,7 +19,7 @@
     },
     {
         "id": "2",
-        "name": "Düsseldorf",
+        "name": "Duesseldorf",
         "destinations": [
             {
                 "id": "3",
@@ -73,7 +73,7 @@
     },
     {
         "id": "5",
-        "name": "Brüssel",
+        "name": "Bruessel",
         "destinations": [
             {
                 "id": "2",
