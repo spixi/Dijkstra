@@ -1,1 +1,0 @@
-Dieses Verzeichnis enthält JUnit-Testfälle.

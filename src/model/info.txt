@@ -1,0 +1,1 @@
+Here goes the Classes for fetching data from the file as the locations and its distances
