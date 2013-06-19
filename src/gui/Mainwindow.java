@@ -3,7 +3,6 @@ package gui;
 import helpers.ClassRouteHelper;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -11,7 +10,7 @@ import javax.swing.JList;
 
 @SuppressWarnings("serial")
 public class Mainwindow extends JFrame {
-
+	
 	public void draw() {
 		super.setTitle("Dijkstra");
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -20,7 +19,7 @@ public class Mainwindow extends JFrame {
 		
 		// Create the first list container
 		//JPanel leftList = new JPanel();
-		JList<String> leftList = new JList<>(ClassRouteHelper.getLocalListModel().getPossibleLocations());
+		JList<String> leftList = new JList<>(ClassRouteHelper.getListModel().getLocations());
 		JList<String> rightList = new JList<>(new DefaultListModel<String>());
 		
 		leftList.addMouseListener(new ActionHandling());
