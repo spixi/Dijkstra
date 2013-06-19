@@ -11,7 +11,11 @@ public class DummyImplListDataModel implements ListDataModel {
 		return new Vector<String>(Arrays.asList(
 									"Berlin",
 									"London", 
-									"Aachen"
+									"Aachen",
+									"Köln",
+									"Kairo",
+									"Frankfurt",
+									"Dubai"
 								));
 	}
 
