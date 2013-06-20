@@ -17,8 +17,8 @@ public class ClassRouteHelper {
 	 * @return {@link ListDataModel} a instance of an ListDataModel implementation
 	 */
 	public static ListDataModel getListModel() {
-		//return new DummyImplListDataModel();
-		return new ImplListDataModel();
+		return new DummyImplListDataModel();
+		//return new ImplListDataModel();
 	}
 	
 }
