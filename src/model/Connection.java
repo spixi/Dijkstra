@@ -11,10 +11,12 @@ import org.joda.time.Duration;
  */
 
 public class Connection {
-	private Airport  destination;
+	private Integer  destination; //The connection only knows the id of the destination airport,
+	                              //so you can add destinations even when the corresponding airports
+	                              //are (not yet) created.
 	private Duration duration;
 	
-	public Connection(Airport destination, Duration duration) {
+	public Connection(Integer destination, Duration duration) {
 		this.setDestination(destination);
 		this.setDuration(duration);
 	}
@@ -27,19 +29,19 @@ public class Connection {
 		this.duration = duration;
 	}
 
-	public Airport getDestination() {
+	public Integer getDestination() {
 		return this.destination;
 	}
 
 
-	public void setDestination(Airport destination) {
+	public void setDestination(Integer destination) {
 		this.destination = destination;
 	}
 	
     @Override
 	public int hashCode() {
     	//We take the id of the airport as hash key
-		return this.destination.getId();
+		return getDestination();
 	}
 
 }

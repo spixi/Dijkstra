@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -17,6 +19,10 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import model.BadFileFormatException;
+
+import org.json.simple.parser.ParseException;
 
 @SuppressWarnings("serial")
 public class Mainwindow extends JFrame implements MouseListener, ActionListener {
@@ -34,7 +40,21 @@ public class Mainwindow extends JFrame implements MouseListener, ActionListener 
 		JPanel lists = new JPanel();
 		lists.setLayout(new GridLayout(1,3,2,0));
 		//lists.setLayout(new FlowLayout());
-		this.leftList = new JList<>(ClassRouteHelper.getListModel().getLocations());
+		try {
+			this.leftList = new JList<>(ClassRouteHelper.getListModel().getLocations());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadFileFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.rightList = new JList<>(new DefaultListModel<String>());
 		
 		JButton addButton = new JButton(">>");

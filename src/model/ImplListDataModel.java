@@ -1,14 +1,15 @@
 package model;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Vector;
 
 public class ImplListDataModel implements ListDataModel {
 	
-	private LinkedList<Airport> airportList;
+	private HashSet<Airport> airportList;
 	
 	public ImplListDataModel() {
-		airportList = new LinkedList<Airport>();
+		airportList = new HashSet<Airport>();
 	}
 
 	@Override
@@ -19,7 +20,7 @@ public class ImplListDataModel implements ListDataModel {
 		return v;
 	} 
 
-	public LinkedList<Airport> getAirportList() {
+	public HashSet<Airport> getAirportList() {
 		return airportList;
 	}
 

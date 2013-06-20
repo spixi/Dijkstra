@@ -1,7 +1,14 @@
 package helpers;
 
-import model.DummyImplListDataModel;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
+
+import model.BadFileFormatException;
 import model.ImplListDataModel;
+import model.ImplListDataModelFactory;
 import model.ListDataModel;
 
 /**
@@ -15,10 +22,14 @@ public class ClassRouteHelper {
 	/**
 	 * This method shall ALWAYS return a instance of the correct class to use (the correct implementation)
 	 * @return {@link ListDataModel} a instance of an ListDataModel implementation
+	 * @throws BadFileFormatException 
+	 * @throws ParseException 
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 */
-	public static ListDataModel getListModel() {
-		return new DummyImplListDataModel();
-		//return new ImplListDataModel();
+	public static ListDataModel getListModel() throws FileNotFoundException, IOException, ParseException, BadFileFormatException {
+		File f = new File("test/testconnection.json");
+		return ImplListDataModelFactory.INSTANCE.factory(f);
 	}
 	
 }

@@ -49,7 +49,7 @@ public class ModelTest {
     public void testConnection1() {
 		Duration d = DateHelper.INSTANCE.stringToDuration("00:35");
 		
-		Connection c = new Connection(a,d);
+		Connection c = new Connection(id,d);
 		
 		assertEquals(a, c.getDestination());
 		assertEquals(d, c.getDuration());	
@@ -58,15 +58,15 @@ public class ModelTest {
 	@Test
 	//Test the setters and getters of the class Connection
     public void testConnection2() {
-		Airport  new_airport  = new Airport(2,"Berlin");
+		Integer  new_id       = 2;
 		Duration new_duration = DateHelper.INSTANCE.stringToDuration("00:40");
 		
 		Connection c = new Connection(null,null);
 		
-		c.setDestination(new_airport);
+		c.setDestination(new_id);
 		c.setDuration(new_duration);
 		
-		assertEquals(new_airport, c.getDestination());
+		assertEquals(new_id, c.getDestination());
 		assertEquals(new_duration, c.getDuration());	
     }
 	
