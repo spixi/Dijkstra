@@ -1,6 +1,5 @@
 package controller;
 
-import model.ImplListDataModel;
 import gui.Mainwindow;
 
 /**
