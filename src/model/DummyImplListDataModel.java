@@ -11,18 +11,19 @@ import model.ListDataModel;
  * @author serjoscha-87
  */
 
-public class DummyImplListDataModel implements ListDataModel {
-
-	public Vector<String> getLocations() {
-		return new Vector<String>(Arrays.asList(
-									"Berlin",
-									"London", 
-									"Aachen",
-									"Köln",
-									"Kairo",
-									"Frankfurt",
-									"Dubai"
-								));
+public final class DummyImplListDataModel extends ImplListDataModel {
+	
+	public DummyImplListDataModel() {
+		super();
+		getAirportList().addAll( Arrays.asList(
+				new Airport (1, "Berlin"),
+				new Airport (2, "London"), 
+				new Airport (3, "Aachen"),
+				new Airport (4, "Köln"),
+				new Airport (5, "Kairo"),
+				new Airport (6, "Frankfurt"),
+				new Airport (7, "Dubai") 
+		) );
 	}
 
 }
