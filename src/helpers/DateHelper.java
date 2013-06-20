@@ -2,15 +2,14 @@ package helpers;
 
 import org.joda.time.Duration;
 import org.joda.time.Period;
+import org.joda.time.Seconds;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
-import org.joda.time.format.PeriodParser;
 
 public final class DateHelper {
 	public static final DateHelper INSTANCE = new DateHelper();
 	private PeriodFormatterBuilder builder;
 	private PeriodFormatter formatter;
-	private PeriodParser parser;
 	
 	private DateHelper() {
 	    builder = new PeriodFormatterBuilder();
@@ -26,9 +25,16 @@ public final class DateHelper {
     	return formatter.print(p.toPeriod());
     }
     
-    public Duration stringToDuration(String s) {
+    public Duration stringToDuration(String s) throws IllegalArgumentException {
     	Period p = Period.parse(s,formatter);
-    	return p.toStandardDuration();
+    	
+    	if (p.toStandardSeconds().isGreaterThan(Seconds.ZERO)) {
+        	return p.toStandardDuration();
+    	}
+    	else {
+    		return p.negated().toStandardDuration();
+    	}
+    	
     }
 
 }

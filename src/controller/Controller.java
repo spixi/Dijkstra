@@ -1,6 +1,5 @@
 package controller;
 
-import model.ImplListDataModel;
 import gui.Mainwindow;
 
 /**
@@ -8,14 +7,17 @@ import gui.Mainwindow;
  */
 public class Controller {
 
-	public Controller() {
+	private final static Controller INSTANCE = new Controller();
+	private Controller() { };
+	
+	private void callMainwindow() {
 		// Render the userinterface
 		Mainwindow mwObj = new Mainwindow();
 		mwObj.draw();
 	}
 
 	public static void main(String[] args) {
-		new Controller();
+		INSTANCE.callMainwindow();
 	}
 
 }

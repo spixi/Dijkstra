@@ -3,8 +3,6 @@ package gui;
 import helpers.ClassRouteHelper;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.ListModel;
 
 @SuppressWarnings("serial")
 public class Mainwindow extends JFrame implements MouseListener, ActionListener {
@@ -73,7 +70,7 @@ public class Mainwindow extends JFrame implements MouseListener, ActionListener 
 	public void mouseClicked(MouseEvent e) {
 		if(e.getClickCount()==2) {
 			// Get the list which fired the event
-			JList<String> list = (JList)e.getSource();
+			JList<String> list = (JList<String>)e.getSource();
 			// List Model/Data for the right list
 			DefaultListModel<String> lm = (DefaultListModel<String>)this.rightList.getModel();
 			if(list.getName().equals("ll")) {
