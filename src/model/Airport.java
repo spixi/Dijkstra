@@ -15,6 +15,8 @@ public class Airport {
 	private String name;
 	private HashMap<Airport,Connection> connections = new HashMap<Airport,Connection>();
 	
+	protected Airport() {}
+	
 	public Airport(String name) {
 		this.setName(name);
 	}
