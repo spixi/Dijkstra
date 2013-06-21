@@ -31,21 +31,34 @@ public class Mainwindow extends JFrame implements MouseListener, ActionListener 
 		super.setTitle("Dijkstra");
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		super.setLayout(new BoxLayout(super.getContentPane(), BoxLayout.PAGE_AXIS));
+		super.setLayout(new BoxLayout(super.getContentPane(), BoxLayout.Y_AXIS));
 		
 		// Create a container for the lists and the lists them self
 		JPanel lists = new JPanel();
-		lists.setLayout(new GridLayout(1,3,2,0));
+		
+		// Container for the left list and the add button
+		JPanel llNbContainer = new JPanel();
+		//lists.setLayout(new GridLayout(1,3,2,0));
 		//lists.setLayout(new FlowLayout());
+		lists.setLayout(new BorderLayout());
+		llNbContainer.setLayout(new BorderLayout());
+		
+		// Create the lists
 		this.leftList = new JList<>(ClassRouteHelper.getListModel().getLocations());
 		this.rightList = new JList<>(new DefaultListModel<String>());
 		
 		JButton addButton = new JButton(">>");
 		
 		// Add the elements to the container
-		lists.add(leftList);
-		lists.add(addButton);
-		lists.add(rightList);
+		//lists.add(leftList);
+		//lists.add(addButton);
+		//lists.add(rightList);
+		
+		llNbContainer.add(leftList,BorderLayout.CENTER);
+		llNbContainer.add(addButton, BorderLayout.EAST);
+		
+		lists.add(llNbContainer,BorderLayout.CENTER);
+		lists.add(rightList, BorderLayout.LINE_END);
 		
 		// Create a action button making everything preform
 		JButton startAction = new JButton("Berechnen");
