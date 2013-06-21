@@ -21,26 +21,20 @@ public class ModelTest {
 	public void setUp() throws Exception {
 		id = 1;
 		name = "Frankfurt";
-		a = new Airport(id,name);
+		a = new Airport(name);
 	}
 
 	@Test
 	//Test the constructor of the class Airport
 	public void testAirport1() {
-		assertEquals(id, a.getId());
 		assertEquals(name, a.getName());
 	}
 	
 	@Test
 	//Test the setters of the class Airport
 	public void testAirport2() {
-		Integer new_id   = 2;
 		String  new_name = "London";
-		
-		a.setId(new_id);
 		a.setName(new_name);
-		
-		assertEquals(new_id, a.getId());
 		assertEquals(new_name, a.getName());
 	}
 	
@@ -49,24 +43,18 @@ public class ModelTest {
     public void testConnection1() {
 		Duration d = DateHelper.INSTANCE.stringToDuration("00:35");
 		
-		Connection c = new Connection(id,d);
-		
-		assertEquals(a, c.getDestination());
+		Connection c = new Connection(d);
 		assertEquals(d, c.getDuration());	
     }
 	
 	@Test
 	//Test the setters and getters of the class Connection
     public void testConnection2() {
-		Integer  new_id       = 2;
 		Duration new_duration = DateHelper.INSTANCE.stringToDuration("00:40");
 		
-		Connection c = new Connection(null,null);
-		
-		c.setDestination(new_id);
+		Connection c = new Connection(null);
 		c.setDuration(new_duration);
 		
-		assertEquals(new_id, c.getDestination());
 		assertEquals(new_duration, c.getDuration());	
     }
 	
