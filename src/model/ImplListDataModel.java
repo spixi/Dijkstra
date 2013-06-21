@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -23,6 +24,18 @@ public class ImplListDataModel implements ListDataModel {
 
 	public HashMap<Long,Airport> getAirportList() {
 		return airportList;
+	}
+
+	@Override
+	public String getFormattedDuration() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<String> getRouteHops() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

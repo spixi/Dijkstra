@@ -1,5 +1,14 @@
 package controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
+
+import model.BadFileFormatException;
+import model.ImplListDataModelFactory;
+import model.ListDataModel;
 import calc.Calculation;
 import gui.Mainwindow;
 
@@ -8,13 +17,24 @@ import gui.Mainwindow;
  */
 public class Controller {
 
-	private final static Controller INSTANCE = new Controller();
-	private Controller() { };
+	private ListDataModel model;
+	private Mainwindow    view;
+	
+	public final static Controller INSTANCE = new Controller();
+	private Controller() {
+		view = new Mainwindow();
+	};
+	
+	public void readFile(File f) throws FileNotFoundException, IOException, ParseException, BadFileFormatException {
+		model = ImplListDataModelFactory.INSTANCE.factory(f);
+	}
+	
+	public ListDataModel getModel() {
+		return model;
+	}
 	
 	private void callMainwindow() {
-		// Render the userinterface
-		Mainwindow mwObj = new Mainwindow();
-		mwObj.draw();
+		view.draw();
 	}
 
 	public static void main(String[] args) {
