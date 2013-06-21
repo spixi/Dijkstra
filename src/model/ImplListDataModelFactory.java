@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.json.simple.JSONArray;
@@ -20,53 +21,67 @@ public class ImplListDataModelFactory {
 	private ImplListDataModelFactory() { }
 	
 	public ImplListDataModel factory(Reader r) throws IOException, ParseException, BadFileFormatException {
-//TODO: non-confusing variable names
-		
+
 		ImplListDataModel product = new ImplListDataModel();
 		
 		JSONParser parser = new JSONParser();
 		
-		JSONArray data = cast(parser.parse(r), JSONArray.class);
+		JSONArray baseArray = cast(parser.parse(r), JSONArray.class);
 		
-		HashSet<Airport> airportList = product.getAirportList();
+		HashMap<Long,Airport> airportList = product.getAirportList();
 		
-		for(Object o : data) {
-			JSONObject airport = cast(o, JSONObject.class);
+		
+		//Parse the airports first
+		for(Object o : baseArray) {
+			JSONObject airportObject = cast(o, JSONObject.class);
 			
-			String id   =            cast(airport.get("id"),String.class);
-			String name =            cast(airport.get("name"),String.class);
-			JSONArray destinations = cast(airport.get("destinations"),JSONArray.class);
+			Long id     =  cast(airportObject.get("id"),Long.class);
+			String name =  cast(airportObject.get("name"),String.class);
 			
-			Airport a             = new Airport(Integer.valueOf(id),name);
-			HashSet<Connection> c = a.getConnections();
+			airportList.put(id, new Airport(name));
+		}
+		
+		//Then parse the connections
+		for(Object o : baseArray) {
+			JSONObject airportObject = cast(o, JSONObject.class);
 			
-			// TODO comments
+			Long      id      = cast(airportObject.get("id"),Long.class);
+			Airport   airport = airportList.get(id);
+			
+			//airport cannot be found, so skip it
+			if (airport == null)
+				continue;
+			
+			JSONArray destinations = cast(airportObject.get("destinations"),JSONArray.class);
+			
 			for(Object p : destinations) {
 				JSONObject connections = cast(p, JSONObject.class);
 				
-				String id2      = cast(connections.get("id"),String.class);
-				String duration = cast(connections.get("duration"),String.class);
+				Long    destination_id       = cast(connections.get("id"),Long.class);
+				Airport destination_airport  = airportList.get(destination_id);
+				String duration              = cast(connections.get("duration"),String.class);
+				
+				HashMap<Airport,Connection> c = airport.getConnections();
 				
 				Connection connection =
-						new Connection(Integer.valueOf(id2),
-						               DateHelper.INSTANCE.stringToDuration(duration));
+						new Connection(DateHelper.INSTANCE.stringToDuration(duration));
 				
-				c.add(connection);
+				c.put(destination_airport, connection);
 			}
-			
-			airportList.add(a);
 		}
-		
-		System.out.println(data);
 
 		return product;
 	}
 	
 	//TODO: more meaningful and understandable message
 	@SuppressWarnings("unchecked")
-	private <T> T cast(Object o, Class<T> clazz) throws BadFileFormatException {
-		if (o.getClass() != clazz) {
-			throw new BadFileFormatException("Fehlerhaftes Dateiformat!");
+	private <T> T cast(Object o, Class<T> expectedClass) throws BadFileFormatException {
+		Class<?> catchedClass = o.getClass();
+		if (catchedClass != expectedClass) {
+			throw new BadFileFormatException("Fehlerhaftes Format!"
+					                         + " Feld: "     + o.toString()
+					                         + " Erwartet: " + expectedClass.toString()
+					                         + " Gefunden: " + catchedClass.toString() );
 		}
 		return (T)o;
 	}

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 /**
@@ -11,21 +12,11 @@ import java.util.LinkedHashSet;
  */
 
 public class Airport {
-	private Integer id;
 	private String name;
-	private LinkedHashSet<Connection> connections = new LinkedHashSet<Connection>();
+	private HashMap<Airport,Connection> connections = new HashMap<Airport,Connection>();
 	
-	public Airport(Integer id, String name) {
-		this.setId(id);
+	public Airport(String name) {
 		this.setName(name);
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -36,13 +27,7 @@ public class Airport {
 		this.name = name;
 	}
 
-	public LinkedHashSet<Connection> getConnections() {
+	public HashMap<Airport,Connection> getConnections() {
 		return this.connections;
-	}
-	
-    @Override
-	public int hashCode() {
-    	//We take the id of the airport as hash key
-		return getId();
 	}
 }
