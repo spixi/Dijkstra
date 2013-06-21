@@ -39,4 +39,10 @@ public class Airport {
 	public LinkedHashSet<Connection> getConnections() {
 		return this.connections;
 	}
+	
+    @Override
+	public int hashCode() {
+    	//We take the id of the airport as hash key
+		return getId();
+	}
 }

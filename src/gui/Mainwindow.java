@@ -3,6 +3,7 @@ package gui;
 import helpers.ClassRouteHelper;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -10,10 +11,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -21,59 +28,49 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListModel;
 
+import org.json.simple.parser.ParseException;
+
+import calc.Calculation;
+
+import sun.management.snmp.jvmmib.JvmCompilationMeta;
+
+import model.BadFileFormatException;
+
 @SuppressWarnings("serial")
-public class Mainwindow extends JFrame implements MouseListener, ActionListener {
+public class Mainwindow extends JFrame implements ActionListener {
 	
-	private JList<String> leftList;
-	private JList<String> rightList;
+	private JComboBox<String> leftList;
+	private JComboBox<String> rightList;
 	
 	public void draw() {
 		super.setTitle("Dijkstra");
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		super.setLayout(new BoxLayout(super.getContentPane(), BoxLayout.Y_AXIS));
+		super.setLayout(new GridLayout(3,2,2,2));
 		
-		// Create a container for the lists and the lists them self
-		JPanel lists = new JPanel();
-		
-		// Container for the left list and the add button
-		JPanel llNbContainer = new JPanel();
-		//lists.setLayout(new GridLayout(1,3,2,0));
-		//lists.setLayout(new FlowLayout());
-		lists.setLayout(new BorderLayout());
-		llNbContainer.setLayout(new BorderLayout());
-		
+		((JComponent)getContentPane()).setBorder(BorderFactory.createMatteBorder( 4, 4, 4, 4, Color.LIGHT_GRAY ) ); 
+	
 		// Create the lists
-		this.leftList = new JList<>(ClassRouteHelper.getListModel().getLocations());
-		this.rightList = new JList<>(new DefaultListModel<String>());
+		try {
+			this.leftList = new JComboBox<String>(ClassRouteHelper.getListModel().getLocations());
+			this.rightList = new JComboBox<String>(ClassRouteHelper.getListModel().getLocations());
+		} catch (FileNotFoundException e) { e.printStackTrace(); // TODO why doing exception handling here within the view ?
+		} catch (IOException e) { e.printStackTrace();
+		} catch (ParseException e) { e.printStackTrace();
+		} catch (BadFileFormatException e) {e.printStackTrace(); }
 		
-		JButton addButton = new JButton(">>");
-		
-		// Add the elements to the container
-		//lists.add(leftList);
-		//lists.add(addButton);
-		//lists.add(rightList);
-		
-		llNbContainer.add(leftList,BorderLayout.CENTER);
-		llNbContainer.add(addButton, BorderLayout.EAST);
-		
-		lists.add(llNbContainer,BorderLayout.CENTER);
-		lists.add(rightList, BorderLayout.LINE_END);
-		
-		// Create a action button making everything preform
+		// Create a button for beeding able to submit the action
 		JButton startAction = new JButton("Berechnen");
 		
-		// Action listener assignments
-		leftList.addMouseListener(this);
-		leftList.setName("ll");
-		rightList.addMouseListener(this);
-		rightList.setName("rl");
+		// Add elements to the frame
+		super.add(new JLabel("Start"));
+		super.add(leftList);
+		super.add(new JLabel("Ziel"));
+		super.add(rightList);
+		super.add(startAction);
+		super.add(new JLabel());
 		
 		startAction.addActionListener(this);
-		
-		super.getContentPane().add(new JLabel("Demonstration des Dijkstra Algorithmus"), BorderLayout.NORTH);
-		super.getContentPane().add(lists, BorderLayout.CENTER);
-		super.getContentPane().add(startAction, BorderLayout.SOUTH);
 		
 		// Do the rest for displaying the window
 		super.pack();
@@ -83,29 +80,11 @@ public class Mainwindow extends JFrame implements MouseListener, ActionListener 
 		super.setVisible(true);
 	}
 
-	public void mouseClicked(MouseEvent e) {
-		if(e.getClickCount()==2) {
-			// Get the list which fired the event
-			JList<String> list = (JList)e.getSource();
-			// List Model/Data for the right list
-			DefaultListModel<String> lm = (DefaultListModel<String>)this.rightList.getModel();
-			if(list.getName().equals("ll")) {
-				if(!lm.contains(leftList.getSelectedValue()))
-					lm.addElement(leftList.getSelectedValue());
-			}
-			else if(list.getName().equals("rl")) {
-				lm.removeElement(rightList.getSelectedValue());
-			}
-		}
-	}
-
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
-
 	public void actionPerformed(ActionEvent e) {
-		JOptionPane.showMessageDialog(null, "Preform!");
+		//JOptionPane.showMessageDialog(null, "Preform!");
+		Calculation c = new Calculation();
+		c.setIdFrom(-1);
+		c.setIdTo(-1);
 	}
 	
 }
