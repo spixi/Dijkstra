@@ -12,12 +12,14 @@ import java.util.LinkedHashSet;
  */
 
 public class Airport {
+	private Long   id;
 	private String name;
 	private HashMap<Airport,Connection> connections = new HashMap<Airport,Connection>();
 	
-	protected Airport() {}
+	protected Airport(Long id) {}
 	
-	public Airport(String name) {
+	public Airport(Long id, String name) {
+		this.setId(id);
 		this.setName(name);
 	}
 
@@ -31,5 +33,17 @@ public class Airport {
 
 	public HashMap<Airport,Connection> getConnections() {
 		return this.connections;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	private void setId(Long id) {
+		this.id = id;
+	}
+	
+	public int hashCode() {
+		return id.hashCode();
 	}
 }

@@ -13,21 +13,22 @@ import org.junit.Test;
 
 public class ModelTest {
 	
-	Integer id;
+	Long id;
 	String  name;
 	Airport a;
 
 	@Before
 	public void setUp() throws Exception {
-		id = 1;
+		id = 1L;
 		name = "Frankfurt";
-		a = new Airport(name);
+		a = new Airport(id,name);
 	}
 
 	@Test
 	//Test the constructor of the class Airport
 	public void testAirport1() {
 		assertEquals(name, a.getName());
+		assertEquals(id, a.getId());
 	}
 	
 	@Test
