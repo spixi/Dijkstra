@@ -1,5 +1,11 @@
-package test;
+/**
+* AllTest
+* <p>
+* Test suite for the dijkstra project
+* @author Marius Spix
+*/
 
+package test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

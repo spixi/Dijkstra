@@ -1,3 +1,11 @@
+/**
+* DateHelper
+* <p>
+* This class contains the actual Dijkstra algorithm and selects the shortest path between
+* two nodes.
+* @author Marius Spix
+*/
+
 package helpers;
 
 import java.util.Collection;
@@ -6,6 +14,8 @@ import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -31,6 +41,13 @@ public class Pathfinder {
 	private HashMap<Airport,Duration>   durations;
 	private PriorityQueue<Airport>      connections;
 	
+	/**
+	 * Constructor of the Pathfinder class
+	 * <p>
+	 * Initializes the Pathfinder
+	 * @param startAirport: the start node
+	 * @param airports: a list of all nodes
+	 */
 	public Pathfinder(Airport startAirport, Collection<Airport> airports) {
 		//Create the lookup tables
 		precessors        = new HashMap<Airport,Airport>();
@@ -48,7 +65,7 @@ public class Pathfinder {
 		//Create the priority queue of the connections
 		connections =
 		new PriorityQueue<Airport>(100,
-			new MapValueComparator<Airport,Duration>(durations, new ReadableDurationComparator())
+			new MapValueComparator<Airport,Duration>(durations, new GenericComparator<Duration>())
 		);
 		
 		//Fill the priority queue with the airports from the data model
@@ -58,6 +75,11 @@ public class Pathfinder {
 		calculate();
 	}
 	
+	/**
+	 * calculate
+	 * <p>
+	 * The actual calculation method.
+	 */
 	private void calculate() {
 		Airport next;
 		
@@ -72,6 +94,13 @@ public class Pathfinder {
 		}
 	}
 	
+	/**
+	 * updateDuration
+	 * <p>
+	 * Updates the shortest duration to a node relative to the start node. For internal use only!
+	 * @param from: a Node
+	 * @param to: another Node
+	 */
 	private void updateDuration(Airport from, Airport to) {
 		Duration alternative = getDurationBetween(from,to).plus(durations.get(from));
 		
@@ -81,24 +110,46 @@ public class Pathfinder {
 		}
 	}
 	
+	/**
+	 * getDurationBetween
+	 * <p>
+	 * Gets the duration between two nodes. For internal use only!
+	 * @param from
+	 * @param to
+	 * @return
+	 */
 	private static Duration getDurationBetween(Airport from, Airport to) {
-		//TODO Check for null
-		return from.getConnections().get(to).getDuration();
+		Duration d;
+		try {
+			d = from.getConnections().get(to).getDuration();
+		}
+		catch( NullPointerException e ) {
+			d = new Duration(Long.MAX_VALUE);
+		}
+		return d;
 	}
 	
 	//TODO also transmit Durations
-	public Queue<Airport> determineShortestPathTo(Airport destinationAirport) {
-		Deque<Airport> deque   = new ConcurrentLinkedDeque<Airport>();
-		Airport        current = destinationAirport;
+	/**
+	 * determineShortestPathTo
+	 * <p>
+	 * Determines the shortest path from the start node to another node.
+	 * If there is no possible way the behavior is undefined.
+	 * @param destinationAirport
+	 * @return
+	 */
+	public List<Airport> determineShortestPathTo(Airport destinationAirport) {
+		LinkedList<Airport> list   = new LinkedList<Airport>();
+		Airport            current = destinationAirport;
 		
-		deque.push(destinationAirport);
+		list.addFirst(destinationAirport);
 		
 		while(precessors.get(current) != null) {
 			current = precessors.get(current);
-			deque.push(current);
+			list.addFirst(current);
 		}
 		
-		return deque;
+		return list;
 	}
 
 }

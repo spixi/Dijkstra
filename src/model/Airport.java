@@ -1,15 +1,12 @@
+/**
+* Airport
+* <p>
+* This structure describes an airport and its connections to other airports.
+* @author Marius Spix
+*/
 package model;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
-
-/**
- * 
- * @author Marius
- * 
- * This structure describes an airport and its connections to other airports
- * 
- */
 
 public class Airport {
 	private Long   id;
