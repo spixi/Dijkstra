@@ -1,9 +1,10 @@
 package model;
 
-import java.util.ArrayList;
+import helpers.DateHelper;
+import helpers.Pathfinder;
+
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 public class ImplListDataModel implements ListDataModel {
@@ -27,15 +28,26 @@ public class ImplListDataModel implements ListDataModel {
 	}
 
 	@Override
-	public String getFormattedDuration() {
+	public Vector<String> getRouteHops(Airport from, Airport to) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ArrayList<String> getRouteHops() {
-		// TODO Auto-generated method stub
-		return null;
+		Pathfinder pf = new Pathfinder(from,airportList.values());
+		Vector<String> routeHops = new Vector<String>();
+		Airport previous = null;
+		
+		List<Airport> path = pf.determineShortestPathTo(to);
+		
+		for(Airport a : path) {
+			String s;
+			s = a.getName();
+			if (previous != null) {
+				s += '\t';
+				s += DateHelper.INSTANCE.durationToString(previous.getConnections().get(a).getDuration());
+			}
+			routeHops.add(s);
+			previous = a;
+		}
+		
+		return routeHops;
 	}
 
 }
