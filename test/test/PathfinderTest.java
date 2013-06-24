@@ -92,7 +92,7 @@ public class PathfinderTest {
 	
 	@Test
 	/**
-	 * testPathfinder3
+	 * testPathfinder4
 	 * <p>
 	 * Test with directed graph (Bruessel (5) -> Frankfurt (1) only via London (4))
 	 */

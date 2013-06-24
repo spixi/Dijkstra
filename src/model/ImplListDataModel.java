@@ -1,3 +1,10 @@
+/**
+* ImplListDataModel
+* <p>
+* This is the real implementation of the data model.
+* @author Marius Spix
+*/
+
 package model;
 
 import helpers.DateHelper;
@@ -18,6 +25,7 @@ public class ImplListDataModel implements ListDataModel {
 		airportList = new HashMap<Long,Airport>();
 	}
 
+	
 	@Override
 	public Vector<Airport> getLocations() {
 		Vector<Airport> v = new Vector<Airport>();

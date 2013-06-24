@@ -1,3 +1,10 @@
+/**
+* Mainwindow
+* <p>
+* This is the main window of the Dijkstra program
+* @author Serjoscha Bassauer
+*/
+
 package gui;
 
 import java.awt.Color;
@@ -20,11 +27,12 @@ import model.Airport;
 import model.ListDataModel;
 
 @SuppressWarnings("serial")
-public class Mainwindow extends JFrame implements ActionListener {
+public class Mainwindow extends JFrame implements ActionListener, View {
 	
 	private JComboBox<Airport> leftList;
 	private JComboBox<Airport> rightList;
 	
+	@Override
 	public void draw() {
 		super.setTitle("Dijkstra");
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,6 +76,12 @@ public class Mainwindow extends JFrame implements ActionListener {
 		super.setVisible(true);
 	}
 
+	
+	/***
+	 * actionPerformed
+	 * <p>
+	 * Handles the action events. Currently all action events cause the connection table to show.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		Airport from = (Airport)rightList.getSelectedItem();
 		Airport to   = (Airport)leftList.getSelectedItem();
