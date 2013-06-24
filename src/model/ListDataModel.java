@@ -4,8 +4,7 @@ import java.util.Vector;
 
 public interface ListDataModel {
 
-	public Vector<String> getLocations();
-	public String getFormattedDuration();
-	public Vector<String> getRouteHops(Airport from, Airport to);
+	public Vector<Airport> getLocations();
+	public Vector<Vector<Object>> getRoute(Airport from, Airport to);
 	
 }
