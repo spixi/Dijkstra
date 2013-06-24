@@ -12,6 +12,8 @@ import javax.swing.JTable;
 
 
 public class ConnectionTableWindow  extends JFrame  {
+
+	private static final long serialVersionUID = 4956218067122590646L;
 	private Vector<Vector<Object>> rowData;
 	
 	public ConnectionTableWindow(Vector<Vector<Object>> rowData) {
@@ -22,7 +24,7 @@ public class ConnectionTableWindow  extends JFrame  {
 		
 		Vector<String> columnNames =
 				new Vector<String>(
-				    Arrays.asList("Flughafen", "Flugzeit")
+				    Arrays.asList("Abflughafen", "Zielflughafen", "Flugzeit")
 				);
 		
 		super.setTitle("Ihre Verbindungen");

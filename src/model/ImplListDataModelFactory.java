@@ -61,19 +61,18 @@ public class ImplListDataModelFactory {
 				Airport destination_airport  = airportList.get(destination_id);
 				String duration              = cast(connections.get("duration"),String.class);
 				
-				HashMap<Airport,Connection> c = airport.getConnections();
+				HashMap<Airport,Connection> c = destination_airport.getConnections();
 				
 				Connection connection =
 						new Connection(DateHelper.INSTANCE.stringToDuration(duration));
 				
-				c.put(destination_airport, connection);
+				c.put(airport, connection);
 			}
 		}
 
 		return product;
 	}
 	
-	//TODO: more meaningful and understandable message
 	@SuppressWarnings("unchecked")
 	private <T> T cast(Object o, Class<T> expectedClass) throws BadFileFormatException {
 		Class<?> catchedClass = o.getClass();
