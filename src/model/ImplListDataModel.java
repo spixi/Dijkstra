@@ -3,14 +3,12 @@ package model;
 import helpers.DateHelper;
 import helpers.Pathfinder;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
 import org.joda.time.Duration;
-import org.joda.time.ReadableDuration;
-import org.json.simple.JSONObject;
+
 
 public class ImplListDataModel implements ListDataModel {
 	
@@ -34,14 +32,14 @@ public class ImplListDataModel implements ListDataModel {
 
 
 	@Override
-	public Vector<Vector<Object>> getRoute(Airport from, Airport to) {
-		Pathfinder pf = new Pathfinder(from,airportList.values());
+	public Vector<Vector<Object>> getRoute(Airport to, Airport from) {
+		Pathfinder pf = new Pathfinder(to,airportList.values());
 		Vector<Vector<Object>> routeHops = new Vector<Vector<Object>>();
 		Airport previous = null;
 		Duration sum     = Duration.ZERO;
 		Vector<Object> row;
 		
-		List<Airport> path = pf.determineShortestPathTo(to);
+		List<Airport> path = pf.determineShortestPathFrom(from);
 		
         for (Airport a : path) {
 			row = new Vector<Object>();
@@ -61,7 +59,7 @@ public class ImplListDataModel implements ListDataModel {
 			previous = a;
 		}
         
-        if (path.indexOf(from) > 0) {
+        if (path.indexOf(to) > 0) {
         	row = new Vector<Object>();
         	row.add("Summe");
         	row.add("");

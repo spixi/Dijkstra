@@ -37,7 +37,7 @@ public class Pathfinder {
 	 * @param startAirport: the start node
 	 * @param airports: a list of all nodes
 	 */
-	public Pathfinder(Airport startAirport, Collection<Airport> airports) {
+	public Pathfinder(Airport destinationAirport, Collection<Airport> airports) {
 		//Create the lookup tables
 		precessors        = new HashMap<Airport,Airport>();
 		durations         = new HashMap<Airport,Duration>();
@@ -48,8 +48,8 @@ public class Pathfinder {
 		    durations.put(airport, new Duration(Long.MAX_VALUE));
 		}
 		
-		durations.put (startAirport, new Duration(Duration.ZERO));
-		precessors.put(startAirport, null);
+		durations.put (destinationAirport, new Duration(Duration.ZERO));
+		precessors.put(destinationAirport, null);
 		
 		//Create the priority queue of the connections
 		connections =
@@ -128,20 +128,19 @@ public class Pathfinder {
 		return d;
 	}
 	
-	//TODO also transmit Durations
 	/**
 	 * determineShortestPathTo
 	 * <p>
 	 * Determines the shortest path from the start node to another node.
 	 * If there is no possible way the behavior is undefined.
-	 * @param destinationAirport
+	 * @param startAirport
 	 * @return
 	 */
-	public List<Airport> determineShortestPathTo(Airport destinationAirport) {
+	public List<Airport> determineShortestPathFrom(Airport startAirport) {
 		LinkedList<Airport> list   = new LinkedList<Airport>();
-		Airport            current = destinationAirport;
+		Airport            current = startAirport;
 		
-		list.addFirst(destinationAirport);
+		list.addFirst(startAirport);
 		
 		while(precessors.get(current) != null) {
 			current = precessors.get(current);
