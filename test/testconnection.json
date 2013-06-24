@@ -120,5 +120,10 @@
                 "duration": "01:47"
             }
         ]
+    },
+    {
+    	"id": 8,
+    	"name": "Peking",
+    	"destinations" : []
     }
 ]

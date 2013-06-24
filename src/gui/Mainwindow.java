@@ -1,40 +1,25 @@
 package gui;
 
-import helpers.ClassRouteHelper;
-
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.File;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.ListModel;
 
-import org.json.simple.parser.ParseException;
+import controller.Controller;
 
 import calc.Calculation;
 
-import sun.management.snmp.jvmmib.JvmCompilationMeta;
-
-import model.BadFileFormatException;
+import model.ListDataModel;
 
 @SuppressWarnings("serial")
 public class Mainwindow extends JFrame implements ActionListener {
@@ -49,15 +34,20 @@ public class Mainwindow extends JFrame implements ActionListener {
 		super.setLayout(new GridLayout(3,2,2,2));
 		
 		((JComponent)getContentPane()).setBorder(BorderFactory.createMatteBorder( 4, 4, 4, 4, Color.LIGHT_GRAY ) ); 
+		
+		File f = new File("test/testconnection.json");
+		try {
+			Controller.INSTANCE.readFile(f);
+		} catch (Exception e) {
+			//TODO e.getMessage() in Dialogbox ausgeben!
+		}
+		
+		ListDataModel  model     = Controller.INSTANCE.getModel();
+		Vector<String> locations = model.getLocations();
 	
 		// Create the lists
-		try {
-			this.leftList = new JComboBox<String>(ClassRouteHelper.getListModel().getLocations());
-			this.rightList = new JComboBox<String>(ClassRouteHelper.getListModel().getLocations());
-		} catch (FileNotFoundException e) { e.printStackTrace(); // TODO why doing exception handling here within the view ?
-		} catch (IOException e) { e.printStackTrace();
-		} catch (ParseException e) { e.printStackTrace();
-		} catch (BadFileFormatException e) {e.printStackTrace(); }
+	    this.leftList  = new JComboBox<String>(locations);
+		this.rightList = new JComboBox<String>(locations);
 		
 		// Create a button for beeding able to submit the action
 		JButton startAction = new JButton("Berechnen");

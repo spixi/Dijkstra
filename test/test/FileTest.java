@@ -1,3 +1,9 @@
+/**
+* FileTest
+* <p>
+* Test file reading classes
+* @author Marius Spix
+*/
 package test;
 
 import helpers.DateHelper;
@@ -35,28 +41,44 @@ public class FileTest {
 
 	
 	@Test
+	/**
+	 * fileTest1
+	 * <p>
+	 * Test whether the name is correctly read
+	 */
 	public void fileTest1() throws Throwable {
-		//Test whether the name is correctly read
 		assertEquals("Frankfurt",airport.getName());
 	}
 	
 	@Test
+	/**
+	 * fileTest2
+	 * <p>
+	 * Assure a destination is added
+	 */
 	public void fileTest2() throws Throwable {
-		//Assure a destination is added
 		Airport dest_airport = airportList.get(4L);
 		assertTrue(connections.containsKey(dest_airport));
 	}
 	
 	@Test
+	/**
+	 * fileTest3
+	 * <p>
+	 * Assure that no wrong destination is added
+	 */
 	public void fileTest3() throws Throwable {
-		//Assure that no wrong destination is added
 		Airport no_dest_airport  = airportList.get(2L);
 		assertFalse(connections.containsKey(no_dest_airport));
 	}
 	
 	@Test
+	/**
+	 * fileTest4
+	 * <p>
+	 * Test whether the duration is correctly read
+	 */
 	public void fileTest4() throws Throwable {
-		//Test whether the duration is correctly read
 		Airport    dest_airport        = airportList.get(4L);
 		assertEquals(DateHelper.INSTANCE.stringToDuration("01:24"),connections.get(dest_airport).getDuration());
 	}

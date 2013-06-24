@@ -1,14 +1,13 @@
+/**
+* Connection
+* <p>
+* This structure describes a single connection to another airport
+* @author Marius Spix
+*/
+
 package model;
 
 import org.joda.time.Duration;
-
-/**
- * 
- * @author Marius
- * 
- * This structure describes a single connection to another airport
- * 
- */
 
 public class Connection {
 	private Duration duration;

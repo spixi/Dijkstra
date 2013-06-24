@@ -1,3 +1,10 @@
+/**
+* Airport
+* <p>
+* This exception is thrown if the JSON parser found an invalid structure in a file
+* @author Marius Spix
+*/
+
 package model;
 
 public class BadFileFormatException extends Exception {

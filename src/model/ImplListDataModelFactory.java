@@ -38,7 +38,7 @@ public class ImplListDataModelFactory {
 			Long id     =  cast(airportObject.get("id"),Long.class);
 			String name =  cast(airportObject.get("name"),String.class);
 			
-			airportList.put(id, new Airport(name));
+			airportList.put(id, new Airport(id,name));
 		}
 		
 		//Then parse the connections
