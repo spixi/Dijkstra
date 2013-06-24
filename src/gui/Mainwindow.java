@@ -81,7 +81,7 @@ public class Mainwindow extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		JOptionPane.showMessageDialog(null, "Preform!");
+		JOptionPane.showMessageDialog(null, "Die Reise dauert: " + ClassRouteHelper.getListModel().getFormattedDuration().toString());
 		Calculation c = new Calculation();
 		c.setIdFrom(-1);
 		c.setIdTo(-1);
