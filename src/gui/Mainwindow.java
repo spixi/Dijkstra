@@ -13,11 +13,8 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import controller.Controller;
-
-import calc.Calculation;
 
 import model.ListDataModel;
 
@@ -71,10 +68,7 @@ public class Mainwindow extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		JOptionPane.showMessageDialog(null, "Die Reise dauert: " + ClassRouteHelper.getListModel().getFormattedDuration().toString());
-		Calculation c = new Calculation();
-		c.setIdFrom(-1);
-		c.setIdTo(-1);
+		//JOptionPane.showMessageDialog(null, "Die Reise dauert: " + ClassRouteHelper.getListModel().getFormattedDuration().toString());
 	}
 	
 }

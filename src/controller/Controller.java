@@ -9,7 +9,6 @@ import org.json.simple.parser.ParseException;
 import model.BadFileFormatException;
 import model.ImplListDataModelFactory;
 import model.ListDataModel;
-import calc.Calculation;
 import gui.Mainwindow;
 
 /**
