@@ -9,23 +9,14 @@
 package helpers;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Stack;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 import org.joda.time.Duration;
 
 import model.Airport;
-import model.Connection;
 
 /**
  * 
@@ -33,8 +24,6 @@ import model.Connection;
  *
  * This class contains the implementation of the Dijkstra algorithm
  */
-
-import org.joda.time.ReadableDuration;
 
 public class Pathfinder {
 	private HashMap<Airport,Airport>    precessors;
@@ -102,7 +91,17 @@ public class Pathfinder {
 	 * @param to: another Node
 	 */
 	private void updateDuration(Airport from, Airport to) {
-		Duration alternative = getDurationBetween(from,to).plus(durations.get(from));
+		Duration alternative;
+		
+		alternative = getDurationBetween(from,to);
+		
+		try {
+			alternative = alternative.plus(durations.get(from));	
+		}
+		 //Overflow abfangen
+		catch (ArithmeticException e) {
+			alternative = new Duration(Long.MAX_VALUE);
+		}
 		
 		if (alternative.isShorterThan(durations.get(to))) {
 			durations.put(to, new Duration(alternative));
@@ -146,7 +145,7 @@ public class Pathfinder {
 		
 		while(precessors.get(current) != null) {
 			current = precessors.get(current);
-			list.addFirst(current);
+			list.add(current);
 		}
 		
 		return list;

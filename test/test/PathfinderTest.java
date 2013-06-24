@@ -63,7 +63,7 @@ public class PathfinderTest {
 	
 	@Test
 	/**
-	 * testPathfinder2
+	 * testPathfinder1
 	 * <p>
 	 * Test the pathfinder class.
 	 */

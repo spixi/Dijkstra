@@ -131,5 +131,18 @@ public class ModelTest {
 		assertEquals(25.0D, d.getStandardHours(), 0);
     }
 	
+	@Test
+	/**
+	 * testDateHelper5
+	 * <p>
+	 * Test the DateHelper class
+	 * <p>
+	 * Zeros
+	 */
+    public void testDateHelper5() {
+		Duration d = DateHelper.INSTANCE.stringToDuration("02:4");
+		assertEquals("2:04", DateHelper.INSTANCE.durationToString(d));
+    }
+	
 	
 }

@@ -31,6 +31,7 @@ public final class DateHelper {
 	    builder.printZeroAlways()
 	           .appendHours()
 	           .appendSeparator(":")
+	           .minimumPrintedDigits(2)
 	           .appendMinutes();
 	    
 	    formatter = builder.toFormatter();

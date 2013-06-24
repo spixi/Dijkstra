@@ -16,13 +16,14 @@ import javax.swing.JLabel;
 
 import controller.Controller;
 
+import model.Airport;
 import model.ListDataModel;
 
 @SuppressWarnings("serial")
 public class Mainwindow extends JFrame implements ActionListener {
 	
-	private JComboBox<String> leftList;
-	private JComboBox<String> rightList;
+	private JComboBox<Airport> leftList;
+	private JComboBox<Airport> rightList;
 	
 	public void draw() {
 		super.setTitle("Dijkstra");
@@ -40,11 +41,11 @@ public class Mainwindow extends JFrame implements ActionListener {
 		}
 		
 		ListDataModel  model     = Controller.INSTANCE.getModel();
-		Vector<String> locations = model.getLocations();
+		Vector<Airport> locations = model.getLocations();
 	
 		// Create the lists
-	    this.leftList  = new JComboBox<String>(locations);
-		this.rightList = new JComboBox<String>(locations);
+	    this.leftList  = new JComboBox<Airport>(locations);
+		this.rightList = new JComboBox<Airport>(locations);
 		
 		// Create a button for beeding able to submit the action
 		JButton startAction = new JButton("Berechnen");
@@ -69,6 +70,12 @@ public class Mainwindow extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		//JOptionPane.showMessageDialog(null, "Die Reise dauert: " + ClassRouteHelper.getListModel().getFormattedDuration().toString());
+		Airport from = (Airport)rightList.getSelectedItem();
+		Airport to   = (Airport)leftList.getSelectedItem();
+		
+		Vector<Vector<Object>> test = Controller.INSTANCE.getModel().getRoute(from,to);
+		
+		new ConnectionTableWindow(test).draw();
 	}
 	
 }

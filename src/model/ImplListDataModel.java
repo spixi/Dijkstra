@@ -3,9 +3,14 @@ package model;
 import helpers.DateHelper;
 import helpers.Pathfinder;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
+
+import org.joda.time.Duration;
+import org.joda.time.ReadableDuration;
+import org.json.simple.JSONObject;
 
 public class ImplListDataModel implements ListDataModel {
 	
@@ -16,10 +21,10 @@ public class ImplListDataModel implements ListDataModel {
 	}
 
 	@Override
-	public Vector<String> getLocations() {
-		Vector<String> v = new Vector<String>();
+	public Vector<Airport> getLocations() {
+		Vector<Airport> v = new Vector<Airport>();
 		for(Airport a : airportList.values())
-			v.add(a.getName());
+			v.add(a);
 		return v;
 	} 
 
@@ -27,26 +32,43 @@ public class ImplListDataModel implements ListDataModel {
 		return airportList;
 	}
 
+
 	@Override
-	public Vector<String> getRouteHops(Airport from, Airport to) {
-		// TODO Auto-generated method stub
+	public Vector<Vector<Object>> getRoute(Airport from, Airport to) {
 		Pathfinder pf = new Pathfinder(from,airportList.values());
-		Vector<String> routeHops = new Vector<String>();
+		Vector<Vector<Object>> routeHops = new Vector<Vector<Object>>();
 		Airport previous = null;
+		Duration sum     = Duration.ZERO;
+		Vector<Object> row;
 		
 		List<Airport> path = pf.determineShortestPathTo(to);
 		
-		for(Airport a : path) {
-			String s;
-			s = a.getName();
+        for (Airport a : path) {
+			row = new Vector<Object>();
+			
 			if (previous != null) {
-				s += '\t';
-				s += DateHelper.INSTANCE.durationToString(previous.getConnections().get(a).getDuration());
+				row.add(previous);
+				row.add(a);
+				
+				Duration d = a.getConnections().get(previous).getDuration();
+				
+				//cumulate the durations
+				sum = sum.plus(d);
+				row.add(DateHelper.INSTANCE.durationToString(d));
+				routeHops.add(row);
 			}
-			routeHops.add(s);
+		
 			previous = a;
 		}
-		
+        
+        if (path.indexOf(from) > 0) {
+        	row = new Vector<Object>();
+        	row.add("Summe");
+        	row.add("");
+        	row.add(DateHelper.INSTANCE.durationToString(sum));
+        	routeHops.add(row);
+        }
+        
 		return routeHops;
 	}
 
