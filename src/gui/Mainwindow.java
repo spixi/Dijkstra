@@ -5,8 +5,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -22,12 +20,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.json.simple.parser.ParseException;
-
 import controller.Controller;
 
 import model.Airport;
-import model.BadFileFormatException;
 import model.ListDataModel;
 
 @SuppressWarnings("serial")
@@ -36,12 +31,13 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 	private JComboBox<Airport> leftList;
 	private JComboBox<Airport> rightList;
 	
-	private File connectionFile = Controller.INSTANCE.getDefaultConnectionFile();
+	private File connectionFile = Controller.getDefaultConnectionFile();
 	
 	public void draw() {
-		super.getContentPane().removeAll();
+		super.getContentPane().removeAll(); // making this function being able to repaint the mainwindow
 		super.setTitle("Dijkstra");
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		super.setResizable(false);
 		
 		super.setLayout(new GridLayout(3,2,2,2));
 		
@@ -60,10 +56,12 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 		// Create the lists
 	    this.leftList  = new JComboBox<Airport>(locations);
 		this.rightList = new JComboBox<Airport>(locations);
+		this.rightList.setSelectedIndex(1); // just for a more professional impression of the program -> mark the second element in the second list as active
 		
 		// Create a button for being able to submit the action
 		JButton startAction = new JButton("Berechnen");
 		startAction.setActionCommand("calc");
+		startAction.addActionListener(this);
 		
 		// Add elements to the frame
 		super.add(new JLabel("Start"));
@@ -72,8 +70,6 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 		super.add(rightList);
 		super.add(startAction);
 		super.add(new JLabel());
-		
-		startAction.addActionListener(this);
 		
 		// Create a menu for various actions
 		JMenuBar menuBar = new JMenuBar();

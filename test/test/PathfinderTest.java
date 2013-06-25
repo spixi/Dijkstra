@@ -97,7 +97,15 @@ public class PathfinderTest {
 	 * Test with directed graph (Bruessel (5) -> Frankfurt (1) only via London (4))
 	 */
 	public void testPathfinder4() {
-		pathfinderTest(l.get(1L),l.get(5L), new Airport[]{l.get(5L),l.get(4L),l.get(1L)});
+		pathfinderTest( // sorry for messing this code up a bit, but i need this to understand how everything works... i'll be cleaning this up later when the result comes like expected
+				l.get(1L), // source
+				l.get(5L), // destination
+				new Airport[]{
+						l.get(5L),
+						l.get(4L),
+						l.get(1L)
+					}
+				);
 	}
 
 }
