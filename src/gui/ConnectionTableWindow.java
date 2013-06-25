@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 
-public class ConnectionTableWindow  extends JFrame  {
+public class ConnectionTableWindow extends JFrame {
 
 	private static final long serialVersionUID = 4956218067122590646L;
 	private Vector<Vector<Object>> rowData;
@@ -45,14 +45,14 @@ public class ConnectionTableWindow  extends JFrame  {
 				);
 		
 		super.setTitle("Ihre Verbindungen");
-		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JTable connections = new JTable(rowData,columnNames);
 		Container cp       = super.getContentPane();
 		cp.setLayout(new BorderLayout());
 		JScrollPane scroll = new JScrollPane(connections);
 		
-		cp.add(BorderLayout.NORTH, new JLabel("Verbindungsï¿½bersicht"));
+		cp.add(BorderLayout.NORTH, new JLabel("Verbindungsübersicht"));
 		cp.add(BorderLayout.SOUTH, scroll);
 		
 		super.pack();

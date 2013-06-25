@@ -67,5 +67,9 @@ public class Controller {
 	public static void main(String[] args) {
 		INSTANCE.callMainwindow();
 	}
+	
+	public static File getDefaultConnectionFile(){
+		return new File("test/testconnection.json");
+	}
 
 }
