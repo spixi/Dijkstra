@@ -67,7 +67,7 @@ public class PathfinderTest {
 	 * Test the pathfinder class.
 	 */
 	public void testPathfinder1() {
-		pathfinderTest(l.get(6L), l.get(1L), new Airport[]{l.get(1L), l.get(5L), l.get(6L)});
+		pathfinderTest(l.get(6L), l.get(1L), new Airport[]{l.get(6L), l.get(5L), l.get(7L), l.get(7L)});
 	}
 	
 	@Test
