@@ -36,7 +36,10 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 	private JComboBox<Airport> leftList;
 	private JComboBox<Airport> rightList;
 	
+	private File connectionFile = Controller.INSTANCE.getDefaultConnectionFile();
+	
 	public void draw() {
+		super.getContentPane().removeAll();
 		super.setTitle("Dijkstra");
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -45,9 +48,8 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 		((JComponent)getContentPane()).setBorder(BorderFactory.createMatteBorder( 4, 4, 4, 4, Color.LIGHT_GRAY ) ); 
 		
 		//File f = new File("test/testconnection.json");
-		File f = Controller.INSTANCE.getDefaultConnectionFile();
 		try {
-			Controller.INSTANCE.readFile(f);
+			Controller.INSTANCE.readFile(this.connectionFile);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, "Die Datei konnte nicht geöffnet werden", "Fehler", JOptionPane.ERROR_MESSAGE);
 		}
@@ -77,13 +79,24 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 		JMenuBar menuBar = new JMenuBar();
 		super.setJMenuBar(menuBar);
 		
+		// Define Menu Cats
 		JMenu fileMenu = new JMenu("Datei");
 		menuBar.add(fileMenu);
+		JMenu infoMenu = new JMenu("Info");
+		menuBar.add(infoMenu);
 		
+		// Define Menu Items within the cats
 		JMenuItem openFile = new JMenuItem("Datei öffnen...");
 		openFile.addActionListener(this);
 		openFile.setActionCommand("loadFile");
 		fileMenu.add(openFile);
+		
+		JMenuItem fileInfo = new JMenuItem(this.connectionFile.getAbsolutePath().toString());
+		fileInfo.setEnabled(false);
+		JMenuItem textLabelFileInfo = new JMenuItem("Momentan geöffnete Datei:");
+		textLabelFileInfo.setEnabled(false);
+		infoMenu.add(textLabelFileInfo);
+		infoMenu.add(fileInfo);
 		
 		// Do the rest for displaying the window
 		super.pack();
@@ -96,7 +109,6 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand()) {
 			case "calc":
-				//JOptionPane.showMessageDialog(null, "Die Reise dauert: " + ClassRouteHelper.getListModel().getFormattedDuration().toString());
 				Airport from = (Airport)rightList.getSelectedItem();
 				Airport to   = (Airport)leftList.getSelectedItem();
 				
@@ -111,12 +123,8 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 			    chooser.setFileFilter(filter);
 			    int returnVal = chooser.showOpenDialog(this);
 			    if(returnVal == JFileChooser.APPROVE_OPTION) {
-			    	System.out.println(chooser.getSelectedFile().getAbsolutePath()); // TODO DEBUG
-					try {
-						Controller.INSTANCE.readFile(new File(chooser.getSelectedFile().getAbsolutePath()));
-					} catch (IOException | ParseException | BadFileFormatException e1) {
-						JOptionPane.showMessageDialog(this, "Die Datei konnte nicht geöffnet werden", "Fehler", JOptionPane.ERROR_MESSAGE);
-					}
+					this.connectionFile = new File(chooser.getSelectedFile().getAbsolutePath()); // set the new file to parse before redrawing the gui with new data
+					this.draw(); // repaint the gui!
 			    }
 			break;
 		}
