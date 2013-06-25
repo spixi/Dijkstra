@@ -47,11 +47,11 @@ public class PathfinderTest {
 	 * @param should: expected hops
 	 */
 	private void pathfinderTest(Airport source, Airport destination, Airport[] should) {
-		Pathfinder pf = new Pathfinder(l.get(6L), l.values());
+		Pathfinder pf = new Pathfinder(destination, l.values());
 		Airport[]  is = new Airport[should.length];
 		
 		List<Airport> q =
-		pf.determineShortestPathFrom(destination);
+		pf.determineShortestPathFrom(source);
 		
 		System.out.println(q);
 		
@@ -87,7 +87,7 @@ public class PathfinderTest {
 	 * Test an unreachable airport
 	 */
 	public void testPathfinder3() {		
-		pathfinderTest(l.get(6L), l.get(8L), new Airport[]{l.get(8L)});
+		pathfinderTest(l.get(6L), l.get(8L), new Airport[]{l.get(6L)});
 	}
 	
 	@Test
@@ -97,9 +97,9 @@ public class PathfinderTest {
 	 * Test with directed graph (Bruessel (5) -> Frankfurt (1) only via London (4))
 	 */
 	public void testPathfinder4() {
-		pathfinderTest( // sorry for messing this code up a bit, but i need this to understand how everything works... i'll be cleaning this up later when the result comes like expected
-				l.get(1L), // source
-				l.get(5L), // destination
+		pathfinderTest(
+				l.get(5L), // source
+				l.get(1L), // destination
 				new Airport[]{
 						l.get(5L),
 						l.get(4L),
