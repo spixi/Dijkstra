@@ -47,7 +47,7 @@ public class Mainwindow extends JFrame implements ActionListener {
 	    this.leftList  = new JComboBox<Airport>(locations);
 		this.rightList = new JComboBox<Airport>(locations);
 		
-		// Create a button for beeding able to submit the action
+		// Create a button for being able to submit the action
 		JButton startAction = new JButton("Berechnen");
 		
 		// Add elements to the frame

@@ -1,3 +1,9 @@
+/**
+* ConnectionTableWindow
+* <p>
+* This widget shows a table for the connection between two nodes.
+* @author Marius Spix
+*/
 package gui;
 
 import java.awt.BorderLayout;
@@ -16,10 +22,21 @@ public class ConnectionTableWindow  extends JFrame  {
 	private static final long serialVersionUID = 4956218067122590646L;
 	private Vector<Vector<Object>> rowData;
 	
+	
+	/**
+	 * ConnectionTableWindow
+	 * @param rowData: Vector of the rows which should be showed
+	 * <p>
+	 * Reads a file for the data model factory
+	 */
 	public ConnectionTableWindow(Vector<Vector<Object>> rowData) {
 		this.rowData = rowData;
 	}
-	
+	/***
+	 * draw
+	 * <p>
+	 * Draws the window.
+	 */
 	public void draw() {
 		
 		Vector<String> columnNames =
@@ -35,7 +52,7 @@ public class ConnectionTableWindow  extends JFrame  {
 		cp.setLayout(new BorderLayout());
 		JScrollPane scroll = new JScrollPane(connections);
 		
-		cp.add(BorderLayout.NORTH, new JLabel("Verbindungsübersicht"));
+		cp.add(BorderLayout.NORTH, new JLabel("Verbindungsï¿½bersicht"));
 		cp.add(BorderLayout.SOUTH, scroll);
 		
 		super.pack();

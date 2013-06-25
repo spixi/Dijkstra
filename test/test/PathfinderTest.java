@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
 
 import model.Airport;
 import model.BadFileFormatException;
@@ -31,8 +30,6 @@ public class PathfinderTest {
 	
 	private static ImplListDataModel m;
 	private static HashMap<Long,Airport> l;
-	private static Pathfinder pf;
-	
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws FileNotFoundException, IOException, ParseException, BadFileFormatException {
@@ -40,7 +37,6 @@ public class PathfinderTest {
 		
 		m = ImplListDataModelFactory.INSTANCE.factory(f);
 		l = m.getAirportList();
-		pf = new Pathfinder(l.get(1L), l.values());
 	}
 	
 	/***
@@ -50,13 +46,16 @@ public class PathfinderTest {
 	 * @param destination: destination from the start airport
 	 * @param should: expected hops
 	 */
-	private void pathfinderTest(Airport destination, Airport... should) {
-		Airport[] is = new Airport[should.length];
+	private void pathfinderTest(Airport source, Airport destination, Airport[] should) {
+		Pathfinder pf = new Pathfinder(l.get(6L), l.values());
+		Airport[]  is = new Airport[should.length];
 		
 		List<Airport> q =
-		pf.determineShortestPathTo(destination);
+		pf.determineShortestPathFrom(destination);
 		
-		q.toArray(is);
+		System.out.println(q);
+		
+	    q.toArray(is);
 		
 		assertArrayEquals(should, is);
 	}
@@ -67,8 +66,8 @@ public class PathfinderTest {
 	 * <p>
 	 * Test the pathfinder class.
 	 */
-	public void testPathfinder1() {		
-		pathfinderTest(l.get(6L), l.get(1L), l.get(7L), l.get(6L));
+	public void testPathfinder1() {
+		pathfinderTest(l.get(6L), l.get(1L), new Airport[]{l.get(1L), l.get(5L), l.get(6L)});
 	}
 	
 	@Test
@@ -78,17 +77,27 @@ public class PathfinderTest {
 	 * Test the route to the start airport itself
 	 */
 	public void testPathfinder2() {		
-		pathfinderTest(l.get(1L), l.get(1L));
+		pathfinderTest(l.get(6L), l.get(6L), new Airport[]{l.get(6L)});
 	}
 	
 	@Test
 	/**
-	 * testPathfinder2
+	 * testPathfinder3
 	 * <p>
 	 * Test an unreachable airport
 	 */
 	public void testPathfinder3() {		
-		pathfinderTest(l.get(8L), l.get(8L));
+		pathfinderTest(l.get(6L), l.get(8L), new Airport[]{l.get(8L)});
+	}
+	
+	@Test
+	/**
+	 * testPathfinder4
+	 * <p>
+	 * Test with directed graph (Bruessel (5) -> Frankfurt (1) only via London (4))
+	 */
+	public void testPathfinder4() {
+		pathfinderTest(l.get(1L),l.get(5L), new Airport[]{l.get(5L),l.get(4L),l.get(1L)});
 	}
 
 }

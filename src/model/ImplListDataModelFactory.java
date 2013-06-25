@@ -1,3 +1,10 @@
+/**
+* ImplListDataModel
+* <p>
+* This factory creates the data model.
+* @author Marius Spix
+*/
+
 package model;
 
 import helpers.DateHelper;
@@ -8,7 +15,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,6 +26,14 @@ public class ImplListDataModelFactory {
 	public static final ImplListDataModelFactory INSTANCE = new ImplListDataModelFactory();
 	private ImplListDataModelFactory() { }
 	
+	/**
+	* factory(Reader r)
+	* @throws IOException
+	* @throws ParseException
+	* @throws BadFileFormatException
+	* <p>
+	* Creates the airport data model from a JSON stream
+	*/
 	public ImplListDataModel factory(Reader r) throws IOException, ParseException, BadFileFormatException {
 
 		ImplListDataModel product = new ImplListDataModel();
@@ -73,6 +87,15 @@ public class ImplListDataModelFactory {
 		return product;
 	}
 	
+	/**
+	* cast
+	* @param o: the object which should be casted
+	* @param expectedClass: the expected class
+	* @return the casted object
+	* @throws BadFileFormatException 
+	* <p>
+	* Casts an object to another object and throws an exception if the object has not the expected class
+	*/ 
 	@SuppressWarnings("unchecked")
 	private <T> T cast(Object o, Class<T> expectedClass) throws BadFileFormatException {
 		Class<?> catchedClass = o.getClass();
@@ -85,6 +108,15 @@ public class ImplListDataModelFactory {
 		return (T)o;
 	}
 	
+	/**
+	* factory(Reader r)
+	* @throws IOException
+	* @throws ParseException
+	* @throws BadFileFormatException
+	* @throws FileNotFoundException
+	* <p>
+	* Creates the airport data model from a JSON file
+	*/
 	public ImplListDataModel factory(File r) throws IOException, ParseException, FileNotFoundException, BadFileFormatException {
 		return factory(new FileReader(r));
 	}

@@ -11,6 +11,9 @@ import java.util.HashMap;
 public class Airport {
 	private Long   id;
 	private String name;
+	
+	//These are incoming connections, not outgoing connections!!!
+	//In the file, however, the outgoing connections are saved.
 	private HashMap<Airport,Connection> connections = new HashMap<Airport,Connection>();
 	
 	protected Airport(Long id) {}
