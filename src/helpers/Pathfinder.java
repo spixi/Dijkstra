@@ -76,9 +76,7 @@ public class Pathfinder {
 			next = connections.poll();
 			
 			for(Airport c : next.getConnections().keySet()) {
-				if(connections.contains(c)) {
 					updateDuration(next,c);
-				}
 			}
 		}
 	}
