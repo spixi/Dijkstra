@@ -52,7 +52,7 @@ public class FileTest {
 	 */
 	public void fileTest2() throws Throwable {
 		Airport dest_airport = airportList.get(4L);
-		assertTrue(dest_airport.getConnections().containsKey(airport));
+		assertTrue(dest_airport.getIncomingConnections().containsKey(airport));
 	}
 	
 	@Test
@@ -63,7 +63,7 @@ public class FileTest {
 	 */
 	public void fileTest3() throws Throwable {
 		Airport no_dest_airport  = airportList.get(2L);
-		assertFalse(no_dest_airport.getConnections().containsKey(airport));
+		assertFalse(no_dest_airport.getIncomingConnections().containsKey(airport));
 	}
 	
 	@Test
@@ -75,7 +75,7 @@ public class FileTest {
 	public void fileTest4() throws Throwable {
 
 		Airport    dest_airport        = airportList.get(4L);
-		assertEquals(DateHelper.INSTANCE.stringToDuration("01:24"),dest_airport.getConnections().get(airport).getDuration());
+		assertEquals(DateHelper.INSTANCE.stringToDuration("01:24"),dest_airport.getIncomingConnections().get(airport).getDuration());
 	}
 	
 }

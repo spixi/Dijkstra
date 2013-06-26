@@ -75,7 +75,7 @@ public class Pathfinder {
 		while(! connections.isEmpty()) {
 			next = connections.poll();
 			
-			for(Airport c : next.getConnections().keySet()) {
+			for(Airport c : next.getIncomingConnections().keySet()) {
 					updateDuration(next,c);
 			}
 		}
@@ -118,7 +118,7 @@ public class Pathfinder {
 	private static Duration getDurationBetween(Airport from, Airport to) {
 		Duration d;
 		try {
-			d = from.getConnections().get(to).getDuration();
+			d = from.getIncomingConnections().get(to).getDuration();
 		}
 		catch( NullPointerException e ) {
 			d = new Duration(Long.MAX_VALUE);

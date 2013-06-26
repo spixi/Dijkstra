@@ -56,7 +56,7 @@ public class ImplListDataModel implements ListDataModel {
 				row.add(previous);
 				row.add(a);
 				
-				Duration d = a.getConnections().get(previous).getDuration();
+				Duration d = a.getIncomingConnections().get(previous).getDuration();
 				
 				//cumulate the durations
 				sum = sum.plus(d);

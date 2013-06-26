@@ -73,18 +73,27 @@ public class EditorWindow extends JFrame implements View, MouseListener {
 		// Determine which element was clicked
 		int elem = this.locations.indexOf(this.locationJList.getSelectedValue());
 		Airport ap = this.locations.get(elem); // the object of type Airport that has been chosen from the list
+		
+		
 
 		// Render Form
 		this.connectionsContainer.removeAll();
-		this.connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
+		this.connectionsContainer.setLayout(new GridLayout(ap.getIncomingConnections().size(), 2));
 		
-		for(Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()){
+		for(Map.Entry<Airport, Connection> entry : ap.getIncomingConnections().entrySet()){
 			//System.out.print(entry.getKey());
 			//System.out.print(" -> ");
 			//System.out.println(entry.getValue().getName());
 			this.connectionsContainer.add(new JLabel(entry.getKey().getName())); // THIS WILL BECOME A SELECTBOX LATER!!!!
 			this.connectionsContainer.add(new JTextField(DateHelper.INSTANCE.durationToString(entry.getValue().getDuration())));
 		}
+		
+		/*Iterator foo = ap.getConnections().values().iterator();
+		while(foo.hasNext()){
+			Connection quxx = (Connection)foo.next();
+			System.out.println(quxx.getName());
+		}*/
+		
 		this.pack();
 		this.repaint();
 	}

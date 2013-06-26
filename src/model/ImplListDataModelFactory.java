@@ -75,7 +75,7 @@ public class ImplListDataModelFactory {
 				Airport destination_airport  = airportList.get(destination_id);
 				String duration              = cast(connections.get("duration"),String.class);
 				
-				HashMap<Airport,Connection> c = destination_airport.getConnections();
+				HashMap<Airport,Connection> c = destination_airport.getIncomingConnections();
 				
 				//Connection connection = new Connection(DateHelper.INSTANCE.stringToDuration(duration));
 				Connection connection = new Connection(		DateHelper.INSTANCE.stringToDuration(duration), 
