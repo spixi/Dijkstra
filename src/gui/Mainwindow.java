@@ -82,11 +82,17 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 		menuBar.add(infoMenu);
 		
 		// Define Menu Items within the cats
-		JMenuItem openFile = new JMenuItem("Datei öffnen...");
+		JMenuItem openFile = new JMenuItem("öffnen...");
 		openFile.addActionListener(this);
 		openFile.setActionCommand("loadFile");
 		fileMenu.add(openFile);
 		
+		JMenuItem editFile = new JMenuItem("bearbeiten...");
+		editFile.addActionListener(this);
+		editFile.setActionCommand("editFile");
+		fileMenu.add(editFile);
+		
+		// Info menu
 		JMenuItem fileInfo = new JMenuItem(this.connectionFile.getAbsolutePath().toString());
 		fileInfo.setEnabled(false);
 		JMenuItem textLabelFileInfo = new JMenuItem("Momentan geöffnete Datei:");
@@ -122,6 +128,10 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 					this.connectionFile = new File(chooser.getSelectedFile().getAbsolutePath()); // set the new file to parse before redrawing the gui with new data
 					this.draw(); // repaint the gui!
 			    }
+			break;
+			
+			case "editFile":
+				new EditorWindow(Controller.INSTANCE.getModel().getLocations()).draw();
 			break;
 		}
 
