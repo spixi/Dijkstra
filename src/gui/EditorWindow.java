@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -43,7 +44,7 @@ public class EditorWindow extends JFrame implements View, MouseListener {
 		super.getContentPane().removeAll(); // making this function being able to repaint the mainwindow
 		super.setTitle("Bearbeiten");
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		//super.setResizable(false);
+		super.setResizable(false);
 		
 		super.setLayout(new GridLayout(1, 2, 10, 0));
 		
@@ -71,7 +72,7 @@ public class EditorWindow extends JFrame implements View, MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		// Determine which element was clicked
 		int elem = this.locations.indexOf(this.locationJList.getSelectedValue());
-		Airport ap = this.locations.get(elem);
+		Airport ap = this.locations.get(elem); // the object of type Airport that has been chosen from the list
 
 		// Render Form
 		this.connectionsContainer.removeAll();
