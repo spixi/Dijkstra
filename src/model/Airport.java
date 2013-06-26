@@ -7,6 +7,7 @@
 package model;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 public class Airport {
 	private Long   id;
@@ -31,8 +32,16 @@ public class Airport {
 		this.name = name;
 	}
 
-	public HashMap<Airport,Connection> getConnections() {
+	public HashMap<Airport,Connection> getIncomingConnections() {
 		return this.connections;
+	}
+	
+	/**
+	 * TODO !!!!!I NEED THE IMPLEMENTATION OF THIS METHOD!!!!
+	 * @return
+	 */
+	public Vector<Airport> getOutgoingConnections() {
+		return new Vector<>();
 	}
 
 	public Long getId() {
