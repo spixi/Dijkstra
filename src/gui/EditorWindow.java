@@ -1,5 +1,7 @@
 package gui;
 
+import helpers.DateHelper;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -80,7 +82,7 @@ public class EditorWindow extends JFrame implements View, MouseListener {
 			//System.out.print(" -> ");
 			//System.out.println(entry.getValue().getName());
 			this.connectionsContainer.add(new JLabel(entry.getKey().getName())); // THIS WILL BECOME A SELECTBOX LATER!!!!
-			this.connectionsContainer.add(new JTextField(entry.getValue().getDuration().toString()));
+			this.connectionsContainer.add(new JTextField(DateHelper.INSTANCE.durationToString(entry.getValue().getDuration())));
 		}
 		this.pack();
 		this.repaint();
