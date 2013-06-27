@@ -10,12 +10,18 @@ package model;
 import helpers.DateHelper;
 import helpers.Pathfinder;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Vector;
 
 import org.joda.time.Duration;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 
 public class ImplListDataModel implements ListDataModel {
@@ -79,5 +85,20 @@ public class ImplListDataModel implements ListDataModel {
         
 		return routeHops;
 	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void writeJSONString(Writer out) throws IOException {		
+		JSONArray  baseArray = new JSONArray();
+		
+		for (Airport a: airportList.values()) {
+			//The Airport is JSONStreamAware, so you can simply add it here.
+			baseArray.add(a);
+		}
+		
+		JSONValue.writeJSONString(baseArray, out);
+	}
+
 
 }

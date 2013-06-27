@@ -9,6 +9,8 @@ package test;
 import helpers.DateHelper;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 
 import org.junit.BeforeClass;
@@ -77,5 +79,21 @@ public class FileTest {
 		Airport    dest_airport        = airportList.get(4L);
 		assertEquals(DateHelper.INSTANCE.stringToDuration("01:24"),airport.getConnections().get(dest_airport).getDuration());
 	}
+	
+	@Test
+	/**
+	 * JSONWriteTest1
+	 * <p>
+	 * Test the JSONWriter for the model class
+	 */
+	public void JSONWriteTest1() throws IOException {
+		StringWriter sw = new StringWriter();
+		model.writeJSONString(sw);
+		System.out.println(sw);
+		
+		//TODO: add an actual test here
+		//TODO 2: check what happens when you put an " (double-quote) or an \ (backslash) in a Airport's name)
+	}
+	
 	
 }

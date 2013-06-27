@@ -66,14 +66,14 @@ public class ImplListDataModelFactory {
 			if (airport == null)
 				continue;
 			
-			JSONArray destinations = cast(airportObject.get("destinations"),JSONArray.class);
+			JSONArray destinationsArray = cast(airportObject.get("destinations"),JSONArray.class);
 			
-			for(Object p : destinations) {
-				JSONObject connections = cast(p, JSONObject.class);
+			for(Object p : destinationsArray) {
+				JSONObject connectionObject = cast(p, JSONObject.class);
 				
-				Long    destination_id       = cast(connections.get("id"),Long.class);
+				Long    destination_id       = cast(connectionObject.get("id"),Long.class);
 				Airport destination_airport  = airportList.get(destination_id);
-				String duration              = cast(connections.get("duration"),String.class);
+				String duration              = cast(connectionObject.get("duration"),String.class);
 				
 				HashMap<Airport,Connection> c = airport.getConnections();
 				

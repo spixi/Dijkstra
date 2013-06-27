@@ -9,7 +9,9 @@ package model;
 
 import java.util.Vector;
 
-public interface ListDataModel {
+import org.json.simple.JSONStreamAware;
+
+public interface ListDataModel extends JSONStreamAware {
 
 	/**
 	* getLocations()
