@@ -32,16 +32,8 @@ public class Airport {
 		this.name = name;
 	}
 
-	public HashMap<Airport,Connection> getIncomingConnections() {
+	public HashMap<Airport,Connection> getConnections() {
 		return this.connections;
-	}
-	
-	/**
-	 * TODO !!!!!I NEED THE IMPLEMENTATION OF THIS METHOD!!!!
-	 * @return
-	 */
-	public Vector<Airport> getOutgoingConnections() {
-		return new Vector<>();
 	}
 
 	public Long getId() {

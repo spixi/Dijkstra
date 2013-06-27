@@ -47,7 +47,7 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 		try {
 			Controller.INSTANCE.readFile(this.connectionFile);
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(this, "Die Datei konnte nicht geöffnet werden", "Fehler", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Die Datei konnte nicht geï¿½ffnet werden", "Fehler", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		ListDataModel  model     = Controller.INSTANCE.getModel();
@@ -82,7 +82,7 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 		menuBar.add(infoMenu);
 		
 		// Define Menu Items within the cats
-		JMenuItem openFile = new JMenuItem("öffnen...");
+		JMenuItem openFile = new JMenuItem("ï¿½ffnen...");
 		openFile.addActionListener(this);
 		openFile.setActionCommand("loadFile");
 		fileMenu.add(openFile);
@@ -95,7 +95,7 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 		// Info menu
 		JMenuItem fileInfo = new JMenuItem(this.connectionFile.getAbsolutePath().toString());
 		fileInfo.setEnabled(false);
-		JMenuItem textLabelFileInfo = new JMenuItem("Momentan geöffnete Datei:");
+		JMenuItem textLabelFileInfo = new JMenuItem("Momentan geï¿½ffnete Datei:");
 		textLabelFileInfo.setEnabled(false);
 		infoMenu.add(textLabelFileInfo);
 		infoMenu.add(fileInfo);
@@ -111,8 +111,8 @@ public class Mainwindow extends JFrame implements ActionListener, View {
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand()) {
 			case "calc":
-				Airport from = (Airport)rightList.getSelectedItem();
-				Airport to   = (Airport)leftList.getSelectedItem();
+				Airport from  = (Airport)leftList.getSelectedItem();
+				Airport to    = (Airport)rightList.getSelectedItem();
 				
 				Vector<Vector<Object>> test = Controller.INSTANCE.getModel().getRoute(from,to);
 				

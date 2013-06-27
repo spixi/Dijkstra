@@ -78,9 +78,9 @@ public class EditorWindow extends JFrame implements View, MouseListener {
 
 		// Render Form
 		this.connectionsContainer.removeAll();
-		this.connectionsContainer.setLayout(new GridLayout(ap.getIncomingConnections().size(), 2));
+		this.connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
 		
-		for(Map.Entry<Airport, Connection> entry : ap.getIncomingConnections().entrySet()){
+		for(Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()){
 			//System.out.print(entry.getKey());
 			//System.out.print(" -> ");
 			//System.out.println(entry.getValue().getName());

@@ -14,6 +14,8 @@ import helpers.Pathfinder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,13 +49,15 @@ public class PathfinderTest {
 	 * @param should: expected hops
 	 */
 	private void pathfinderTest(Airport source, Airport destination, Airport[] should) {
-		Pathfinder pf = new Pathfinder(destination, l.values());
+		Pathfinder pf = new Pathfinder(source, l.values());
 		Airport[]  is = new Airport[should.length];
 		
 		List<Airport> q =
-		pf.determineShortestPathFrom(source);
+		pf.determineShortestPathTo(destination);
 		
-		System.out.println(q);
+		System.out.println("Soll: " + q);
+		System.out.println("Ist: " + Arrays.asList(should));
+		System.out.println();
 		
 	    q.toArray(is);
 		
@@ -67,7 +71,7 @@ public class PathfinderTest {
 	 * Test the pathfinder class.
 	 */
 	public void testPathfinder1() {
-		pathfinderTest(l.get(6L), l.get(1L), new Airport[]{l.get(6L), l.get(5L), l.get(7L), l.get(7L)});
+		pathfinderTest(l.get(6L), l.get(1L), new Airport[]{l.get(6L), l.get(5L), l.get(4L), l.get(1L)});
 	}
 	
 	@Test
@@ -87,7 +91,7 @@ public class PathfinderTest {
 	 * Test an unreachable airport
 	 */
 	public void testPathfinder3() {		
-		pathfinderTest(l.get(6L), l.get(8L), new Airport[]{l.get(6L)});
+		pathfinderTest(l.get(6L), l.get(8L), new Airport[]{l.get(8L)});
 	}
 	
 	@Test

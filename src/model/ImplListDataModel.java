@@ -10,6 +10,7 @@ package model;
 import helpers.DateHelper;
 import helpers.Pathfinder;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -40,34 +41,35 @@ public class ImplListDataModel implements ListDataModel {
 
 
 	@Override
-	public Vector<Vector<Object>> getRoute(Airport to, Airport from) {
-		Pathfinder pf = new Pathfinder(to,airportList.values());
+	public Vector<Vector<Object>> getRoute(Airport from, Airport to) {
+		Pathfinder pf = new Pathfinder(from,airportList.values());
 		Vector<Vector<Object>> routeHops = new Vector<Vector<Object>>();
 		Airport previous = null;
 		Duration sum     = Duration.ZERO;
 		Vector<Object> row;
 		
-		List<Airport> path = pf.determineShortestPathFrom(from);
+		List<Airport> path = pf.determineShortestPathTo(to);
+		Collections.reverse(path);
 		
         for (Airport a : path) {
 			row = new Vector<Object>();
 			
 			if (previous != null) {
-				row.add(previous);
 				row.add(a);
+				row.add(previous);
 				
-				Duration d = a.getIncomingConnections().get(previous).getDuration();
+				Duration d = a.getConnections().get(previous).getDuration();
 				
 				//cumulate the durations
 				sum = sum.plus(d);
 				row.add(DateHelper.INSTANCE.durationToString(d));
-				routeHops.add(row);
+				routeHops.add(0,row);
 			}
 		
 			previous = a;
 		}
         
-        if (path.indexOf(to) > 0) {
+        if (routeHops.size() > 1) {
         	row = new Vector<Object>();
         	row.add("Summe");
         	row.add("");

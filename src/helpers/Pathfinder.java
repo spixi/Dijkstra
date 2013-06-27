@@ -37,7 +37,7 @@ public class Pathfinder {
 	 * @param startAirport: the start node
 	 * @param airports: a list of all nodes
 	 */
-	public Pathfinder(Airport destinationAirport, Collection<Airport> airports) {
+	public Pathfinder(Airport startAirport, Collection<Airport> airports) {
 		//Create the lookup tables
 		precessors        = new HashMap<Airport,Airport>();
 		durations         = new HashMap<Airport,Duration>();
@@ -48,8 +48,8 @@ public class Pathfinder {
 		    durations.put(airport, new Duration(Long.MAX_VALUE));
 		}
 		
-		durations.put (destinationAirport, new Duration(Duration.ZERO));
-		precessors.put(destinationAirport, null);
+		durations.put (startAirport, new Duration(Duration.ZERO));
+		precessors.put(startAirport, null);
 		
 		//Create the priority queue of the connections
 		connections =
@@ -75,7 +75,7 @@ public class Pathfinder {
 		while(! connections.isEmpty()) {
 			next = connections.poll();
 			
-			for(Airport c : next.getIncomingConnections().keySet()) {
+			for(Airport c : next.getConnections().keySet()) {
 					updateDuration(next,c);
 			}
 		}
@@ -118,7 +118,7 @@ public class Pathfinder {
 	private static Duration getDurationBetween(Airport from, Airport to) {
 		Duration d;
 		try {
-			d = from.getIncomingConnections().get(to).getDuration();
+			d = from.getConnections().get(to).getDuration();
 		}
 		catch( NullPointerException e ) {
 			d = new Duration(Long.MAX_VALUE);
@@ -131,18 +131,18 @@ public class Pathfinder {
 	 * <p>
 	 * Determines the shortest path from the start node to another node.
 	 * If there is no possible way the behavior is undefined.
-	 * @param startAirport
+	 * @param destinationAirport
 	 * @return
 	 */
-	public List<Airport> determineShortestPathFrom(Airport startAirport) {
+	public List<Airport> determineShortestPathTo(Airport destinationAirport) {
 		LinkedList<Airport> list   = new LinkedList<Airport>();
-		Airport            current = startAirport;
+		Airport            current = destinationAirport;
 		
-		list.addFirst(startAirport);
+		list.addFirst(destinationAirport);
 		
 		while(precessors.get(current) != null) {
 			current = precessors.get(current);
-			list.add(current);
+			list.addFirst(current);
 		}
 		
 		return list;
