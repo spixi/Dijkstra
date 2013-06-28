@@ -83,7 +83,7 @@ public class Airport implements JSONStreamAware {
 			destinationsArray.add(connectionObject);
 		}
 		
-		airportObject.put("connections", destinationsArray);
+		airportObject.put("destinations", destinationsArray);
 		
 		JSONValue.writeJSONString(airportObject, out);
 		

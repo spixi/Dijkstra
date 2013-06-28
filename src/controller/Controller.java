@@ -9,8 +9,10 @@ package controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 
+import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
 import model.BadFileFormatException;
@@ -44,6 +46,28 @@ public class Controller {
 	 */
 	public void readFile(File f) throws FileNotFoundException, IOException, ParseException, BadFileFormatException {
 		model = ImplListDataModelFactory.INSTANCE.factory(f);
+	}
+	
+	/**
+	 * writeFile
+	 * @param f: The file to read
+	 * <p>
+	 * Writes a file from the data model factory
+	 */
+	public void writeFile(File f) throws FileNotFoundException, IOException, BadFileFormatException {
+		FileWriter writer;
+		
+		if (!f.exists()) {
+			f.createNewFile();
+		}
+		
+		writer = new FileWriter(f);
+		
+		//f.setWritable(true);
+		
+		model.writeJSONString(writer);
+		
+		writer.close();
 	}
 	
 	public ListDataModel getModel() {
