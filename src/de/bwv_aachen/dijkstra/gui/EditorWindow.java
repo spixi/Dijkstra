@@ -171,6 +171,10 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
                     }
                 }
             break;
+            
+            case "lRem":
+                lm.remove(this.locationJList.getSelectedIndex());
+            break;
         }
         this.draw(); // repaint
     }
