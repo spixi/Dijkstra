@@ -60,7 +60,6 @@ public class Mainwindow extends JFrame implements ActionListener, View {
         ((JComponent) getContentPane()).setBorder(BorderFactory
                 .createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
 
-        // File f = new File("test/testconnection.json");
         if (file_changed) {
             try {
                 Controller.INSTANCE.readFile(connectionFile);

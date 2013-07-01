@@ -11,6 +11,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -20,14 +22,17 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 
 import de.bwv_aachen.dijkstra.helpers.DateHelper;
@@ -35,13 +40,18 @@ import de.bwv_aachen.dijkstra.model.Airport;
 import de.bwv_aachen.dijkstra.model.Connection;
 
 @SuppressWarnings("serial")
-public class EditorWindow extends JFrame implements View, MouseListener {
+public class EditorWindow extends JFrame implements View, MouseListener, ActionListener {
 
     Vector<Airport> locations;
 
     // Beans
     JPanel          connectionsContainer;
     JList<Airport>  locationJList;
+    
+    JButton lAdd;
+    JButton lRem;
+    JButton rAdd;
+    JButton rRem;
 
     public EditorWindow(Vector<Airport> locations) {
         this.locations = locations;
@@ -63,22 +73,29 @@ public class EditorWindow extends JFrame implements View, MouseListener {
         locationJList = new JList<Airport>(locations);
         connectionsContainer = new JPanel();
         
-        // Container
+        // Container for the left and the right side
         JPanel leftContainer = new JPanel();
         leftContainer.setLayout(new BorderLayout());
         JPanel rightContainer = new JPanel();
         rightContainer.setLayout(new BorderLayout());
         
         // Buttons
-        JButton lAdd = new JButton("+");
-        JButton lRem = new JButton("-");
-        JButton rAdd = new JButton("+");
-        JButton rRem = new JButton("-");
+        this.lAdd = new JButton("+");
+        this.lAdd.setActionCommand("lAdd");
+        this.lRem = new JButton("-");
+        this.lRem.setActionCommand("lRem");
+        this.rAdd = new JButton("+");
+        this.rAdd.setActionCommand("rAdd");
+        this.rRem = new JButton("-");
+        this.rRem.setActionCommand("rRem");
+        
+        // Container for the buttons
         JPanel lButtons = new JPanel();
         lButtons.setLayout(new FlowLayout());
         JPanel rButtons = new JPanel();
         rButtons.setLayout(new FlowLayout());
         
+        // Add buttons to container
         lButtons.add(lAdd);
         lButtons.add(lRem);
         
@@ -87,14 +104,19 @@ public class EditorWindow extends JFrame implements View, MouseListener {
 
         // Add ActionListening
         locationJList.addMouseListener(this);
+        this.lAdd.addActionListener(this);
+        this.rAdd.addActionListener(this);
+        this.lRem.addActionListener(this);
+        this.rRem.addActionListener(this);
         
+        // Add lists and buttons to the correct jpanel
         leftContainer.add(locationJList, BorderLayout.CENTER);
         leftContainer.add(lButtons, BorderLayout.SOUTH);
         
         rightContainer.add(connectionsContainer, BorderLayout.CENTER);
         rightContainer.add(rButtons, BorderLayout.SOUTH);
         
-        // Add elems to frame
+        // Add elems (panels) to frame
         super.getContentPane().add(leftContainer);
         super.getContentPane().add(rightContainer);
 
@@ -127,6 +149,18 @@ public class EditorWindow extends JFrame implements View, MouseListener {
         this.repaint();
     }
 
+    public void actionPerformed(ActionEvent e) {
+        //JButton button = (JButton)e.getSource();
+        switch(e.getActionCommand()){
+            case "lAdd":
+                String input = JOptionPane.showInputDialog("Name des Flughafens:");
+                if(!input.equals("")) {
+                    // this.locationJList.getModel() -> returns JList .... WTF?! Why?! Can't use a Bean as ListModel o.O 
+                    //foo.addElement(new Airport(200l, input));
+                }
+            break;
+        }
+    }
 
     public void mouseEntered(MouseEvent e) { }
     public void mouseExited(MouseEvent e) { }
