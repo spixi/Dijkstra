@@ -7,7 +7,9 @@
  */
 package de.bwv_aachen.dijkstra.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -16,7 +18,9 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -53,19 +57,46 @@ public class EditorWindow extends JFrame implements View, MouseListener {
 
         super.setLayout(new GridLayout(1, 2, 10, 0));
 
-        ((JComponent) getContentPane()).setBorder(BorderFactory
-                .createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
+        ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
 
         // Build the UI Elems
         locationJList = new JList<Airport>(locations);
         connectionsContainer = new JPanel();
+        
+        // Container
+        JPanel leftContainer = new JPanel();
+        leftContainer.setLayout(new BorderLayout());
+        JPanel rightContainer = new JPanel();
+        rightContainer.setLayout(new BorderLayout());
+        
+        // Buttons
+        JButton lAdd = new JButton("+");
+        JButton lRem = new JButton("-");
+        JButton rAdd = new JButton("+");
+        JButton rRem = new JButton("-");
+        JPanel lButtons = new JPanel();
+        lButtons.setLayout(new FlowLayout());
+        JPanel rButtons = new JPanel();
+        rButtons.setLayout(new FlowLayout());
+        
+        lButtons.add(lAdd);
+        lButtons.add(lRem);
+        
+        rButtons.add(rAdd);
+        rButtons.add(rRem);
 
         // Add ActionListening
         locationJList.addMouseListener(this);
-
+        
+        leftContainer.add(locationJList, BorderLayout.CENTER);
+        leftContainer.add(lButtons, BorderLayout.SOUTH);
+        
+        rightContainer.add(connectionsContainer, BorderLayout.CENTER);
+        rightContainer.add(rButtons, BorderLayout.SOUTH);
+        
         // Add elems to frame
-        super.getContentPane().add(locationJList);
-        super.getContentPane().add(connectionsContainer);
+        super.getContentPane().add(leftContainer);
+        super.getContentPane().add(rightContainer);
 
         // Do the rest for displaying the window
         super.pack();
