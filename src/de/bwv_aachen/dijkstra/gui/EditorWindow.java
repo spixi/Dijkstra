@@ -11,10 +11,13 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -43,8 +46,7 @@ public class EditorWindow extends JFrame implements View, MouseListener {
     
     @Override
     public void draw() {
-        super.getContentPane().removeAll(); // making this function being able
-                                            // to repaint the mainwindow
+        super.getContentPane().removeAll(); // making this function being able to repaint the mainwindow
         super.setTitle("Bearbeiten");
         super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         super.setResizable(false);
@@ -77,53 +79,27 @@ public class EditorWindow extends JFrame implements View, MouseListener {
     public void mouseClicked(MouseEvent e) {
         // Determine which element was clicked
         int elem = locations.indexOf(locationJList.getSelectedValue());
-        Airport ap = locations.get(elem); // the object of type Airport that has
-                                          // been chosen from the list
+        Airport ap = locations.get(elem); // the object of type Airport that has been chosen from the list
 
         // Render Form
         connectionsContainer.removeAll();
-        connectionsContainer.setLayout(new GridLayout(ap.getConnections()
-                .size(), 2));
+        connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
 
-        for (Map.Entry<Airport, Connection> entry : ap.getConnections()
-                .entrySet()) {
-            // System.out.print(entry.getKey());
-            // System.out.print(" -> ");
-            // System.out.println(entry.getValue().getName());
-            connectionsContainer.add(new JLabel(entry.getKey().getName())); // THIS
-                                                                            // WILL
-                                                                            // BECOME
-                                                                            // A
-                                                                            // SELECTBOX
-                                                                            // LATER!!!!
-            connectionsContainer.add(new JTextField(DateHelper.INSTANCE
-                    .durationToString(entry.getValue().getDuration())));
+        for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
+            JComboBox<Airport> apSelect = new JComboBox<>(locations);
+            apSelect.setSelectedIndex(locations.indexOf(entry.getKey()));
+            connectionsContainer.add(apSelect);
+            connectionsContainer.add(new JTextField(DateHelper.INSTANCE.durationToString(entry.getValue().getDuration())));
         }
-
-        /*
-         * Iterator foo = ap.getConnections().values().iterator();
-         * while(foo.hasNext()){ Connection quxx = (Connection)foo.next();
-         * System.out.println(quxx.getName()); }
-         */
 
         pack();
         this.repaint();
     }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
+    public void mouseEntered(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) { }
+    public void mousePressed(MouseEvent e) { }
+    public void mouseReleased(MouseEvent e) { }
 
 }

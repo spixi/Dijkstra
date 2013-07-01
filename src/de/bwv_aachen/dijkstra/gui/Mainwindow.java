@@ -109,7 +109,7 @@ public class Mainwindow extends JFrame implements ActionListener, View {
         menuBar.add(infoMenu);
 
         // Define Menu Items within the cats
-        JMenuItem openFile = new JMenuItem("ï¿½ffnen...");
+        JMenuItem openFile = new JMenuItem("Öffnen...");
         openFile.addActionListener(this);
         openFile.setActionCommand("loadFile");
         fileMenu.add(openFile);
