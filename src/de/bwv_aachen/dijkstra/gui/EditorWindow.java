@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -57,8 +58,6 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
         this.locations = locations;
     }
 
-    
-    @Override
     public void draw() {
         super.getContentPane().removeAll(); // making this function being able to repaint the mainwindow
         super.setTitle("Bearbeiten");
@@ -70,7 +69,14 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
         ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
 
         // Build the UI Elems
-        locationJList = new JList<Airport>(locations);
+        DefaultListModel<Airport> lm = new DefaultListModel<>();
+        Iterator<Airport> it = locations.iterator();
+        while(it.hasNext()) { // assign every location to the jList Model
+            Airport ca = (Airport)it.next();
+            lm.addElement(ca);
+        }
+        //locationJList = new JList<Airport>(locations); // this will create a jlist without an model -> completly unusable
+        locationJList = new JList<Airport>(lm);
         connectionsContainer = new JPanel();
         
         // Container for the left and the right side
@@ -155,11 +161,12 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
             case "lAdd":
                 String input = JOptionPane.showInputDialog("Name des Flughafens:");
                 if(!input.equals("")) {
-                    // this.locationJList.getModel() -> returns JList .... WTF?! Why?! Can't use a Bean as ListModel o.O 
-                    //foo.addElement(new Airport(200l, input));
+                    DefaultListModel<Airport> lm = (DefaultListModel<Airport>)this.locationJList.getModel();
+                    lm.addElement(new Airport(200l, input));
                 }
             break;
         }
+        //this.draw(); // repaint
     }
 
     public void mouseEntered(MouseEvent e) { }
