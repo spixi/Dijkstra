@@ -36,6 +36,8 @@ import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 
+import org.joda.time.Duration;
+
 import de.bwv_aachen.dijkstra.helpers.DateHelper;
 import de.bwv_aachen.dijkstra.model.Airport;
 import de.bwv_aachen.dijkstra.model.Connection;
@@ -167,7 +169,12 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
                 if(input != null) { // prevents some nullpointer exceptions (which would not take any effect for the program, but disturbed me)
                     if(!input.equals("")) {
                         DefaultListModel<Airport> lm = (DefaultListModel<Airport>)this.locationJList.getModel();
-                        lm.addElement(new Airport(locations.lastElement().getId()+1, input));
+                        
+                        Airport nAp = new Airport(lm.lastElement().getId()+1, input); // create an temp airport that will later be assigned as connection
+                        
+                        nAp.getConnections().put(new Airport(1337l, "Test!"), new Connection(new Duration(1338)));
+                        
+                        lm.addElement(nAp); // add the String as given Airport to the JList Model
                     }
                 }
             break;
