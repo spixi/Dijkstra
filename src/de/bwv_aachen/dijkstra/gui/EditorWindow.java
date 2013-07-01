@@ -53,9 +53,19 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
     JButton lRem;
     JButton rAdd;
     JButton rRem;
+    
+    // Model(s)
+    DefaultListModel<Airport> lm = new DefaultListModel<>();
 
     public EditorWindow(Vector<Airport> locations) {
         this.locations = locations;
+        
+        // generate Airport List Model
+        Iterator<Airport> it = locations.iterator();
+        while(it.hasNext()) { // assign every location to the jList Model
+            Airport ca = (Airport)it.next();
+            this.lm.addElement(ca);
+        }
     }
 
     public void draw() {
@@ -69,12 +79,6 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
         ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
 
         // Build the UI Elems
-        DefaultListModel<Airport> lm = new DefaultListModel<>();
-        Iterator<Airport> it = locations.iterator();
-        while(it.hasNext()) { // assign every location to the jList Model
-            Airport ca = (Airport)it.next();
-            lm.addElement(ca);
-        }
         //locationJList = new JList<Airport>(locations); // this will create a jlist without an model -> completly unusable
         locationJList = new JList<Airport>(lm);
         connectionsContainer = new JPanel();
@@ -160,13 +164,15 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
         switch(e.getActionCommand()){
             case "lAdd":
                 String input = JOptionPane.showInputDialog("Name des Flughafens:");
-                if(!input.equals("")) {
-                    DefaultListModel<Airport> lm = (DefaultListModel<Airport>)this.locationJList.getModel();
-                    lm.addElement(new Airport(200l, input));
+                if(input != null) { // prevents some nullpointer exceptions (which would not take any effect for the program, but disturbed me)
+                    if(!input.equals("")) {
+                        DefaultListModel<Airport> lm = (DefaultListModel<Airport>)this.locationJList.getModel();
+                        lm.addElement(new Airport(locations.lastElement().getId()+1, input));
+                    }
                 }
             break;
         }
-        //this.draw(); // repaint
+        this.draw(); // repaint
     }
 
     public void mouseEntered(MouseEvent e) { }
