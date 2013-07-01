@@ -143,11 +143,18 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
     @Override
     public void mouseClicked(MouseEvent e) {
         // Determine which element was clicked
-        int elem = locations.indexOf(locationJList.getSelectedValue());
-        Airport ap = locations.get(elem); // the object of type Airport that has been chosen from the list
+        //int elem = locations.indexOf(locationJList.getSelectedValue());
+        //Airport ap = locations.get(elem); // the object of type Airport that has been chosen from the list
+        
+        int elem = this.lm.indexOf(locationJList.getSelectedValue());
+        Airport ap = this.lm.get(elem); // the object of type Airport that has been chosen from the list
 
         // Render Form
         connectionsContainer.removeAll();
+        
+        if(ap.getConnections().size() == 0)
+            return;
+        
         connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
 
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
@@ -172,7 +179,7 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
                         
                         Airport nAp = new Airport(lm.lastElement().getId()+1, input); // create an temp airport that will later be assigned as connection
                         
-                        nAp.getConnections().put(new Airport(1337l, "Test!"), new Connection(new Duration(1338)));
+                        nAp.getConnections().put(new Airport(1337l, "Prag"), new Connection(new Duration(1338))); // TEST!!
                         
                         lm.addElement(nAp); // add the String as given Airport to the JList Model
                     }
