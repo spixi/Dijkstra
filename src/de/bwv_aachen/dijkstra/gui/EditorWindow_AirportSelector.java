@@ -15,6 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+
 import de.bwv_aachen.dijkstra.controller.Controller;
 import de.bwv_aachen.dijkstra.model.Airport;
 
@@ -52,7 +53,7 @@ public class EditorWindow_AirportSelector extends View {
         
         JButton cancelButton = new JButton("Abbrechen");
         cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) { // inline window disposal ...
                 JButton src = (JButton)e.getSource();
                 JFrame superFrame = (JFrame)src.getParent().getParent().getParent().getParent(); // this is a bunch of layers we need to travel for finally finding the JFrame o.O 
                 superFrame.dispose();
@@ -62,6 +63,10 @@ public class EditorWindow_AirportSelector extends View {
         super.getContentPane().add(cb);
         super.getContentPane().add(approveButton);
         super.getContentPane().add(cancelButton);
+        
+        cb.setAlignmentX(CENTER_ALIGNMENT);
+        approveButton.setAlignmentX(CENTER_ALIGNMENT);
+        cancelButton.setAlignmentX(CENTER_ALIGNMENT);
         
         super.pack();
         super.setLocationRelativeTo(null);
