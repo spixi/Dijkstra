@@ -21,6 +21,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -172,10 +173,6 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
                 ap.getConnections().put(new Airport(2l, this.airportSel.getSelection().getName()), new Connection(new Duration(1339)));
                 this.airportSel.dispose();
             break;
-            
-            case "selectBoxChanged":
-                System.out.println("changed!");
-            break;
         }
         int selection = this.locationJList.getSelectedIndex(); // repainting makes the form lose its selection so lets manually save and restore them
         this.draw(); // repaint
@@ -183,7 +180,6 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
     }
 
     public void valueChanged(ListSelectionEvent e) {     
-        Object[] airportList = controller.getModel().getAirportList().values().toArray();
     /**
      * Triggered as soon as the list selection changes in any way
      */
@@ -205,12 +201,10 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
 
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
-            JComboBox<Object> apSelect = new JComboBox<Object>(airportList);
-            apSelect.setSelectedIndex(Arrays.binarySearch(airportList, entry.getKey()));
-            apSelect.addActionListener(this);
-            apSelect.setActionCommand("selectBoxChanged");
-            connectionsContainer.add(apSelect);
-            connectionsContainer.add(new JTextField(DateHelper.INSTANCE.durationToString(entry.getValue().getDuration())));
+            connectionsContainer.add(new JLabel(entry.getKey().toString()));
+            JTextField textDuration = new JTextField();
+            connectionsContainer.add(textDuration);
+            connectionsContainer.add(new ConnectionChangeButton(entry.getValue(),textDuration));
         }
 
         pack();
