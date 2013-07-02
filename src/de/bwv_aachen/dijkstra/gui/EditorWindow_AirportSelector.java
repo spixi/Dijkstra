@@ -26,7 +26,7 @@ public class EditorWindow_AirportSelector extends View {
     ActionListener al;
     
     // Beans
-    private JComboBox<Airport> cb;
+    private JComboBox<Object> cb;
     
     public EditorWindow_AirportSelector(Controller c, ActionListener al) {
         super(c);
@@ -43,8 +43,8 @@ public class EditorWindow_AirportSelector extends View {
 
         ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
         
-        ComboBoxModel<Airport> cbm = new DefaultComboBoxModel<Airport>((Airport[]) controller.getModel().getAirportList().values().toArray());
-        this.cb = new JComboBox<Airport>(cbm);
+        ComboBoxModel<Object> cbm = new DefaultComboBoxModel<Object>(controller.getModel().getAirportList().values().toArray());
+        this.cb = new JComboBox<Object>(cbm);
         
         // Buttons
         JButton approveButton = new JButton("Ok");
