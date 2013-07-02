@@ -198,8 +198,9 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         // Render Form
         connectionsContainer.removeAll();
         
-        if(ap.getConnections().size() == 0)
-            return;
+        //No, because of Peking
+        /*if(ap.getConnections().size() == 0)
+            return;*/ 
         
         connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
 
