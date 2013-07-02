@@ -36,8 +36,8 @@ import de.bwv_aachen.dijkstra.model.ListDataModel;
 @SuppressWarnings("serial")
 public class Mainwindow extends View implements ActionListener {
 
-    private JComboBox<Airport>    leftList;
-    private JComboBox<Airport>    rightList;
+    private JComboBox<Object>     leftList;
+    private JComboBox<Object>     rightList;
     boolean                       file_changed;
     private File                  connectionFile;
     private final JSONFileChooser chooser = new JSONFileChooser();
@@ -75,11 +75,11 @@ public class Mainwindow extends View implements ActionListener {
         }
 
         ListDataModel model = controller.getModel();
-        Vector<Airport> locations = model.getLocations();
+        Object[] locations = model.getAirportList().values().toArray();
 
         // Create the lists
-        leftList = new JComboBox<Airport>(locations);
-        rightList = new JComboBox<Airport>(locations);
+        leftList  = new JComboBox<>(locations);
+        rightList = new JComboBox<>(locations);
         rightList.setSelectedIndex(1); // just for a more professional
                                        // impression of the program -> mark
                                        // the second element in the second

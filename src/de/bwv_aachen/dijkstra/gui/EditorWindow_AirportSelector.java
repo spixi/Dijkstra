@@ -7,6 +7,8 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -40,7 +42,8 @@ public class EditorWindow_AirportSelector extends View {
 
         ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
         
-        this.cb = new JComboBox<>(controller.getModel().getLocations());
+        ComboBoxModel<Airport> cbm = new DefaultComboBoxModel<Airport>((Airport[]) controller.getModel().getAirportList().values().toArray());
+        this.cb = new JComboBox<Airport>(cbm);
         
         // Buttons
         JButton approveButton = new JButton("Ok");

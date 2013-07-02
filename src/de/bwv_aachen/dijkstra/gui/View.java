@@ -11,7 +11,6 @@ package de.bwv_aachen.dijkstra.gui;
 import javax.swing.JFrame;
 
 import de.bwv_aachen.dijkstra.controller.Controller;
-import de.bwv_aachen.dijkstra.model.ListDataModel;
 
 public abstract class View extends JFrame {
     /**

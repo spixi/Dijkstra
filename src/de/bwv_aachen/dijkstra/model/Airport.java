@@ -19,7 +19,7 @@ import org.json.simple.JSONValue;
 
 import de.bwv_aachen.dijkstra.helpers.DateHelper;
 
-public class Airport implements JSONStreamAware {
+public class Airport implements JSONStreamAware, Comparable<Airport> {
     private Long                         id;
     private String                       name;
 
@@ -104,5 +104,11 @@ public class Airport implements JSONStreamAware {
         // https://github.com/zaach/jsonlint
         // yajl: Console program json_reformatter || GitHub:
         // https://github.com/lloyd/yajl (see reformatter)
+    }
+
+    @Override
+    public int compareTo(Airport a) {
+        // TODO Auto-generated method stub
+        return this.getId().compareTo(a.getId());
     }
 }
