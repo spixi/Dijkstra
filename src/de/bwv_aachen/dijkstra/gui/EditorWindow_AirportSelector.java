@@ -1,6 +1,8 @@
 package de.bwv_aachen.dijkstra.gui;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +15,8 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+
+import com.sun.xml.internal.ws.api.server.Container;
 
 import de.bwv_aachen.dijkstra.model.Airport;
 
@@ -36,7 +40,7 @@ public class EditorWindow_AirportSelector extends JFrame implements View {
         super.setResizable(false);
         super.setAlwaysOnTop(true); // this is a bit hacky..
         
-        super.setLayout(new BoxLayout(super.getContentPane(), BoxLayout.PAGE_AXIS));
+        super.getContentPane().setLayout(new BoxLayout(super.getContentPane(), BoxLayout.Y_AXIS));
 
         ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
         
@@ -49,7 +53,7 @@ public class EditorWindow_AirportSelector extends JFrame implements View {
         
         JButton cancelButton = new JButton("Abbrechen");
         cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) { // inline window disposal ...
                 JButton src = (JButton)e.getSource();
                 JFrame superFrame = (JFrame)src.getParent().getParent().getParent().getParent(); // this is a bunch of layers we need to travel for finally finding the JFrame o.O 
                 superFrame.dispose();
@@ -59,6 +63,10 @@ public class EditorWindow_AirportSelector extends JFrame implements View {
         super.getContentPane().add(cb);
         super.getContentPane().add(approveButton);
         super.getContentPane().add(cancelButton);
+        
+        cb.setAlignmentX(CENTER_ALIGNMENT);
+        approveButton.setAlignmentX(CENTER_ALIGNMENT);
+        cancelButton.setAlignmentX(CENTER_ALIGNMENT);
         
         super.pack();
         super.setLocationRelativeTo(null);

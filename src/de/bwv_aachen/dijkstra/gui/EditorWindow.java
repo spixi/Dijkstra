@@ -104,8 +104,10 @@ public class EditorWindow extends JFrame implements View, ActionListener, ListSe
         this.lRem.setActionCommand("lRem");
         this.rAdd = new JButton("+");
         this.rAdd.setActionCommand("rAdd");
+        this.rAdd.setEnabled(false);
         this.rRem = new JButton("-");
         this.rRem.setActionCommand("rRem");
+        this.rRem.setEnabled(false);
         
         // Container for the buttons
         JPanel lButtons = new JPanel();
@@ -150,7 +152,7 @@ public class EditorWindow extends JFrame implements View, ActionListener, ListSe
     public void actionPerformed(ActionEvent e) {
         //JButton button = (JButton)e.getSource();
         switch(e.getActionCommand()){
-            case "lAdd":
+            case "lAdd": // add FROM/source airport
                 String input = JOptionPane.showInputDialog("Name des Flughafens:");
                 if(input != null) { // prevents some nullpointer exceptions (which would not take any effect for the program, but disturbed me)
                     if(!input.equals("")) {
@@ -158,7 +160,8 @@ public class EditorWindow extends JFrame implements View, ActionListener, ListSe
                         
                         Airport nAp = new Airport(lm.lastElement().getId()+1, input); // create an temp airport that will later be assigned as connection
                         
-                        nAp.getConnections().put(new Airport(1337l, "Prag"), new Connection(new Duration(1338))); // TEST!!
+                        nAp.getConnections().put(new Airport(1l, "Frankfurt"), new Connection(new Duration(1338))); // TEST!!
+                        nAp.getConnections().put(new Airport(1l, "Frankfurt"), new Connection(new Duration(1338)));
                         
                         lm.addElement(nAp); // add the String as given Airport to the JList Model
                     }
@@ -176,7 +179,10 @@ public class EditorWindow extends JFrame implements View, ActionListener, ListSe
             break;
             
             case "approveAPselection":
-                System.out.println(this.airportSel.getSelection());
+                //if()
+                int elem = this.lm.indexOf(locationJList.getSelectedValue());
+                Airport ap = this.lm.get(elem);
+                ap.getConnections().put(new Airport(2l, this.airportSel.getSelection().getName()), new Connection(new Duration(1339)));
                 this.airportSel.dispose();
             break;
         }
@@ -185,7 +191,15 @@ public class EditorWindow extends JFrame implements View, ActionListener, ListSe
         this.locationJList.setSelectedIndex(selection);
     }
 
-    public void valueChanged(ListSelectionEvent e) {     
+    /**
+     * Triggered as soon as the list selection changes in any way
+     */
+    public void valueChanged(ListSelectionEvent e) {
+        
+        // first enable the action buttons
+        this.rAdd.setEnabled(true);
+        this.rRem.setEnabled(true);
+        
         int elem = this.lm.indexOf(locationJList.getSelectedValue());
         Airport ap = this.lm.get(elem); // the object of type Airport that has been chosen from the list
 
