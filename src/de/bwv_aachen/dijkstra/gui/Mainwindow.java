@@ -12,6 +12,10 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -46,6 +50,19 @@ public class Mainwindow extends View implements ActionListener {
         super(c);
         connectionFile = controller.getDefaultConnectionFile();
         file_changed = true;
+        
+        
+        //Every time when the Mainwindow gains the focus, redraw it
+        this.addWindowFocusListener(new WindowFocusListener() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) { 
+                draw();   
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+            }
+        });
     }
 
     @Override
@@ -109,7 +126,7 @@ public class Mainwindow extends View implements ActionListener {
         menuBar.add(infoMenu);
 
         // Define Menu Items within the cats
-        JMenuItem openFile = new JMenuItem("Öffnen...");
+        JMenuItem openFile = new JMenuItem("ï¿½ffnen...");
         openFile.addActionListener(this);
         openFile.setActionCommand("loadFile");
         fileMenu.add(openFile);
@@ -164,13 +181,14 @@ public class Mainwindow extends View implements ActionListener {
                                              // redrawing the gui with new
                                              // data
                 file_changed = true;
-                draw(); // repaint the gui!
+//                draw(); // repaint the gui!
             }
             break;
         }
 
         case "editFile": {
-            new EditorWindow(controller).draw();
+            EditorWindow ew = new EditorWindow(controller);            
+            ew.draw();
             break;
         }
 
@@ -200,7 +218,6 @@ public class Mainwindow extends View implements ActionListener {
                             "Die Datei konnte nicht gespeichert werden",
                             "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
-                draw(); // repaint the gui!
             }
             break;
         }

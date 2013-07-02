@@ -17,9 +17,12 @@ import de.bwv_aachen.dijkstra.helpers.DateHelper;
 import de.bwv_aachen.dijkstra.model.Connection;
 
 public class ConnectionChangeButton extends JToggleButton implements ItemListener {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2135290913257401700L;
     private Connection c;
     private JTextComponent tx;
-    private Color oldColor;
     
     public ConnectionChangeButton(Connection c, JTextComponent tx) {
         super("");

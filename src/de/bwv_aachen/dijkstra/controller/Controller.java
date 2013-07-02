@@ -78,6 +78,10 @@ public class Controller {
     public ListDataModel getModel() {
         return model;
     }
+    
+    public View getMainWindow() {
+        return view;
+    }
 
     /**
      * Controller
