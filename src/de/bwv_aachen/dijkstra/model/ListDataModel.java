@@ -8,6 +8,7 @@
 
 package de.bwv_aachen.dijkstra.model;
 
+import java.util.Map;
 import java.util.Vector;
 
 import org.json.simple.JSONStreamAware;
@@ -20,7 +21,10 @@ public interface ListDataModel extends JSONStreamAware {
      * 
      * @return see below Returns a list of the Airports in the data model
      */
+    @Deprecated //Use getAirportList() instead
     public Vector<Airport> getLocations();
+    
+    public Map<Long,Airport> getAirportList();
 
     /**
      * getLocations()

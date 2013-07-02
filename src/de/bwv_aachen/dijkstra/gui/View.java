@@ -8,11 +8,25 @@
 
 package de.bwv_aachen.dijkstra.gui;
 
-public interface View {
+import javax.swing.JFrame;
+
+import de.bwv_aachen.dijkstra.controller.Controller;
+import de.bwv_aachen.dijkstra.model.ListDataModel;
+
+public abstract class View extends JFrame {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6945535097653654834L;
+    protected Controller controller;
+    
     /**
      * draw
      * <p>
      * Draws the view.
      */
-    public void draw();
+    public abstract void draw();
+    public View(Controller c) {
+        this.controller = c;
+    }
 }

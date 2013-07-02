@@ -41,14 +41,13 @@ import javax.swing.event.ListSelectionListener;
 
 import org.joda.time.Duration;
 
+import de.bwv_aachen.dijkstra.controller.Controller;
 import de.bwv_aachen.dijkstra.helpers.DateHelper;
 import de.bwv_aachen.dijkstra.model.Airport;
 import de.bwv_aachen.dijkstra.model.Connection;
 
 @SuppressWarnings("serial")
-public class EditorWindow extends JFrame implements View, ActionListener, ListSelectionListener {
-
-    Vector<Airport> locations;
+public class EditorWindow extends View  implements ActionListener, ListSelectionListener {
 
     // Beans
     JPanel          connectionsContainer;
@@ -65,13 +64,11 @@ public class EditorWindow extends JFrame implements View, ActionListener, ListSe
     // Model(s)
     DefaultListModel<Airport> lm = new DefaultListModel<>();
 
-    public EditorWindow(Vector<Airport> locations) {
-        this.locations = locations;
+    public EditorWindow(Controller c) {
+        super(c);
         
         // generate Airport List Model
-        Iterator<Airport> it = locations.iterator();
-        while(it.hasNext()) { // assign every location to the jList Model
-            Airport ca = (Airport)it.next();
+        for(Airport ca: controller.getModel().getLocations()) { // assign every location to the jList Model
             this.lm.addElement(ca);
         }
     }
@@ -171,7 +168,7 @@ public class EditorWindow extends JFrame implements View, ActionListener, ListSe
             
             case "rAdd":
                 // Show our self made selection box modal
-                this.airportSel = new EditorWindow_AirportSelector(this.locations, this);
+                this.airportSel = new EditorWindow_AirportSelector(controller, this);
                 this.airportSel.draw();
             break;
             
@@ -198,8 +195,8 @@ public class EditorWindow extends JFrame implements View, ActionListener, ListSe
         connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
 
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
-            JComboBox<Airport> apSelect = new JComboBox<>(locations);
-            apSelect.setSelectedIndex(locations.indexOf(entry.getKey()));
+            JComboBox<Airport> apSelect = new JComboBox<>(controller.getModel().getLocations());
+            apSelect.setSelectedIndex(controller.getModel().getLocations().indexOf(entry.getKey()));
             connectionsContainer.add(apSelect);
             connectionsContainer.add(new JTextField(DateHelper.INSTANCE.durationToString(entry.getValue().getDuration())));
         }
