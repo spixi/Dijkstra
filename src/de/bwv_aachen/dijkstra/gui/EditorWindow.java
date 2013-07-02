@@ -168,7 +168,8 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             break;
             
             case "lRem":
-                lm.remove(this.locationJList.getSelectedIndex());
+                Airport oldAirport = lm.remove(this.locationJList.getSelectedIndex());
+                controller.getModel().getAirportList().remove(oldAirport.getId());
             break;
             
             case "rAdd":
