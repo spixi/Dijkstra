@@ -34,7 +34,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.joda.time.Duration;
 
@@ -43,7 +46,7 @@ import de.bwv_aachen.dijkstra.model.Airport;
 import de.bwv_aachen.dijkstra.model.Connection;
 
 @SuppressWarnings("serial")
-public class EditorWindow extends JFrame implements View, MouseListener, ActionListener {
+public class EditorWindow extends JFrame implements View, ActionListener, ListSelectionListener {
 
     Vector<Airport> locations;
 
@@ -55,6 +58,9 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
     JButton lRem;
     JButton rAdd;
     JButton rRem;
+    
+    // Helper Window(s)
+    EditorWindow_AirportSelector airportSel;
     
     // Model(s)
     DefaultListModel<Airport> lm = new DefaultListModel<>();
@@ -115,7 +121,8 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
         rButtons.add(rRem);
 
         // Add ActionListening
-        locationJList.addMouseListener(this);
+        //locationJList.addMouseListener(this);
+        locationJList.addListSelectionListener(this);
         this.lAdd.addActionListener(this);
         this.rAdd.addActionListener(this);
         this.lRem.addActionListener(this);
@@ -140,34 +147,6 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
         super.setVisible(true);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        // Determine which element was clicked
-        //int elem = locations.indexOf(locationJList.getSelectedValue());
-        //Airport ap = locations.get(elem); // the object of type Airport that has been chosen from the list
-        
-        int elem = this.lm.indexOf(locationJList.getSelectedValue());
-        Airport ap = this.lm.get(elem); // the object of type Airport that has been chosen from the list
-
-        // Render Form
-        connectionsContainer.removeAll();
-        
-        if(ap.getConnections().size() == 0)
-            return;
-        
-        connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
-
-        for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
-            JComboBox<Airport> apSelect = new JComboBox<>(locations);
-            apSelect.setSelectedIndex(locations.indexOf(entry.getKey()));
-            connectionsContainer.add(apSelect);
-            connectionsContainer.add(new JTextField(DateHelper.INSTANCE.durationToString(entry.getValue().getDuration())));
-        }
-
-        pack();
-        this.repaint();
-    }
-
     public void actionPerformed(ActionEvent e) {
         //JButton button = (JButton)e.getSource();
         switch(e.getActionCommand()){
@@ -189,13 +168,44 @@ public class EditorWindow extends JFrame implements View, MouseListener, ActionL
             case "lRem":
                 lm.remove(this.locationJList.getSelectedIndex());
             break;
+            
+            case "rAdd":
+                // Show our self made selection box modal
+                this.airportSel = new EditorWindow_AirportSelector(this.locations, this);
+                this.airportSel.draw();
+            break;
+            
+            case "approveAPselection":
+                System.out.println(this.airportSel.getSelection());
+                this.airportSel.dispose();
+            break;
         }
+        int selection = this.locationJList.getSelectedIndex(); // repainting makes the form lose its selection so lets manually save and restore them
         this.draw(); // repaint
+        this.locationJList.setSelectedIndex(selection);
     }
 
-    public void mouseEntered(MouseEvent e) { }
-    public void mouseExited(MouseEvent e) { }
-    public void mousePressed(MouseEvent e) { }
-    public void mouseReleased(MouseEvent e) { }
+    public void valueChanged(ListSelectionEvent e) {     
+        int elem = this.lm.indexOf(locationJList.getSelectedValue());
+        Airport ap = this.lm.get(elem); // the object of type Airport that has been chosen from the list
+
+        // Render Form
+        connectionsContainer.removeAll();
+        
+        if(ap.getConnections().size() == 0)
+            return;
+        
+        connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
+
+        for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
+            JComboBox<Airport> apSelect = new JComboBox<>(locations);
+            apSelect.setSelectedIndex(locations.indexOf(entry.getKey()));
+            connectionsContainer.add(apSelect);
+            connectionsContainer.add(new JTextField(DateHelper.INSTANCE.durationToString(entry.getValue().getDuration())));
+        }
+
+        pack();
+        this.repaint();
+    }
 
 }
