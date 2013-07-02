@@ -147,7 +147,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
                         
                         Long id = 0L;
                         try {
-                           id = lm.lastElement().getId();
+                           id = lm.lastElement().getId()+1;
                         }
                         //Last element not found, so create a new airport with ID 1
                         catch (NoSuchElementException | NullPointerException ex) {
