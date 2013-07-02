@@ -185,6 +185,10 @@ public class EditorWindow extends JFrame implements View, ActionListener, ListSe
                 ap.getConnections().put(new Airport(2l, this.airportSel.getSelection().getName()), new Connection(new Duration(1339)));
                 this.airportSel.dispose();
             break;
+            
+            case "selectBoxChanged":
+                System.out.println("changed!");
+            break;
         }
         int selection = this.locationJList.getSelectedIndex(); // repainting makes the form lose its selection so lets manually save and restore them
         this.draw(); // repaint
@@ -214,6 +218,8 @@ public class EditorWindow extends JFrame implements View, ActionListener, ListSe
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
             JComboBox<Airport> apSelect = new JComboBox<>(locations);
             apSelect.setSelectedIndex(locations.indexOf(entry.getKey()));
+            apSelect.addActionListener(this);
+            apSelect.setActionCommand("selectBoxChanged");
             connectionsContainer.add(apSelect);
             connectionsContainer.add(new JTextField(DateHelper.INSTANCE.durationToString(entry.getValue().getDuration())));
         }
