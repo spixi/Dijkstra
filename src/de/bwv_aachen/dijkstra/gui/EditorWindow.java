@@ -9,6 +9,7 @@ package de.bwv_aachen.dijkstra.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -81,7 +82,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
 
         super.setLayout(new GridLayout(1, 2, 10, 0));
 
-        ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
+        ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(5, 4, 4, 4, Color.LIGHT_GRAY));
 
         // Build the UI Elems
         //locationJList = new JList<Airport>(locations); // this will create a jlist without an model -> completly unusable
@@ -148,6 +149,10 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
 
     public void actionPerformed(ActionEvent e) {
         //JButton button = (JButton)e.getSource();
+        
+        int elem = this.lm.indexOf(locationJList.getSelectedValue()); // COPY PASTE!! NOT DRY
+        Airport ap = this.lm.get(elem);
+        
         switch(e.getActionCommand()){
             case "lAdd": // add FROM/source airport
                 String input = JOptionPane.showInputDialog("Name des Flughafens:");
@@ -177,14 +182,26 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             
             case "approveAPselection":
                 //if()
-                int elem = this.lm.indexOf(locationJList.getSelectedValue());
-                Airport ap = this.lm.get(elem);
                 ap.getConnections().put(new Airport(2l, this.airportSel.getSelection().getName()), new Connection(new Duration(1339)));
                 this.airportSel.dispose();
             break;
             
             case "selectBoxChanged":
-                System.out.println("changed!");
+                // determine the source by iteration
+                
+                JComboBox<Airport> cb = (JComboBox<Airport>)e.getSource();
+                int i = 0;
+                for(Component comp : this.connectionsContainer.getComponents()) {
+                    if(comp.equals(cb)){
+                        //System.out.println("found source: " + cb.getName());
+                        //controller.getModel().getLocations();
+                        //ap.getConnections().put(new Airport(12l, "Test!!"), new Connection(new Duration(123l)));
+                        ap.getConnections().get(i).setDuration(new Duration(123l));
+                    }
+                    if(comp.getClass().getSimpleName().equals("JComboBox"))
+                        i++;
+                }
+                //System.out.println("changed!");
             break;
         }
         int selection = this.locationJList.getSelectedIndex(); // repainting makes the form lose its selection so lets manually save and restore them
@@ -201,7 +218,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         this.rAdd.setEnabled(true);
         this.rRem.setEnabled(true);
         
-        int elem = this.lm.indexOf(locationJList.getSelectedValue());
+        int elem = this.lm.indexOf(locationJList.getSelectedValue()); // COPY PASTE ! NOT DRY
         Airport ap = this.lm.get(elem); // the object of type Airport that has been chosen from the list
 
         // Render Form
@@ -212,11 +229,14 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         
         connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
 
+        //int i=0;
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
             JComboBox<Airport> apSelect = new JComboBox<>(controller.getModel().getLocations());
             apSelect.setSelectedIndex(controller.getModel().getLocations().indexOf(entry.getKey()));
             apSelect.addActionListener(this);
             apSelect.setActionCommand("selectBoxChanged");
+            //apSelect.setName(i+""); // missuage of the name attribute
+            //i++;
             connectionsContainer.add(apSelect);
             connectionsContainer.add(new JTextField(DateHelper.INSTANCE.durationToString(entry.getValue().getDuration())));
         }
