@@ -34,7 +34,7 @@ public class Controller {
      * exchanged later.
      */
     private Controller() {
-        view = new Mainwindow();
+        view = new Mainwindow(this);
     }
 
     /**
@@ -97,7 +97,7 @@ public class Controller {
         INSTANCE.callMainwindow();
     }
 
-    public static File getDefaultConnectionFile() {
+    public File getDefaultConnectionFile() {
         return new File("test/testconnection.json");
     }
 

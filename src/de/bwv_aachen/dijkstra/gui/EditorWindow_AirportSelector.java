@@ -18,10 +18,11 @@ import javax.swing.WindowConstants;
 
 import com.sun.xml.internal.ws.api.server.Container;
 
+import de.bwv_aachen.dijkstra.controller.Controller;
 import de.bwv_aachen.dijkstra.model.Airport;
 
 @SuppressWarnings("serial")
-public class EditorWindow_AirportSelector extends JFrame implements View {
+public class EditorWindow_AirportSelector extends View {
 
     Vector<Airport> locations;
     ActionListener al;
@@ -29,8 +30,8 @@ public class EditorWindow_AirportSelector extends JFrame implements View {
     // Beans
     private JComboBox<Airport> cb;
     
-    public EditorWindow_AirportSelector(Vector<Airport> locations, ActionListener al) {
-        this.locations = locations;
+    public EditorWindow_AirportSelector(Controller c, ActionListener al) {
+        super(c);
         this.al = al;
     }
     
@@ -44,7 +45,7 @@ public class EditorWindow_AirportSelector extends JFrame implements View {
 
         ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
         
-        this.cb = new JComboBox<>(this.locations);
+        this.cb = new JComboBox<>(controller.getModel().getLocations());
         
         // Buttons
         JButton approveButton = new JButton("Ok");

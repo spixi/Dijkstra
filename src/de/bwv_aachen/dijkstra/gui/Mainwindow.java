@@ -34,7 +34,7 @@ import de.bwv_aachen.dijkstra.model.Airport;
 import de.bwv_aachen.dijkstra.model.ListDataModel;
 
 @SuppressWarnings("serial")
-public class Mainwindow extends JFrame implements ActionListener, View {
+public class Mainwindow extends View implements ActionListener {
 
     private JComboBox<Airport>    leftList;
     private JComboBox<Airport>    rightList;
@@ -42,8 +42,9 @@ public class Mainwindow extends JFrame implements ActionListener, View {
     private File                  connectionFile;
     private final JSONFileChooser chooser = new JSONFileChooser();
 
-    public Mainwindow() {
-        connectionFile = Controller.getDefaultConnectionFile();
+    public Mainwindow(Controller c) {
+        super(c);
+        connectionFile = controller.getDefaultConnectionFile();
         file_changed = true;
     }
 
@@ -73,7 +74,7 @@ public class Mainwindow extends JFrame implements ActionListener, View {
             file_changed = false;
         }
 
-        ListDataModel model = Controller.INSTANCE.getModel();
+        ListDataModel model = controller.getModel();
         Vector<Airport> locations = model.getLocations();
 
         // Create the lists
@@ -169,8 +170,7 @@ public class Mainwindow extends JFrame implements ActionListener, View {
         }
 
         case "editFile": {
-            new EditorWindow(Controller.INSTANCE.getModel().getLocations())
-                    .draw();
+            new EditorWindow(controller).draw();
             break;
         }
 
