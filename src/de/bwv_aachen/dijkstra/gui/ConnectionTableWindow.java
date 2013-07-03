@@ -57,7 +57,7 @@ public class ConnectionTableWindow extends JFrame {
         cp.setLayout(new BorderLayout());
         JScrollPane scroll = new JScrollPane(connections);
 
-        cp.add(BorderLayout.NORTH, new JLabel("Verbindungs�bersicht"));
+        cp.add(BorderLayout.NORTH, new JLabel("Verbindungsübersicht"));
         cp.add(BorderLayout.SOUTH, scroll);
 
         super.pack();
