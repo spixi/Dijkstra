@@ -281,7 +281,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             
             // create beans
             JTextField textDuration = new JTextField();
-            JButton deleteButton = new JButton("Löschen"); 
+            JButton deleteButton = new JButton(""); 
             deleteButton.addActionListener(new ActionListener() {
                 private Airport ap;
                 private Map.Entry<Airport, Connection> entry;
@@ -300,9 +300,9 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             deleteButton.setActionCommand("removeConnection");
             deleteButton.addActionListener(this); // TODO this needs to be deleted later for its obsolete
             // delete button styles
-            deleteButton.setIcon(new ImageIcon("res/delete_icon.png"));
-            deleteButton.setText("");
-            deleteButton.setBackground(Color.WHITE);
+            deleteButton.setIcon(new ImageIcon("res/delete_icon.gif"));
+            deleteButton.setBackground(new Color(0,0,0,0));
+            deleteButton.setOpaque(false);
             deleteButton.setBorder(BorderFactory.createEmptyBorder());
             
             row.add(new JLabel(entry.getKey().toString())); // The Airport Name

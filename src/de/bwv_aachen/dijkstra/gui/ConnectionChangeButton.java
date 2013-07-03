@@ -66,7 +66,8 @@ public class ConnectionChangeButton extends JToggleButton implements ItemListene
         
         // styles
         this.setIcon(new ImageIcon("res/edit_icon.gif"));
-        this.setBackground(Color.white);
+        this.setBackground(new Color(0,0,0,0));
+        this.setOpaque(false);
         this.setBorder(BorderFactory.createEmptyBorder());
     }
     
