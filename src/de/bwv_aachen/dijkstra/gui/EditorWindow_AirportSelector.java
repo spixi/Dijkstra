@@ -1,22 +1,20 @@
 package de.bwv_aachen.dijkstra.gui;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import com.sun.xml.internal.ws.api.server.Container;
 
 import de.bwv_aachen.dijkstra.controller.Controller;
 import de.bwv_aachen.dijkstra.model.Airport;
@@ -28,7 +26,7 @@ public class EditorWindow_AirportSelector extends View {
     ActionListener al;
     
     // Beans
-    private JComboBox<Airport> cb;
+    private JComboBox<Object> cb;
     
     public EditorWindow_AirportSelector(Controller c, ActionListener al) {
         super(c);
@@ -41,11 +39,12 @@ public class EditorWindow_AirportSelector extends View {
         super.setResizable(false);
         super.setAlwaysOnTop(true); // this is a bit hacky..
         
-        super.getContentPane().setLayout(new BoxLayout(super.getContentPane(), BoxLayout.Y_AXIS));
+        super.setLayout(new BoxLayout(super.getContentPane(), BoxLayout.PAGE_AXIS));
 
         ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
         
-        this.cb = new JComboBox<>(controller.getModel().getLocations());
+        ComboBoxModel<Object> cbm = new DefaultComboBoxModel<Object>(controller.getModel().getAirportList().values().toArray());
+        this.cb = new JComboBox<Object>(cbm);
         
         // Buttons
         JButton approveButton = new JButton("Ok");

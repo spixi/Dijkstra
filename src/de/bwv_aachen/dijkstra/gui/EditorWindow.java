@@ -14,28 +14,18 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -69,7 +59,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         super(c);
         
         // generate Airport List Model
-        for(Airport ca: controller.getModel().getLocations()) { // assign every location to the jList Model
+        for(Airport ca: controller.getModel().getAirportList().values()) { // assign every location to the jList Model
             this.lm.addElement(ca);
         }
     }
@@ -224,15 +214,16 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         // Render Form
         connectionsContainer.removeAll();
         
-        if(ap.getConnections().size() == 0)
-            return;
+        //No, because of Peking
+        /*if(ap.getConnections().size() == 0)
+            return;*/ 
         
         connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
 
         //int i=0;
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
-            JComboBox<Airport> apSelect = new JComboBox<>(controller.getModel().getLocations());
-            apSelect.setSelectedIndex(controller.getModel().getLocations().indexOf(entry.getKey()));
+            JComboBox<Object> apSelect = new JComboBox<Object>(controller.getModel().getAirportList().values());
+            apSelect.setSelectedIndex(Arrays.binarySearch(airportList, entry.getKey()));
             apSelect.addActionListener(this);
             apSelect.setActionCommand("selectBoxChanged");
             //apSelect.setName(i+""); // missuage of the name attribute
