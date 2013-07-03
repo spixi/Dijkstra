@@ -9,6 +9,7 @@ package de.bwv_aachen.dijkstra.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -29,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
+import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -66,27 +70,57 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
     }
 
     public void draw() {
-        super.getContentPane().removeAll(); // making this function being able to repaint the mainwindow
+        Container cp = super.getContentPane();
+        
+        cp.removeAll(); // making this function being able to repaint the mainwindow
         super.setTitle("Bearbeiten");
         super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         super.setResizable(false);
 
-        super.setLayout(new GridLayout(1, 2, 10, 0));
-
-        ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
+        cp.setLayout(new BoxLayout(cp, BoxLayout.PAGE_AXIS));
+        
+        ((JComponent)cp).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
 
         // Build the UI Elems
-        //locationJList = new JList<Airport>(locations); // this will create a jlist without an model -> completly unusable
         locationJList = new JList<Airport>(lm);
-        //Only one airport can be selected
-        locationJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        locationJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //Only one airport can be selected
+        locationJList.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
+        //if(locationJList.getSelectedIndex()==-1) // initially start with selecting the first elem in list
+            //locationJList.setSelectedIndex(0);
         connectionsContainer = new JPanel();
+        connectionsContainer.setLayout(new BoxLayout(connectionsContainer, BoxLayout.PAGE_AXIS));
+        
+        // Some Look and feel helper captions
+        JLabel formTitle = new JLabel("Daten bearbeiten");
+        JLabel leftAreaCaption = new JLabel("Flughäfen");
+        JLabel rightAreaCaption = new JLabel("Verbindungen");
+        
+        // Panels for the captions
+        JPanel headArea = new JPanel();
+        headArea.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
+        headArea.setLayout(new BorderLayout());
+        headArea.add(formTitle, BorderLayout.CENTER);
+        
+        JPanel subHeaderArea = new JPanel();
+        subHeaderArea.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
+        subHeaderArea.setLayout(new BorderLayout());
+        subHeaderArea.add(leftAreaCaption, BorderLayout.WEST);
+        subHeaderArea.add(rightAreaCaption, BorderLayout.EAST);
+        
+        // Add caption
+        cp.add(headArea);
+        cp.add(subHeaderArea);
         
         // Container for the left and the right side
+        JPanel dataArea = new JPanel(); // this panel contains all date elems (list and select boxes)
+        dataArea.setLayout(new BoxLayout(dataArea, BoxLayout.LINE_AXIS));
+        
         JPanel leftContainer = new JPanel();
         leftContainer.setLayout(new BorderLayout());
         JPanel rightContainer = new JPanel();
         rightContainer.setLayout(new BorderLayout());
+        //rightContainer.setLayout(new BoxLayout(rightContainer, BoxLayout.PAGE_AXIS));
+        rightContainer.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
         
         // Buttons
         this.lAdd = new JButton("+");
@@ -107,11 +141,9 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         // Add buttons to container
         lButtons.add(lAdd);
         lButtons.add(lRem);
-        
         rButtons.add(rAdd);
 
         // Add ActionListening
-        //locationJList.addMouseListener(this);
         locationJList.addListSelectionListener(this);
         this.lAdd.addActionListener(this);
         this.rAdd.addActionListener(this);
@@ -125,8 +157,10 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         rightContainer.add(rButtons, BorderLayout.SOUTH);
         
         // Add elems (panels) to frame
-        super.getContentPane().add(leftContainer);
-        super.getContentPane().add(rightContainer);
+        dataArea.add(leftContainer);
+        dataArea.add(rightContainer);
+        
+        cp.add(dataArea);
 
         // Do the rest for displaying the window
         super.pack();
@@ -213,15 +247,16 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             return;
         }
         
-        connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 4));
+        //connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 4));
 
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
-            connectionsContainer.add(new JLabel(entry.getKey().toString()));
-            JTextField textDuration = new JTextField();
-            connectionsContainer.add(textDuration);
-            connectionsContainer.add(new ConnectionChangeButton(entry.getValue(),textDuration));
-            JButton deleteButton = new JButton("Löschen");
+            // Create a flowing panel for each row
+            JPanel row = new JPanel();
+            row.setLayout(new FlowLayout());
             
+            // create beans
+            JTextField textDuration = new JTextField();
+            JButton deleteButton = new JButton("Löschen"); 
             deleteButton.addActionListener(new ActionListener() {
                 private Airport ap;
                 private Map.Entry<Airport, Connection> entry;
@@ -237,10 +272,22 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
                     return this;
                 }
             }.fakeConstructor(ap,entry));
-            
-            deleteButton.addActionListener(this);
             deleteButton.setActionCommand("removeConnection");
-            connectionsContainer.add(deleteButton);
+            deleteButton.addActionListener(this); // TODO this needs to be deleted later for its obsolete
+            
+            // Add beans
+            //connectionsContainer.add(new JLabel(entry.getKey().toString()));
+            //connectionsContainer.add(textDuration);
+            //connectionsContainer.add(new ConnectionChangeButton(entry.getValue(),textDuration));
+            //connectionsContainer.add(deleteButton);
+            
+            row.add(new JLabel(entry.getKey().toString()));
+            row.add(textDuration);
+            row.add(new ConnectionChangeButton(entry.getValue(),textDuration));
+            row.add(deleteButton);
+            
+            connectionsContainer.add(row);
+
         }
 
         pack();
