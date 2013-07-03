@@ -153,7 +153,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         leftContainer.add(locationJList, BorderLayout.CENTER);
         leftContainer.add(lButtons, BorderLayout.SOUTH);
         
-        rightContainer.add(connectionsContainer, BorderLayout.CENTER);
+        rightContainer.add(connectionsContainer, BorderLayout.NORTH);
         rightContainer.add(rButtons, BorderLayout.SOUTH);
         
         // Add elems (panels) to frame
@@ -252,7 +252,8 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
             // Create a flowing panel for each row
             JPanel row = new JPanel();
-            row.setLayout(new FlowLayout());
+            //row.setLayout(new FlowLayout());
+            row.setLayout(new GridLayout(1, 4));
             
             // create beans
             JTextField textDuration = new JTextField();
