@@ -34,7 +34,7 @@ public class EditorWindow_AirportSelector extends View {
     }
     
     public void draw() {
-        super.setTitle("W�hle...");
+        super.setTitle("Wähle...");
         super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         super.setResizable(false);
         super.setAlwaysOnTop(true); // this is a bit hacky..
