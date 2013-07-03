@@ -84,7 +84,7 @@ public class Mainwindow extends View implements ActionListener {
             }
             catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
-                        "Die Datei konnte nicht ge�ffnet werden", "Fehler",
+                        "Die Datei konnte nicht geöffnet werden", "Fehler",
                         JOptionPane.ERROR_MESSAGE);
             }
 
@@ -126,7 +126,7 @@ public class Mainwindow extends View implements ActionListener {
         menuBar.add(infoMenu);
 
         // Define Menu Items within the cats
-        JMenuItem openFile = new JMenuItem("�ffnen...");
+        JMenuItem openFile = new JMenuItem("Öffnen...");
         openFile.addActionListener(this);
         openFile.setActionCommand("loadFile");
         fileMenu.add(openFile);
