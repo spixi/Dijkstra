@@ -114,6 +114,9 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         
         // Add button to footer
         JButton saveDummy = new JButton("Speichern");
+        // NOTE: DONT REMOVE THE SAVE BUTTON AGAIN -> I added it so users dont get confused when editing forms
+        // for its not very common that changes are saved when u click the red X of the window... This is a
+        // look and feel Feature!
         saveDummy.setActionCommand("saveButton");
         saveDummy.addActionListener(this);
         footerArea.add(saveDummy);
