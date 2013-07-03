@@ -57,7 +57,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
     DefaultListModel<Airport> lm = new DefaultListModel<>();
 
     public EditorWindow(Controller c) {
-        super("EditorWindow",c);
+        super(c);
         
         // generate Airport List Model
         for(Airport ca: controller.getModel().getAirportList().values()) { // assign every location to the jList Model
@@ -190,10 +190,10 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         this.locationJList.setSelectedIndex(selection);
     }
 
-    public void valueChanged(ListSelectionEvent e) {     
     /**
      * Triggered as soon as the list selection changes in any way
      */
+    public void valueChanged(ListSelectionEvent e) {     
         
         // first enable the action buttons
         this.lRem.setEnabled(true);
@@ -220,13 +220,12 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             JTextField textDuration = new JTextField();
             connectionsContainer.add(textDuration);
             connectionsContainer.add(new ConnectionChangeButton(entry.getValue(),textDuration));
-            JButton deleteButton = new JButton("L�schen");
+            JButton deleteButton = new JButton("Löschen");
             
             deleteButton.addActionListener(new ActionListener() {
                 private Airport ap;
                 private Map.Entry<Airport, Connection> entry;
                 
-                @Override
                 public void actionPerformed(ActionEvent ev) {
                     ap.getConnections().remove(entry.getKey());
                     connectionsContainer.repaint();
@@ -245,6 +244,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         }
 
         pack();
+        setLocationRelativeTo(null);
         connectionsContainer.repaint();
     }
 

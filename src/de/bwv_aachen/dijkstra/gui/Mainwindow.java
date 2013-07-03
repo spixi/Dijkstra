@@ -133,7 +133,7 @@ public class Mainwindow extends View implements ActionListener {
                 .toString());
         fileInfo.setEnabled(false);
         JMenuItem textLabelFileInfo = new JMenuItem(
-                "Momentan ge�ffnete Datei:");
+                "Momentan geöffnete Datei:");
         textLabelFileInfo.setEnabled(false);
         infoMenu.add(textLabelFileInfo);
         infoMenu.add(fileInfo);
