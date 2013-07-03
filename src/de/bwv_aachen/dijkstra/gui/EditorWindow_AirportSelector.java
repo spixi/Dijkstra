@@ -81,10 +81,7 @@ public class EditorWindow_AirportSelector extends View {
         buttonContainer.add(cancelButton);
         
         // Icon for the left side
-        JLabel imgLabel = new JLabel(new ImageIcon("res/airport-icon.gif"));
-        //imgLabel.setOpaque(false);
-        //imgLabel.setBackground(new Color(0, 0, 0, 0));
-        leftArea.add(imgLabel);
+        leftArea.add(new JLabel(new ImageIcon("res/airport-icon_2.gif")));
 
         // label for the right side
         JLabel decoText = new JLabel("Bitte wählen Sie das Ziel:");
