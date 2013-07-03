@@ -57,7 +57,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
     DefaultListModel<Airport> lm = new DefaultListModel<>();
 
     public EditorWindow(Controller c) {
-        super(c);
+        super("EditorWindow",c);
         
         // generate Airport List Model
         for(Airport ca: controller.getModel().getAirportList().values()) { // assign every location to the jList Model
