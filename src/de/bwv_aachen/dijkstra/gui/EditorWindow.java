@@ -100,13 +100,23 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         JPanel headArea = new JPanel();
         headArea.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
         headArea.setLayout(new BorderLayout());
-        headArea.add(formTitle, BorderLayout.CENTER);
+        headArea.add(formTitle, BorderLayout.LINE_END);
         
         JPanel subHeaderArea = new JPanel();
-        subHeaderArea.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
+        subHeaderArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         subHeaderArea.setLayout(new BorderLayout());
         subHeaderArea.add(leftAreaCaption, BorderLayout.WEST);
         subHeaderArea.add(rightAreaCaption, BorderLayout.EAST);
+        
+        JPanel footerArea = new JPanel();
+        footerArea.setLayout(new BorderLayout());
+        footerArea.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+        
+        // Add button to footer
+        JButton saveDummy = new JButton("Speichern");
+        saveDummy.setActionCommand("saveButton");
+        saveDummy.addActionListener(this);
+        footerArea.add(saveDummy);
         
         // Add caption
         cp.add(headArea);
@@ -121,7 +131,6 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         leftContainer.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         JPanel rightContainer = new JPanel();
         rightContainer.setLayout(new BorderLayout());
-        //rightContainer.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
         rightContainer.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         
         // Buttons
@@ -166,6 +175,9 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         dataArea.add(rightContainer);
         
         cp.add(dataArea);
+        
+        // Add footer
+        cp.add(footerArea);
 
         // Do the rest for displaying the window
         super.pack();
@@ -222,6 +234,10 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
                 Airport ap = this.lm.get(elem);
                 ap.getConnections().put(airportSel.getSelection(), new Connection(Duration.ZERO));
                 this.airportSel.dispose();
+            break;
+            
+            case "saveButton":
+                super.dispose();
             break;
         }
         int selection = this.locationJList.getSelectedIndex(); // repainting makes the form lose its selection so lets manually save and restore them
