@@ -10,6 +10,7 @@ package de.bwv_aachen.dijkstra.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -136,6 +137,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         JPanel rightContainer = new JPanel();
         rightContainer.setLayout(new BorderLayout());
         rightContainer.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+        rightContainer.setPreferredSize(new Dimension(300, 0));
         
         // Buttons
         this.lAdd = new JButton("+");
@@ -318,6 +320,10 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             
             connectionsContainer.add(row);
 
+        }
+        
+        if(ap.getConnections().entrySet().size() == 0) {
+            connectionsContainer.add(new JLabel("Es wurden keine Verbindungen eingetragen!"));
         }
 
         pack();
