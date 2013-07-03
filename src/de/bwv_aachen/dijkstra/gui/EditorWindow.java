@@ -279,6 +279,10 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             JPanel row = new JPanel();
             row.setLayout(new GridLayout(1, 4, 15,0));
             
+            // one more container for the buttons
+            JPanel buttonContainer = new JPanel();
+            buttonContainer.setLayout(new FlowLayout());
+            
             // create beans
             JTextField textDuration = new JTextField();
             JButton deleteButton = new JButton(""); 
@@ -305,10 +309,12 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             deleteButton.setOpaque(false);
             deleteButton.setBorder(BorderFactory.createEmptyBorder());
             
+            buttonContainer.add(new ConnectionChangeButton(entry.getValue(),textDuration));
+            buttonContainer.add(deleteButton);
+            
             row.add(new JLabel(entry.getKey().toString())); // The Airport Name
             row.add(textDuration); // The Duration Placeholder
-            row.add(new ConnectionChangeButton(entry.getValue(),textDuration)); // the change button
-            row.add(deleteButton); // the delete button
+            row.add(buttonContainer);
             
             connectionsContainer.add(row);
 
