@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.json.simple.parser.ParseException;
 
+import de.bwv_aachen.dijkstra.gui.ConnectionVisualization;
 import de.bwv_aachen.dijkstra.gui.Mainwindow;
 import de.bwv_aachen.dijkstra.gui.View;
 import de.bwv_aachen.dijkstra.model.BadFileFormatException;
@@ -37,6 +38,9 @@ public class Controller {
      */
     private Controller() {
         views = new HashMap<String, View>();
+        
+        new ConnectionVisualization(this);
+        new Mainwindow(this);
     }
     
     public void register(String name, View view) {
@@ -88,6 +92,10 @@ public class Controller {
     public View getView(String name) {
         return views.get(name);
     }
+    
+    public void drawView(String name) {
+        getView(name).draw();
+    }
 
 
     /**
@@ -96,7 +104,7 @@ public class Controller {
      * The main method, starts the program
      */
     public static void main(String[] args) {
-        new Mainwindow(INSTANCE).draw();
+        INSTANCE.drawView("MainWindow");
     }
 
     public File getDefaultConnectionFile() {

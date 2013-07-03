@@ -90,17 +90,21 @@ public class Mainwindow extends View implements ActionListener {
                                        // list as active
 
         // Create a button for being able to submit the action
-        JButton startAction = new JButton("Berechnen");
-        startAction.setActionCommand("calc");
-        startAction.addActionListener(this);
+        JButton btCalculate = new JButton("Berechnen");
+        btCalculate.setActionCommand("calc");
+        btCalculate.addActionListener(this);
+        
+        JButton btVisualization = new JButton("graphische Anzeige");
+        btVisualization.setActionCommand("visualization");
+        btVisualization.addActionListener(this);
 
         // Add elements to the frame
         super.add(new JLabel("Start"));
         super.add(leftList);
         super.add(new JLabel("Ziel"));
         super.add(rightList);
-        super.add(startAction);
-        super.add(new JLabel());
+        super.add(btCalculate);
+        super.add(btVisualization);
 
         // Create a menu for various actions
         JMenuBar menuBar = new JMenuBar();
@@ -157,6 +161,11 @@ public class Mainwindow extends View implements ActionListener {
                     .getRoute(from, to);
 
             new ConnectionTableWindow(test).draw();
+            break;
+        }
+        
+        case "visualization": {
+            controller.drawView("ConnectionVisualization");
             break;
         }
 
