@@ -34,7 +34,7 @@ public class EditorWindow_AirportSelector extends View {
     }
     
     public void draw() {
-        super.setTitle("Wähle...");
+        super.setTitle("Wï¿½hle...");
         super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         super.setResizable(false);
         super.setAlwaysOnTop(true); // this is a bit hacky..
@@ -56,6 +56,8 @@ public class EditorWindow_AirportSelector extends View {
             public void actionPerformed(ActionEvent e) { // inline window disposal ...
                 JButton src = (JButton)e.getSource();
                 JFrame superFrame = (JFrame)src.getParent().getParent().getParent().getParent(); // this is a bunch of layers we need to travel for finally finding the JFrame o.O 
+                //Maybe we should the Controller maintain the Frames?
+                
                 superFrame.dispose();
             }
         });

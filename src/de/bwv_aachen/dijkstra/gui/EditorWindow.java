@@ -9,23 +9,25 @@ package de.bwv_aachen.dijkstra.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -47,7 +49,6 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
     JButton lAdd;
     JButton lRem;
     JButton rAdd;
-    JButton rRem;
     
     // Helper Window(s)
     EditorWindow_AirportSelector airportSel;
@@ -72,11 +73,13 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
 
         super.setLayout(new GridLayout(1, 2, 10, 0));
 
-        ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(5, 4, 4, 4, Color.LIGHT_GRAY));
+        ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
 
         // Build the UI Elems
         //locationJList = new JList<Airport>(locations); // this will create a jlist without an model -> completly unusable
         locationJList = new JList<Airport>(lm);
+        //Only one airport can be selected
+        locationJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         connectionsContainer = new JPanel();
         
         // Container for the left and the right side
@@ -89,13 +92,11 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         this.lAdd = new JButton("+");
         this.lAdd.setActionCommand("lAdd");
         this.lRem = new JButton("-");
+        this.lRem.setEnabled(false);
         this.lRem.setActionCommand("lRem");
         this.rAdd = new JButton("+");
         this.rAdd.setActionCommand("rAdd");
         this.rAdd.setEnabled(false);
-        this.rRem = new JButton("-");
-        this.rRem.setActionCommand("rRem");
-        this.rRem.setEnabled(false);
         
         // Container for the buttons
         JPanel lButtons = new JPanel();
@@ -108,7 +109,6 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         lButtons.add(lRem);
         
         rButtons.add(rAdd);
-        rButtons.add(rRem);
 
         // Add ActionListening
         //locationJList.addMouseListener(this);
@@ -116,7 +116,6 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         this.lAdd.addActionListener(this);
         this.rAdd.addActionListener(this);
         this.lRem.addActionListener(this);
-        this.rRem.addActionListener(this);
         
         // Add lists and buttons to the correct jpanel
         leftContainer.add(locationJList, BorderLayout.CENTER);
@@ -139,10 +138,6 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
 
     public void actionPerformed(ActionEvent e) {
         //JButton button = (JButton)e.getSource();
-        
-        int elem = this.lm.indexOf(locationJList.getSelectedValue()); // COPY PASTE!! NOT DRY
-        Airport ap = this.lm.get(elem);
-        
         switch(e.getActionCommand()){
             case "lAdd": // add FROM/source airport
                 String input = JOptionPane.showInputDialog("Name des Flughafens:");
@@ -150,18 +145,31 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
                     if(!input.equals("")) {
                         DefaultListModel<Airport> lm = (DefaultListModel<Airport>)this.locationJList.getModel();
                         
-                        Airport nAp = new Airport(lm.lastElement().getId()+1, input); // create an temp airport that will later be assigned as connection
+                        Long id = 0L;
+                        try {
+                           id = lm.lastElement().getId()+1;
+                        }
+                        //Last element not found, so create a new airport with ID 1
+                        catch (NoSuchElementException | NullPointerException ex) {
+                           id = 1L;
+                        }
                         
-                        nAp.getConnections().put(new Airport(1l, "Frankfurt"), new Connection(new Duration(1338))); // TEST!!
-                        nAp.getConnections().put(new Airport(1l, "Frankfurt"), new Connection(new Duration(1338)));
+                        Airport nAp = new Airport(id, input); // create an temp airport that will later be assigned as connection  
                         
-                        lm.addElement(nAp); // add the String as given Airport to the JList Model
+                        lm.addElement(nAp);      // add the String as given Airport to the JList Model
+                        
+                        //Put the new airport to the real data model
+                        controller.getModel().getAirportList().put(id, nAp);
+                        
+                        //refresh the list
+                        this.repaint();
                     }
                 }
             break;
             
             case "lRem":
-                lm.remove(this.locationJList.getSelectedIndex());
+                Airport oldAirport = lm.remove(this.locationJList.getSelectedIndex());
+                controller.getModel().getAirportList().remove(oldAirport.getId());
             break;
             
             case "rAdd":
@@ -171,27 +179,10 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             break;
             
             case "approveAPselection":
-                //if()
-                ap.getConnections().put(new Airport(2l, this.airportSel.getSelection().getName()), new Connection(new Duration(1339)));
+                int elem = this.lm.indexOf(locationJList.getSelectedValue());
+                Airport ap = this.lm.get(elem);
+                ap.getConnections().put(airportSel.getSelection(), new Connection(Duration.ZERO));
                 this.airportSel.dispose();
-            break;
-            
-            case "selectBoxChanged":
-                // determine the source by iteration
-                
-                JComboBox<Airport> cb = (JComboBox<Airport>)e.getSource();
-                int i = 0;
-                for(Component comp : this.connectionsContainer.getComponents()) {
-                    if(comp.equals(cb)){
-                        //System.out.println("found source: " + cb.getName());
-                        //controller.getModel().getLocations();
-                        //ap.getConnections().put(new Airport(12l, "Test!!"), new Connection(new Duration(123l)));
-                        ap.getConnections().get(i).setDuration(new Duration(123l));
-                    }
-                    if(comp.getClass().getSimpleName().equals("JComboBox"))
-                        i++;
-                }
-                //System.out.println("changed!");
             break;
         }
         int selection = this.locationJList.getSelectedIndex(); // repainting makes the form lose its selection so lets manually save and restore them
@@ -199,41 +190,62 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         this.locationJList.setSelectedIndex(selection);
     }
 
+    public void valueChanged(ListSelectionEvent e) {     
     /**
      * Triggered as soon as the list selection changes in any way
      */
-    public void valueChanged(ListSelectionEvent e) {
         
         // first enable the action buttons
+        this.lRem.setEnabled(true);
         this.rAdd.setEnabled(true);
-        this.rRem.setEnabled(true);
-        
-        int elem = this.lm.indexOf(locationJList.getSelectedValue()); // COPY PASTE ! NOT DRY
-        Airport ap = this.lm.get(elem); // the object of type Airport that has been chosen from the list
 
         // Render Form
         connectionsContainer.removeAll();
         
-        //No, because of Peking
-        /*if(ap.getConnections().size() == 0)
-            return;*/ 
+        //Index points to a deleted Airport
+        if (locationJList.getSelectedIndex() == -1) {
+            return;
+        }
         
-        connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 2));
+        Airport ap = this.lm.elementAt(locationJList.getSelectedIndex());
+        
+        if (ap == null) {
+            return;
+        }
+        
+        connectionsContainer.setLayout(new GridLayout(ap.getConnections().size(), 4));
 
-        //int i=0;
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
-            JComboBox<Object> apSelect = new JComboBox<Object>(controller.getModel().getAirportList().values());
-            apSelect.setSelectedIndex(Arrays.binarySearch(airportList, entry.getKey()));
-            apSelect.addActionListener(this);
-            apSelect.setActionCommand("selectBoxChanged");
-            //apSelect.setName(i+""); // missuage of the name attribute
-            //i++;
-            connectionsContainer.add(apSelect);
-            connectionsContainer.add(new JTextField(DateHelper.INSTANCE.durationToString(entry.getValue().getDuration())));
+            connectionsContainer.add(new JLabel(entry.getKey().toString()));
+            JTextField textDuration = new JTextField();
+            connectionsContainer.add(textDuration);
+            connectionsContainer.add(new ConnectionChangeButton(entry.getValue(),textDuration));
+            JButton deleteButton = new JButton("Löschen");
+            
+            deleteButton.addActionListener(new ActionListener() {
+                private Airport ap;
+                private Map.Entry<Airport, Connection> entry;
+                
+                @Override
+                public void actionPerformed(ActionEvent ev) {
+                    ap.getConnections().remove(entry.getKey());
+                    connectionsContainer.repaint();
+                }
+                
+                public ActionListener fakeConstructor(Airport ap, Map.Entry<Airport, Connection> entry) {
+                    this.ap    = ap;
+                    this.entry = entry;
+                    return this;
+                }
+            }.fakeConstructor(ap,entry));
+            
+            deleteButton.addActionListener(this);
+            deleteButton.setActionCommand("removeConnection");
+            connectionsContainer.add(deleteButton);
         }
 
         pack();
-        this.repaint();
+        connectionsContainer.repaint();
     }
 
 }

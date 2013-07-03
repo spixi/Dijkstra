@@ -8,10 +8,13 @@
 package de.bwv_aachen.dijkstra.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.util.Arrays;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -41,6 +44,7 @@ public class ConnectionTableWindow extends JFrame {
      * Draws the window.
      */
     public void draw() {
+        ((JComponent) getContentPane()).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
 
         Vector<String> columnNames = new Vector<String>(Arrays.asList(
                 "Abflughafen", "Zielflughafen", "Flugzeit"));
@@ -53,7 +57,7 @@ public class ConnectionTableWindow extends JFrame {
         cp.setLayout(new BorderLayout());
         JScrollPane scroll = new JScrollPane(connections);
 
-        cp.add(BorderLayout.NORTH, new JLabel("Verbindungsübersicht"));
+        cp.add(BorderLayout.NORTH, new JLabel("Verbindungsï¿½bersicht"));
         cp.add(BorderLayout.SOUTH, scroll);
 
         super.pack();
