@@ -60,10 +60,9 @@ public class Mainwindow extends View implements ActionListener {
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setResizable(false);
 
-        super.setLayout(new GridLayout(3, 2, 2, 2));
+        super.setLayout(new GridLayout(3, 2, 7, 7));
 
-        ((JComponent) getContentPane()).setBorder(BorderFactory
-                .createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
+        ((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
 
         if (file_changed) {
             try {

@@ -79,7 +79,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
 
         cp.setLayout(new BoxLayout(cp, BoxLayout.PAGE_AXIS));
         
-        ((JComponent)cp).setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.LIGHT_GRAY));
+        ((JComponent)cp).setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         // Build the UI Elems
         locationJList = new JList<Airport>(lm);
