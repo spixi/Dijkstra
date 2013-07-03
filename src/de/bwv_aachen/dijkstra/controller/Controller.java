@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.simple.parser.ParseException;
 
@@ -23,7 +25,7 @@ import de.bwv_aachen.dijkstra.model.ListDataModel;
 public class Controller {
 
     private ListDataModel          model;
-    private View                   view;
+    private HashMap<String, View>  views;
 
     public final static Controller INSTANCE = new Controller();
 
@@ -34,7 +36,11 @@ public class Controller {
      * exchanged later.
      */
     private Controller() {
-        view = new Mainwindow(this);
+        views = new HashMap<String, View>();
+    }
+    
+    public void register(String name, View view) {
+        views.put(name, view);
     }
 
     /**
@@ -79,18 +85,10 @@ public class Controller {
         return model;
     }
     
-    public View getMainWindow() {
-        return view;
+    public View getView(String name) {
+        return views.get(name);
     }
 
-    /**
-     * Controller
-     * <p>
-     * Displays the view
-     */
-    private void callMainwindow() {
-        view.draw();
-    }
 
     /**
      * main
@@ -98,11 +96,30 @@ public class Controller {
      * The main method, starts the program
      */
     public static void main(String[] args) {
-        INSTANCE.callMainwindow();
+        new Mainwindow(INSTANCE).draw();
     }
 
     public File getDefaultConnectionFile() {
         return new File("test/testconnection.json");
+    }
+
+    public void command(String command) {
+        switch(command) {
+        case "AirportListChanged" : {
+            for(Map.Entry<String, View> view : views.entrySet()) {
+                switch(view.getKey()) {
+                    case("MainWindow") :
+                    case("EditorWindow") :
+                    {
+                        //View neu zeichnen
+                        view.getValue().draw();
+                    }
+                }
+            }
+            break;
+        }
+    }
+        
     }
 
 }

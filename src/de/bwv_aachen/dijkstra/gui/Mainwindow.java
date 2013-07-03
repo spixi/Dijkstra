@@ -47,22 +47,9 @@ public class Mainwindow extends View implements ActionListener {
     private final JSONFileChooser chooser = new JSONFileChooser();
 
     public Mainwindow(Controller c) {
-        super(c);
+        super("MainWindow", c);
         connectionFile = controller.getDefaultConnectionFile();
         file_changed = true;
-        
-        
-        //Every time when the Mainwindow gains the focus, redraw it
-        this.addWindowFocusListener(new WindowFocusListener() {
-            @Override
-            public void windowGainedFocus(WindowEvent e) { 
-                draw();   
-            }
-
-            @Override
-            public void windowLostFocus(WindowEvent e) {
-            }
-        });
     }
 
     @Override

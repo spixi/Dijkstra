@@ -25,7 +25,8 @@ public abstract class View extends JFrame {
      * Draws the view.
      */
     public abstract void draw();
-    public View(Controller c) {
+    public View(String name, Controller c) {
         this.controller = c;
+        controller.register(name,this);
     }
 }

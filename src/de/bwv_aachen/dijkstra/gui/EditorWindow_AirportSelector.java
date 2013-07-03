@@ -29,7 +29,7 @@ public class EditorWindow_AirportSelector extends View {
     private JComboBox<Object> cb;
     
     public EditorWindow_AirportSelector(Controller c, ActionListener al) {
-        super(c);
+        super("EditorWindow_AriportSelector",c);
         this.al = al;
     }
     

@@ -19,6 +19,7 @@ import org.joda.time.Duration;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
 
+import de.bwv_aachen.dijkstra.controller.Controller;
 import de.bwv_aachen.dijkstra.helpers.DateHelper;
 import de.bwv_aachen.dijkstra.helpers.Pathfinder;
 
