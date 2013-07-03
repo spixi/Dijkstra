@@ -58,12 +58,6 @@ public class ConnectionChangeButton extends JToggleButton implements ItemListene
     
     private void initializeTextField() {
         tx.setText(DateHelper.INSTANCE.durationToString(c.getDuration()));
-    }
-    
-    private void editOff() {
-        tx.setEditable(false);
-        //this.setText("Bearbeiten");
-        
         // styles
         this.setIcon(new ImageIcon("res/edit_icon.gif"));
         this.setBackground(new Color(0,0,0,0));
@@ -71,9 +65,14 @@ public class ConnectionChangeButton extends JToggleButton implements ItemListene
         this.setBorder(BorderFactory.createEmptyBorder());
     }
     
+    private void editOff() {
+        tx.setEditable(false);
+        //this.setText("Bearbeiten");
+    }
+    
     private void editOn() {
         tx.setEditable(true);
-        this.setText("Speichern");
+        //this.setText("Speichern");
     }
 
 }
