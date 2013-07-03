@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -79,30 +81,29 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
 
         cp.setLayout(new BoxLayout(cp, BoxLayout.PAGE_AXIS));
         
-        ((JComponent)cp).setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        ((JComponent)cp).setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
 
         // Build the UI Elems
         locationJList = new JList<Airport>(lm);
         locationJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //Only one airport can be selected
-        locationJList.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
-        //if(locationJList.getSelectedIndex()==-1) // initially start with selecting the first elem in list
-            //locationJList.setSelectedIndex(0);
+        locationJList.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
         connectionsContainer = new JPanel();
         connectionsContainer.setLayout(new BoxLayout(connectionsContainer, BoxLayout.PAGE_AXIS));
         
         // Some Look and feel helper captions
         JLabel formTitle = new JLabel("Daten bearbeiten");
+        formTitle.setFont(new Font("Arial", Font.CENTER_BASELINE, 20));
         JLabel leftAreaCaption = new JLabel("Flughäfen");
         JLabel rightAreaCaption = new JLabel("Verbindungen");
         
         // Panels for the captions
         JPanel headArea = new JPanel();
-        headArea.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
+        headArea.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
         headArea.setLayout(new BorderLayout());
         headArea.add(formTitle, BorderLayout.CENTER);
         
         JPanel subHeaderArea = new JPanel();
-        subHeaderArea.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
+        subHeaderArea.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
         subHeaderArea.setLayout(new BorderLayout());
         subHeaderArea.add(leftAreaCaption, BorderLayout.WEST);
         subHeaderArea.add(rightAreaCaption, BorderLayout.EAST);
@@ -117,10 +118,11 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         
         JPanel leftContainer = new JPanel();
         leftContainer.setLayout(new BorderLayout());
+        leftContainer.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         JPanel rightContainer = new JPanel();
         rightContainer.setLayout(new BorderLayout());
-        //rightContainer.setLayout(new BoxLayout(rightContainer, BoxLayout.PAGE_AXIS));
-        rightContainer.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
+        //rightContainer.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
+        rightContainer.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         
         // Buttons
         this.lAdd = new JButton("+");
@@ -148,6 +150,9 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         this.lAdd.addActionListener(this);
         this.rAdd.addActionListener(this);
         this.lRem.addActionListener(this);
+        
+        if(locationJList.getSelectedIndex()==-1) // initially start with selecting the first elem in list
+            locationJList.setSelectedIndex(0);
         
         // Add lists and buttons to the correct jpanel
         leftContainer.add(locationJList, BorderLayout.CENTER);
@@ -252,7 +257,6 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
             // Create a flowing panel for each row
             JPanel row = new JPanel();
-            //row.setLayout(new FlowLayout());
             row.setLayout(new GridLayout(1, 4));
             
             // create beans
@@ -275,12 +279,6 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             }.fakeConstructor(ap,entry));
             deleteButton.setActionCommand("removeConnection");
             deleteButton.addActionListener(this); // TODO this needs to be deleted later for its obsolete
-            
-            // Add beans
-            //connectionsContainer.add(new JLabel(entry.getKey().toString()));
-            //connectionsContainer.add(textDuration);
-            //connectionsContainer.add(new ConnectionChangeButton(entry.getValue(),textDuration));
-            //connectionsContainer.add(deleteButton);
             
             row.add(new JLabel(entry.getKey().toString()));
             row.add(textDuration);
