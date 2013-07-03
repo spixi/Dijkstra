@@ -23,6 +23,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -276,7 +277,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         for (Map.Entry<Airport, Connection> entry : ap.getConnections().entrySet()) {
             // Create a flowing panel for each row
             JPanel row = new JPanel();
-            row.setLayout(new GridLayout(1, 4));
+            row.setLayout(new GridLayout(1, 4, 15,0));
             
             // create beans
             JTextField textDuration = new JTextField();
@@ -298,11 +299,16 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
             }.fakeConstructor(ap,entry));
             deleteButton.setActionCommand("removeConnection");
             deleteButton.addActionListener(this); // TODO this needs to be deleted later for its obsolete
+            // delete button styles
+            deleteButton.setIcon(new ImageIcon("res/delete_icon.png"));
+            deleteButton.setText("");
+            deleteButton.setBackground(Color.WHITE);
+            deleteButton.setBorder(BorderFactory.createEmptyBorder());
             
-            row.add(new JLabel(entry.getKey().toString()));
-            row.add(textDuration);
-            row.add(new ConnectionChangeButton(entry.getValue(),textDuration));
-            row.add(deleteButton);
+            row.add(new JLabel(entry.getKey().toString())); // The Airport Name
+            row.add(textDuration); // The Duration Placeholder
+            row.add(new ConnectionChangeButton(entry.getValue(),textDuration)); // the change button
+            row.add(deleteButton); // the delete button
             
             connectionsContainer.add(row);
 

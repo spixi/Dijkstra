@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
@@ -33,7 +35,6 @@ public class ConnectionChangeButton extends JToggleButton implements ItemListene
         this.addItemListener(this);
     }
 
-    @Override
     public void itemStateChanged(ItemEvent ev) {
         Duration d = null;
         
@@ -61,7 +62,12 @@ public class ConnectionChangeButton extends JToggleButton implements ItemListene
     
     private void editOff() {
         tx.setEditable(false);
-        this.setText("Bearbeiten");
+        //this.setText("Bearbeiten");
+        
+        // styles
+        this.setIcon(new ImageIcon("res/edit_icon.gif"));
+        this.setBackground(Color.white);
+        this.setBorder(BorderFactory.createEmptyBorder());
     }
     
     private void editOn() {
