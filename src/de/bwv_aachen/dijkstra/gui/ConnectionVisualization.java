@@ -56,7 +56,10 @@ public class ConnectionVisualization extends View {
             
             setSize(panelWidth,panelHeight);
             Graphics2D g2d = ( Graphics2D ) g; // cast g to Graphics2D
+            
+            //Parameters for g2d
             g2d.setPaint( Color.BLACK);
+            g2d.setFont(new Font("sans-serif", Font.BOLD, 14));
             
             Object[] airports = controller.getModel().getAirportList().values().toArray();
             
@@ -78,8 +81,6 @@ public class ConnectionVisualization extends View {
                 //g2d.draw( new Ellipse2D.Double( x-nodeRadius , y-nodeRadius, nodeDiameter, nodeDiameter ) );
                 
                 g2d.drawImage(airportPicture, (int)(x-picCenterX), (int)(y-picCenterY), null);
-                
-                g2d.setFont(new Font("sans-serif", Font.BOLD, 14));
                 g2d.drawString(airports[i].toString(), (int)(x), (int)(y));
             }       
         }
