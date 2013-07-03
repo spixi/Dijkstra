@@ -2,6 +2,7 @@ package de.bwv_aachen.dijkstra.gui;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -10,10 +11,12 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -41,12 +44,17 @@ public class EditorWindow_AirportSelector extends View {
         super.setResizable(false);
         super.setAlwaysOnTop(true); // this is a bit hacky..
         
-        super.setLayout(new BoxLayout(super.getContentPane(), BoxLayout.PAGE_AXIS));
+        super.getContentPane().setLayout(new GridLayout(1, 2));
 
         ((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
         
         ComboBoxModel<Object> cbm = new DefaultComboBoxModel<Object>(controller.getModel().getAirportList().values().toArray());
         this.cb = new JComboBox<Object>(cbm);
+        
+        // Containers for a left and a right ares
+        JPanel leftArea = new JPanel();
+        JPanel rightArea = new JPanel(); // for the modals form contents
+        rightArea.setLayout(new BoxLayout(rightArea, BoxLayout.Y_AXIS));
         
         // Buttons
         JPanel buttonContainer = new JPanel();
@@ -72,15 +80,30 @@ public class EditorWindow_AirportSelector extends View {
         buttonContainer.add(approveButton);
         buttonContainer.add(cancelButton);
         
-        super.getContentPane().add(cb);
-        //super.getContentPane().add(approveButton);
-        //super.getContentPane().add(cancelButton);
-        super.getContentPane().add(buttonContainer);
+        // Icon for the left side
+        JLabel imgLabel = new JLabel(new ImageIcon("res/airport-icon.gif"));
+        //imgLabel.setOpaque(false);
+        //imgLabel.setBackground(new Color(0, 0, 0, 0));
+        leftArea.add(imgLabel);
+
+        // label for the right side
+        JLabel decoText = new JLabel("Bitte wählen Sie das Ziel:");
+        decoText.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         
+        // add stuff to the panel
+        rightArea.add(decoText);
+        rightArea.add(cb);
+        rightArea.add(buttonContainer);
+        
+        // align beans
+        decoText.setAlignmentX(CENTER_ALIGNMENT); // TODO why the f does this not work with left?!
         cb.setAlignmentX(CENTER_ALIGNMENT);
-        approveButton.setAlignmentX(CENTER_ALIGNMENT);
-        cancelButton.setAlignmentX(CENTER_ALIGNMENT);
         
+        // add panels to the the frame
+        super.getContentPane().add(leftArea);
+        super.getContentPane().add(rightArea);
+        
+        // rest stuff
         super.pack();
         super.setLocationRelativeTo(null);
         super.setVisible(true);
