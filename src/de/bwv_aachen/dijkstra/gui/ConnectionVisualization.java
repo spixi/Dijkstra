@@ -67,9 +67,16 @@ public class ConnectionVisualization extends View {
             g.setColor(labelColor);
             
             for(Map.Entry<Airport, Point> entry: points.entrySet()) {
-                Point p = entry.getValue();
+                Airport a = entry.getKey();
+                Point   p = entry.getValue();
+                
                 g.drawImage(airportPicture, p.x-picCenter.x, p.y-picCenter.y, null);
-                g.drawString(entry.getKey().toString(), p.x, p.y);
+                g.drawString(a.toString(), p.x, p.y);
+                for(Airport dest: a.getConnections().keySet()) {
+                    Point destP = points.get(dest);
+                    //TODO: add arrow ends to differ mono- and bidirectional connections
+                    g.drawLine(p.x, p.y, destP.x, destP.y);
+                }
             }
         }
     }
