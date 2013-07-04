@@ -1,6 +1,7 @@
 package de.bwv_aachen.dijkstra.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -24,9 +25,7 @@ public class ConnectionVisualization extends View {
     private static final long serialVersionUID = 1527659470763038523L;
     
     private BufferedImage airportPicture;
-    private final int              panelWidth  = 660;
-    private final int              panelHeight = 660;
-    private final Point            panelCenter = new Point(panelWidth/2, panelHeight/2);
+    private final Dimension        panelDimension = new Dimension(660,660);
     private final Color            labelColor  = Color.BLACK;
     private final Font             labelFont   = new Font("sans-serif", Font.BOLD, 14);
     private Point                  picCenter;
@@ -60,9 +59,10 @@ public class ConnectionVisualization extends View {
             
             super.paint(g); // call superclass's paint
             
-            //No runtime-intensive calculations here, since this method is called a huge amount of times!
+            //Causes recalculation on each change of the window size, position etc ...
+            //determinePoints();
             
-            setSize(panelWidth,panelHeight);
+            //No runtime-intensive calculations here, since this method is called a huge amount of times!
             g.setFont(labelFont);
             g.setColor(labelColor);
             
@@ -76,22 +76,25 @@ public class ConnectionVisualization extends View {
 
     @Override
     public void draw() {
+        this.getContentPane().removeAll();
+        
+        this.setMinimumSize(panelDimension);
         this.getContentPane().add(new VisualizationPanel());
-        this.pack();
         
         if ( points.isEmpty() ) {
             //determine the points for the airports
             determinePoints();
         }
         
-        this.setSize(panelWidth,panelHeight);
+        super.setLocationRelativeTo(null);
         this.setVisible(true);
     }
     
     
     //The controller may also call this method. So we make it public!
     public void determinePoints() {     
-        Object[] airports = controller.getModel().getAirportList().values().toArray();
+        Object[] airports    = controller.getModel().getAirportList().values().toArray();
+        Point    panelCenter = new Point(this.getWidth()/2, this.getHeight()/2);
         
         int numOfNodes = airports.length;
         if (numOfNodes == 0)
