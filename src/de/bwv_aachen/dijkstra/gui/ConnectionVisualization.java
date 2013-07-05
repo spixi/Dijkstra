@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,8 +30,8 @@ public class ConnectionVisualization extends View {
     private final Dimension        panelDimension = new Dimension(660,660);
     private final Color            labelColor  = Color.BLACK;
     private final Font             labelFont   = new Font("sans-serif", Font.BOLD, 14);
-    private Point                  picCenter;
-    private HashMap<Airport,Point> points;
+    private Point2D.Double         picCenter;
+    private HashMap<Airport,Point2D.Double> points;
     
     static int testNoRepaint = 0;
     
@@ -46,8 +48,8 @@ public class ConnectionVisualization extends View {
             System.out.println("Bild nicht gefunden");
         }
         
-        picCenter = new Point(airportPicture.getWidth()/2, airportPicture.getHeight()/2);
-        points    = new HashMap<Airport,Point>();
+        picCenter = new Point2D.Double(airportPicture.getWidth()/2, airportPicture.getHeight()/2);
+        points    = new HashMap<Airport,Point2D.Double>();
     }
     
     class VisualizationPanel extends JPanel {
@@ -66,16 +68,53 @@ public class ConnectionVisualization extends View {
             g.setFont(labelFont);
             g.setColor(labelColor);
             
-            for(Map.Entry<Airport, Point> entry: points.entrySet()) {
-                Airport a = entry.getKey();
-                Point   p = entry.getValue();
+            for(Map.Entry<Airport, Point2D.Double> entry: points.entrySet()) {
+                Airport        a = entry.getKey();
+                Point2D.Double p = entry.getValue();
+
+                //Paint the airport ...
+                g.drawImage(airportPicture, (int)Math.round(p.x-picCenter.x), (int)Math.round(p.y-picCenter.y), this);
+                //... and its name.
+                g.drawString(a.toString(), (int)Math.round(p.x), (int)Math.round(p.y));
                 
-                g.drawImage(airportPicture, p.x-picCenter.x, p.y-picCenter.y, null);
-                g.drawString(a.toString(), p.x, p.y);
+                
+                final float  arrowEndHeight = 7;
+                final float  arrowEndWeight = 6;
+                final double arrowAngle    = Math.toRadians( 30D );
+                
+                
                 for(Airport dest: a.getConnections().keySet()) {
-                    Point destP = points.get(dest);
+                    Point2D.Double destP = points.get(dest);
+                    
+                    //Draw the connections to the destinations
+                    g.drawLine((int)Math.round(p.x), (int)Math.round(p.y), (int)Math.round(destP.x), (int)Math.round(destP.y));
+
+   
                     //TODO: add arrow ends to differ mono- and bidirectional connections
-                    g.drawLine(p.x, p.y, destP.x, destP.y);
+                    //This was too difficult. I spend about six hours and was not able to draw the arrow end
+                     /*
+                    //The arrow end is an isosceles triangle with its base being orthogonal to a point on the line between the airports.
+                    Point2D.Double baseOfTriangle = new Point2D.Double(((destP.x - p.x) - arrowEndHeight) + p.x, ((destP.y - p.y) - arrowEndHeight) + p.y);
+                    
+                    //Determine the slope (m) with the equation m = (y2-y1) / (x2-x1)
+                    double slope = (baseOfTriangle.y - destP.y) / (baseOfTriangle.x - destP.x);
+                    
+                    //inverse the slope because we want to have the perpendicular
+                    double inversedSlope = 1 / slope;
+                    
+                    //Determine Y-axis intercept (b) with the equation y = mx + b
+                    //We know that the baseOfTriangle point is on this line.
+                    //m is known, take x and y from the known point 
+                    //Adjust the formula to b = y - mx
+                    double yIntercept = baseOfTriangle.y - (inversedSlope * baseOfTriangle.x);
+                    
+                    //Now we know the Y-axis intercept and can reuse the formula x = mx+b
+                    //
+                     */
+                    
+                    //Workaround
+                    g.fillOval((int)(destP.x-arrowEndWeight/2), (int)(destP.y-arrowEndWeight/2),(int)(arrowEndWeight),(int)(arrowEndWeight));
+
                 }
             }
         }
@@ -118,7 +157,7 @@ public class ConnectionVisualization extends View {
             int y = (int)Math.round(panelCenter.y - Math.cos(alpha) * circleRadius);
             
             //Remember the points for further use
-            points.put((Airport) airports[i], new Point(x,y));
+            points.put((Airport) airports[i], new Point2D.Double(x,y));
         }  
         
     }
