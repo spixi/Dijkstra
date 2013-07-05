@@ -6,9 +6,13 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,8 +36,7 @@ public class ConnectionVisualization extends View {
     private final Font             labelFont   = new Font("sans-serif", Font.BOLD, 14);
     private Point2D.Double         picCenter;
     private HashMap<Airport,Point2D.Double> points;
-    
-    static int testNoRepaint = 0;
+    private HashMap<Rectangle2D.Double,Airport> actionAreas;
     
     private final double circleRadius = 200D;
     
@@ -48,8 +51,9 @@ public class ConnectionVisualization extends View {
             System.out.println("Bild nicht gefunden");
         }
         
-        picCenter = new Point2D.Double(airportPicture.getWidth()/2, airportPicture.getHeight()/2);
-        points    = new HashMap<Airport,Point2D.Double>();
+        picCenter    = new Point2D.Double(airportPicture.getWidth()/2, airportPicture.getHeight()/2);
+        points       = new HashMap<Airport,Point2D.Double>();
+        actionAreas  = new HashMap<Rectangle2D.Double,Airport>();
     }
     
     class VisualizationPanel extends JPanel {
@@ -74,12 +78,14 @@ public class ConnectionVisualization extends View {
 
                 //Paint the airport ...
                 g.drawImage(airportPicture, (int)Math.round(p.x-picCenter.x), (int)Math.round(p.y-picCenter.y), this);
+               
+                
                 //... and its name.
                 g.drawString(a.toString(), (int)Math.round(p.x), (int)Math.round(p.y));
                 
                 
-                final float  arrowEndHeight = 7;
-                final float  arrowEndWeight = 6;
+                final double arrowEndHeight = 7D;
+                final double arrowEndWeight = 6D;
                 final double arrowAngle    = Math.toRadians( 30D );
                 
                 
@@ -113,7 +119,7 @@ public class ConnectionVisualization extends View {
                      */
                     
                     //Workaround
-                    g.fillOval((int)(destP.x-arrowEndWeight/2), (int)(destP.y-arrowEndWeight/2),(int)(arrowEndWeight),(int)(arrowEndWeight));
+                    //g.fillOval((int)(destP.x-arrowEndWeight/2), (int)(destP.y-arrowEndWeight/2),(int)Math.round(arrowEndWeight),(int)Math.round(arrowEndWeight));
 
                 }
             }
@@ -132,6 +138,34 @@ public class ConnectionVisualization extends View {
             determinePoints();
         }
         
+        
+        
+        this.getContentPane().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent me) {
+                Point clicked = me.getPoint();
+                
+                //look through all airports until you find 
+                
+                for(Map.Entry<Airport, Point2D.Double> entry: points.entrySet()) {
+                    Airport        a = entry.getKey();
+                    Point2D.Double p = entry.getValue();
+                    
+                    //TODO: Maybe we can buffer this
+                    Rectangle dummy = new Rectangle((int)Math.round(p.x-picCenter.x),
+                                                    (int)Math.round(p.y-picCenter.y),
+                                                     airportPicture.getWidth(),
+                                                     airportPicture.getHeight());
+                
+                    if (dummy.contains(clicked)) {
+                        System.out.println(a + " wurde geklickt!");
+                    }
+                
+                }
+                
+             }
+            });
+        
         super.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -141,6 +175,8 @@ public class ConnectionVisualization extends View {
     public void determinePoints() {     
         Object[] airports    = controller.getModel().getAirportList().values().toArray();
         Point    panelCenter = new Point(this.getWidth()/2, this.getHeight()/2);
+        
+        points.clear();
         
         int numOfNodes = airports.length;
         if (numOfNodes == 0)
@@ -158,6 +194,19 @@ public class ConnectionVisualization extends View {
             
             //Remember the points for further use
             points.put((Airport) airports[i], new Point2D.Double(x,y));
+            
+            //create actionAreas for catching mouse events
+            actionAreas.clear();
+            for(Map.Entry<Airport, Point2D.Double> entry: points.entrySet()) {
+                Airport        a = entry.getKey();
+                Point2D.Double p = entry.getValue();
+
+                actionAreas.put( new Rectangle2D.Double(p.x-picCenter.x,
+                                                        p.y-picCenter.y,
+                                                        airportPicture.getWidth(),
+                                                        airportPicture.getHeight()),
+                                a);
+            }
         }  
         
     }
