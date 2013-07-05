@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,6 +26,7 @@ import javax.swing.JPanel;
 
 import de.bwv_aachen.dijkstra.controller.Controller;
 import de.bwv_aachen.dijkstra.model.Airport;
+import de.bwv_aachen.dijkstra.model.Connection;
 
 public class ConnectionVisualization extends View {
 
@@ -79,7 +81,6 @@ public class ConnectionVisualization extends View {
                 //Paint the airport ...
                 g.drawImage(airportPicture, (int)Math.round(p.x-picCenter.x), (int)Math.round(p.y-picCenter.y), this);
                
-                
                 //... and its name.
                 g.drawString(a.toString(), (int)Math.round(p.x), (int)Math.round(p.y));
                 
@@ -144,23 +145,27 @@ public class ConnectionVisualization extends View {
             @Override
             public void mouseClicked(MouseEvent me) {
                 Point clicked = me.getPoint();
+                Graphics g    = ConnectionVisualization.super.getContentPane().getGraphics();
                 
-                //look through all airports until you find 
+                //TODO refactor this
+                //look through all actionAreas until you find the airport
                 
-                for(Map.Entry<Airport, Point2D.Double> entry: points.entrySet()) {
-                    Airport        a = entry.getKey();
-                    Point2D.Double p = entry.getValue();
-                    
-                    //TODO: Maybe we can buffer this
-                    Rectangle dummy = new Rectangle((int)Math.round(p.x-picCenter.x),
-                                                    (int)Math.round(p.y-picCenter.y),
-                                                     airportPicture.getWidth(),
-                                                     airportPicture.getHeight());
-                
-                    if (dummy.contains(clicked)) {
-                        System.out.println(a + " wurde geklickt!");
+               for (Map.Entry<Rectangle2D.Double,Airport> entry : actionAreas.entrySet()) {
+                   Rectangle2D.Double area = entry.getKey();
+                   Airport            ap   = entry.getValue();
+                    if (area.contains(clicked)) {
+                         System.out.println(ap + " wurde geklickt!");
+                         
+                         g.setXORMode(Color.ORANGE);
+                         
+                         g.fillRect((int)Math.round(area.x), (int)Math.round(area.y), (int)Math.round(area.width), (int)Math.round(area.height));
+                         
+                         Point.Double startP = points.get(ap);
+                         for(Airport dest : ap.getConnections().keySet()) {
+                             Point.Double destP = points.get(dest);
+                             g.drawLine((int)Math.round(startP.x), (int)Math.round(startP.y), (int)Math.round(destP.x), (int)Math.round(destP.y));
+                         }
                     }
-                
                 }
                 
              }
@@ -189,8 +194,8 @@ public class ConnectionVisualization extends View {
             
             //The points are arranged in a n-gon with the radius circleRadius
 
-            int x = (int)Math.round(panelCenter.x + Math.sin(alpha) * circleRadius);
-            int y = (int)Math.round(panelCenter.y - Math.cos(alpha) * circleRadius);
+            double x = panelCenter.x + Math.sin(alpha) * circleRadius;
+            double y = panelCenter.y - Math.cos(alpha) * circleRadius;
             
             //Remember the points for further use
             points.put((Airport) airports[i], new Point2D.Double(x,y));
@@ -203,8 +208,8 @@ public class ConnectionVisualization extends View {
 
                 actionAreas.put( new Rectangle2D.Double(p.x-picCenter.x,
                                                         p.y-picCenter.y,
-                                                        airportPicture.getWidth(),
-                                                        airportPicture.getHeight()),
+                                                        airportPicture.getHeight(),
+                                                        airportPicture.getWidth()),
                                 a);
             }
         }  
