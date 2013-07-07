@@ -5,20 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +20,6 @@ import javax.swing.JPanel;
 
 import de.bwv_aachen.dijkstra.controller.Controller;
 import de.bwv_aachen.dijkstra.model.Airport;
-import de.bwv_aachen.dijkstra.model.Connection;
 
 public class ConnectionVisualization extends View {
 
@@ -183,6 +174,7 @@ public class ConnectionVisualization extends View {
             statusTextValue = space;
         }
         
+        //TODO: Why does this not work???
         statusText.setText(statusTextValue);
         
         this.getContentPane().add(statusText, BorderLayout.SOUTH);

@@ -1,6 +1,5 @@
 package de.bwv_aachen.dijkstra.gui;
 
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,12 +18,7 @@ public class ConnectionVisualizationMouseAdapter extends MouseAdapter {
 
         @Override
         public void mouseClicked(MouseEvent me) {
-            Point clicked = me.getPoint();
-            
-            //TODO refactor this, maybe with the State design pattern
-            //look through all actionAreas until you find the airport
-            
-            //Maybe we could also do the painting stuff in the paint method of the
+            Point clicked = me.getPoint();          
 
            for (Map.Entry<Rectangle2D.Double,Airport> entry : cv.getActionAreas().entrySet()) {
                Rectangle2D.Double area = entry.getKey();
@@ -57,7 +51,7 @@ public class ConnectionVisualizationMouseAdapter extends MouseAdapter {
                      }
 
                      //repaint everything
-                     cv.repaint();
+                     cv.getContentPane().repaint();
                 }
             }
       
