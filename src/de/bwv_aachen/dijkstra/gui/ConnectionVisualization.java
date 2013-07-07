@@ -1,5 +1,6 @@
 package de.bwv_aachen.dijkstra.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.bwv_aachen.dijkstra.controller.Controller;
@@ -36,11 +38,38 @@ public class ConnectionVisualization extends View {
     private final Dimension        panelDimension = new Dimension(660,660);
     private final Color            labelColor  = Color.BLACK;
     private final Font             labelFont   = new Font("sans-serif", Font.BOLD, 14);
+    private final ConnectionVisualizationMouseAdapter mouseAdapter = new ConnectionVisualizationMouseAdapter(this);
     private Point2D.Double         picCenter;
     private HashMap<Airport,Point2D.Double> points;
     private HashMap<Rectangle2D.Double,Airport> actionAreas;
     
+    private Airport startAirport = null;
+    private Airport destinationAirport = null;
+    private final String space = " ";
+    
+    private JLabel statusText;
+    
     private final double circleRadius = 200D;
+    
+    public void setStartAirport(Airport ap) {
+        this.startAirport = ap;
+    }
+    
+    public void setDestinationAirport(Airport ap) {
+        this.destinationAirport = ap;
+    }
+    
+    public Airport getStartAirport() {
+        return this.startAirport;
+    }
+    
+    public Airport getDestinationAirport() {
+        return this.destinationAirport;
+    }
+    
+    public HashMap<Rectangle2D.Double,Airport> getActionAreas() {
+        return this.actionAreas;
+    }
     
     public ConnectionVisualization(Controller c) {
         super("ConnectionVisualization",c);
@@ -56,6 +85,9 @@ public class ConnectionVisualization extends View {
         picCenter    = new Point2D.Double(airportPicture.getWidth()/2, airportPicture.getHeight()/2);
         points       = new HashMap<Airport,Point2D.Double>();
         actionAreas  = new HashMap<Rectangle2D.Double,Airport>();
+        
+        //We initialize the JLabel with a space because a switch from the empty string "" to a non-empty string will cause a repaint
+        statusText   = new JLabel(space);
     }
     
     class VisualizationPanel extends JPanel {
@@ -77,59 +109,83 @@ public class ConnectionVisualization extends View {
             for(Map.Entry<Airport, Point2D.Double> entry: points.entrySet()) {
                 Airport        a = entry.getKey();
                 Point2D.Double p = entry.getValue();
+                
+                //Set paint mode on ...
+                g.setColor(labelColor);
+                g.setPaintMode();
 
                 //Paint the airport ...
                 g.drawImage(airportPicture, (int)Math.round(p.x-picCenter.x), (int)Math.round(p.y-picCenter.y), this);
+                
+                //If the airport is the start or the destination airport, change the color
+                if (a == ConnectionVisualization.this.startAirport) {
+                    g.setColor(Color.YELLOW);
+                }
+                
+                if (a == ConnectionVisualization.this.destinationAirport) {
+                    g.setColor(Color.BLUE);
+                }
                
                 //... and its name.
                 g.drawString(a.toString(), (int)Math.round(p.x), (int)Math.round(p.y));
                 
-                
-                final double arrowEndHeight = 7D;
-                final double arrowEndWeight = 6D;
-                final double arrowAngle    = Math.toRadians( 30D );
-                
+                //Set paint mode on ...
+                g.setColor(labelColor);
+                g.setPaintMode();
                 
                 for(Airport dest: a.getConnections().keySet()) {
                     Point2D.Double destP = points.get(dest);
                     
                     //Draw the connections to the destinations
                     g.drawLine((int)Math.round(p.x), (int)Math.round(p.y), (int)Math.round(destP.x), (int)Math.round(destP.y));
-
-   
-                    //TODO: add arrow ends to differ mono- and bidirectional connections
-                    //This was too difficult. I spend about six hours and was not able to draw the arrow end
-                     /*
-                    //The arrow end is an isosceles triangle with its base being orthogonal to a point on the line between the airports.
-                    Point2D.Double baseOfTriangle = new Point2D.Double(((destP.x - p.x) - arrowEndHeight) + p.x, ((destP.y - p.y) - arrowEndHeight) + p.y);
-                    
-                    //Determine the slope (m) with the equation m = (y2-y1) / (x2-x1)
-                    double slope = (baseOfTriangle.y - destP.y) / (baseOfTriangle.x - destP.x);
-                    
-                    //inverse the slope because we want to have the perpendicular
-                    double inversedSlope = 1 / slope;
-                    
-                    //Determine Y-axis intercept (b) with the equation y = mx + b
-                    //We know that the baseOfTriangle point is on this line.
-                    //m is known, take x and y from the known point 
-                    //Adjust the formula to b = y - mx
-                    double yIntercept = baseOfTriangle.y - (inversedSlope * baseOfTriangle.x);
-                    
-                    //Now we know the Y-axis intercept and can reuse the formula x = mx+b
-                    //
-                     */
-                    
-                    //Workaround
-                    //g.fillOval((int)(destP.x-arrowEndWeight/2), (int)(destP.y-arrowEndWeight/2),(int)Math.round(arrowEndWeight),(int)Math.round(arrowEndWeight));
-
                 }
+            }
+            
+            //TODO refactor this stuff here
+            
+            //redraw the connections of the startAirport
+            if (startAirport != null) {
+                g.setXORMode(Color.YELLOW); //Note: we are using XOR mode to show bidirectional connection as YELLOW xor BLUE = WHITE !!
+                for(Airport dest: startAirport.getConnections().keySet()) {
+                    Point2D.Double destP = points.get(dest);
+                    
+                    //Draw the connections to the destinations
+                    g.drawLine((int)Math.round(points.get(startAirport).x), (int)Math.round(points.get(startAirport).y), (int)Math.round(destP.x), (int)Math.round(destP.y));
+                }  
+            }
+            
+            
+            //redraw the connections of the destinationAirport
+            if (destinationAirport != null) {
+                g.setXORMode(Color.BLUE);
+                for(Airport dest: destinationAirport.getConnections().keySet()) {
+                    Point2D.Double destP = points.get(dest);
+                    
+                    //Draw the connections to the destinations
+                    g.drawLine((int)Math.round(points.get(destinationAirport).x), (int)Math.round(points.get(destinationAirport).y), (int)Math.round(destP.x), (int)Math.round(destP.y));
+                }  
             }
         }
     }
 
     @Override
     public void draw() {
+        String statusTextValue;
         this.getContentPane().removeAll();
+        
+        if(startAirport != null) {
+            statusTextValue = "Verbindung von " + startAirport.getName();
+            if(destinationAirport != null) {
+                statusTextValue += " nach " + destinationAirport.getName();
+            }
+        }
+        else {
+            statusTextValue = space;
+        }
+        
+        statusText.setText(statusTextValue);
+        
+        this.getContentPane().add(statusText, BorderLayout.SOUTH);
         
         this.setMinimumSize(panelDimension);
         this.getContentPane().add(new VisualizationPanel());
@@ -139,37 +195,7 @@ public class ConnectionVisualization extends View {
             determinePoints();
         }
         
-        
-        
-        this.getContentPane().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent me) {
-                Point clicked = me.getPoint();
-                Graphics g    = ConnectionVisualization.super.getContentPane().getGraphics();
-                
-                //TODO refactor this
-                //look through all actionAreas until you find the airport
-                
-               for (Map.Entry<Rectangle2D.Double,Airport> entry : actionAreas.entrySet()) {
-                   Rectangle2D.Double area = entry.getKey();
-                   Airport            ap   = entry.getValue();
-                    if (area.contains(clicked)) {
-                         System.out.println(ap + " wurde geklickt!");
-                         
-                         g.setXORMode(Color.ORANGE);
-                         
-                         g.fillRect((int)Math.round(area.x), (int)Math.round(area.y), (int)Math.round(area.width), (int)Math.round(area.height));
-                         
-                         Point.Double startP = points.get(ap);
-                         for(Airport dest : ap.getConnections().keySet()) {
-                             Point.Double destP = points.get(dest);
-                             g.drawLine((int)Math.round(startP.x), (int)Math.round(startP.y), (int)Math.round(destP.x), (int)Math.round(destP.y));
-                         }
-                    }
-                }
-                
-             }
-            });
+        this.addMouseListener(mouseAdapter);
         
         super.setLocationRelativeTo(null);
         this.setVisible(true);
