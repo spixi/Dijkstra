@@ -3,25 +3,32 @@ package de.bwv_aachen.dijkstra.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.bwv_aachen.dijkstra.controller.Controller;
+import de.bwv_aachen.dijkstra.helpers.Pathfinder;
 import de.bwv_aachen.dijkstra.model.Airport;
 
-public class ConnectionVisualization extends View {
+public class ConnectionVisualization extends View implements ActionListener {
 
     private static final long serialVersionUID = 1527659470763038523L;
     
@@ -33,9 +40,11 @@ public class ConnectionVisualization extends View {
     private Point2D.Double         picCenter;
     private HashMap<Airport,Point2D.Double> points;
     private HashMap<Rectangle2D.Double,Airport> actionAreas;
+    private final JButton calcButton;
     
     private Airport startAirport = null;
     private Airport destinationAirport = null;
+    private Collection<Airport> route = null;
     private final String space = " ";
     
     private JLabel statusText;
@@ -44,10 +53,12 @@ public class ConnectionVisualization extends View {
     
     public void setStartAirport(Airport ap) {
         this.startAirport = ap;
+        this.route        = null;
     }
     
     public void setDestinationAirport(Airport ap) {
         this.destinationAirport = ap;
+        this.route              = null;
     }
     
     public Airport getStartAirport() {
@@ -77,8 +88,13 @@ public class ConnectionVisualization extends View {
         points       = new HashMap<Airport,Point2D.Double>();
         actionAreas  = new HashMap<Rectangle2D.Double,Airport>();
         
-        //We initialize the JLabel with a space because a switch from the empty string "" to a non-empty string will cause a repaint
+        //Pseudo initialization of the JPanel
         statusText   = new JLabel(space);
+        
+        //Initialization of the JButton
+        calcButton   = new JButton("Berechnen");
+        calcButton.setActionCommand("calculate");
+        calcButton.addActionListener(this);
     }
     
     class VisualizationPanel extends JPanel {
@@ -110,74 +126,103 @@ public class ConnectionVisualization extends View {
                 
                 //If the airport is the start or the destination airport, change the color
                 if (a == ConnectionVisualization.this.startAirport) {
-                    g.setColor(Color.YELLOW);
+                    g.setColor(Color.RED);
                 }
                 
                 if (a == ConnectionVisualization.this.destinationAirport) {
-                    g.setColor(Color.BLUE);
+                    g.setColor(Color.CYAN);
                 }
                
-                //... and its name.
+                //Paint the airport's name
                 g.drawString(a.toString(), (int)Math.round(p.x), (int)Math.round(p.y));
                 
                 //Set paint mode on ...
                 g.setColor(labelColor);
                 g.setPaintMode();
                 
-                for(Airport dest: a.getConnections().keySet()) {
-                    Point2D.Double destP = points.get(dest);
-                    
-                    //Draw the connections to the destinations
-                    g.drawLine((int)Math.round(p.x), (int)Math.round(p.y), (int)Math.round(destP.x), (int)Math.round(destP.y));
+                //Draw the connections to the destinations
+                drawConnectionsOfAirport(a, g);
+            }
+            
+            //Set the status text
+            statusText.setText(getStatusText());
+            
+            //Set the calculation button
+            if (startAirport == null || destinationAirport == null) {
+                calcButton.setEnabled(false);
+            }
+            else {
+            //Only enable when startAirport and destinationAirport are selected
+                calcButton.setEnabled(true);
+            }
+
+            //a given route is painted in green
+            if (route != null) {
+                Airport source = null, dest = null;
+                
+                g.setColor(Color.GREEN);
+                
+                Iterator<Airport> it = route.iterator();
+                while(it.hasNext()) {
+                    dest = it.next();
+                    drawConnectionBetween(source, dest, g);
+                    source = dest;
                 }
             }
-            
-            //TODO refactor this stuff here
+            else {
+            //No route is given. Assume that we are in selection mode
             
             //redraw the connections of the startAirport
-            if (startAirport != null) {
-                g.setXORMode(Color.YELLOW); //Note: we are using XOR mode to show bidirectional connection as YELLOW xor BLUE = WHITE !!
-                for(Airport dest: startAirport.getConnections().keySet()) {
-                    Point2D.Double destP = points.get(dest);
-                    
-                    //Draw the connections to the destinations
-                    g.drawLine((int)Math.round(points.get(startAirport).x), (int)Math.round(points.get(startAirport).y), (int)Math.round(destP.x), (int)Math.round(destP.y));
-                }  
-            }
-            
+            //Note: we are using XOR mode to show bidirectional connection as RED xor CYAN = WHITE !!
+            g.setXORMode(Color.RED);
+            drawConnectionsOfAirport(startAirport, g);
             
             //redraw the connections of the destinationAirport
-            if (destinationAirport != null) {
-                g.setXORMode(Color.BLUE);
-                for(Airport dest: destinationAirport.getConnections().keySet()) {
-                    Point2D.Double destP = points.get(dest);
-                    
-                    //Draw the connections to the destinations
-                    g.drawLine((int)Math.round(points.get(destinationAirport).x), (int)Math.round(points.get(destinationAirport).y), (int)Math.round(destP.x), (int)Math.round(destP.y));
-                }  
+            g.setXORMode(Color.CYAN);
+            drawConnectionsOfAirport(destinationAirport, g);
+            
             }
         }
+    }
+    
+    private void drawConnectionsOfAirport(Airport ap, Graphics g) {
+        //do nothing if ap is null
+        if (ap == null) {
+            return;
+        }
+
+        for(Airport dest: ap.getConnections().keySet()) {
+            //Draw the connections to the destinations
+            drawConnectionBetween(ap, dest, g);
+        }  
+    }
+    
+    private void drawConnectionBetween(Airport source, Airport dest, Graphics g) {
+       Point2D.Double sourceP, destP;
+       //return if the source or the destination is null
+       if (source == null || dest == null) {
+           return;
+       }
+       sourceP    = points.get(source);
+       destP      = points.get(dest);
+       g.drawLine((int)Math.round(sourceP.x), (int)Math.round(sourceP.y), (int)Math.round(destP.x), (int)Math.round(destP.y));
     }
 
     @Override
     public void draw() {
-        String statusTextValue;
         this.getContentPane().removeAll();
         
-        if(startAirport != null) {
-            statusTextValue = "Verbindung von " + startAirport.getName();
-            if(destinationAirport != null) {
-                statusTextValue += " nach " + destinationAirport.getName();
-            }
-        }
-        else {
-            statusTextValue = space;
+        JPanel statusbar = new JPanel();
+        statusbar.setLayout(new FlowLayout(FlowLayout.LEFT));
+        
+        statusbar.add(statusText);
+        statusbar.add(calcButton);
+        
+        if (startAirport != null && destinationAirport != null) {
+            calcButton.setEnabled(true);
         }
         
-        //TODO: Why does this not work???
-        statusText.setText(statusTextValue);
-        
-        this.getContentPane().add(statusText, BorderLayout.SOUTH);
+        this.getContentPane().add(statusbar, BorderLayout.SOUTH);
         
         this.setMinimumSize(panelDimension);
         this.getContentPane().add(new VisualizationPanel());
@@ -191,6 +236,22 @@ public class ConnectionVisualization extends View {
         
         super.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+    
+    public String getStatusText() {
+        String statusTextValue;
+        
+        if(startAirport != null) {
+            statusTextValue = "Verbindung von " + startAirport.getName();
+            if(destinationAirport != null) {
+                statusTextValue += " nach " + destinationAirport.getName();
+            }
+        }
+        else {
+            statusTextValue = space;
+        }
+        
+        return statusTextValue;
     }
     
     
@@ -234,4 +295,15 @@ public class ConnectionVisualization extends View {
         
     }
 
-}
+    @Override
+    public void actionPerformed(ActionEvent ev) {
+        switch (ev.getActionCommand()) {
+        case "calculate": {
+                route = new Pathfinder(startAirport,points.keySet()).determineShortestPathTo(destinationAirport);
+                this.getContentPane().repaint();
+                break;
+               }
+            }
+        }
+        
+    }
