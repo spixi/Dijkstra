@@ -1,3 +1,11 @@
+/**
+ * ConnectionVisualization
+ * <p>
+ * This widget is a visualization of the airport data model
+ * 
+ * @author Marius Spix
+ */
+
 package de.bwv_aachen.dijkstra.gui;
 
 import java.awt.BorderLayout;
@@ -72,6 +80,7 @@ public class ConnectionVisualization extends View implements ActionListener {
     public HashMap<Rectangle2D.Double,Airport> getActionAreas() {
         return this.actionAreas;
     }
+    
     
     public ConnectionVisualization(Controller c) {
         super("ConnectionVisualization",c);
@@ -185,6 +194,15 @@ public class ConnectionVisualization extends View implements ActionListener {
         }
     }
     
+    /**
+     * drawConnectionsOfAirport
+     * <p>
+     * Draws all connections of an airport
+     * @param ap the airport
+     * @param g which graphics instance should be used
+     * 
+     * @author Marius Spix
+     */
     private void drawConnectionsOfAirport(Airport ap, Graphics g) {
         //do nothing if ap is null
         if (ap == null) {
@@ -197,6 +215,16 @@ public class ConnectionVisualization extends View implements ActionListener {
         }  
     }
     
+    /**
+     * drawConnectionsBetween
+     * <p>
+     * Draws a single connection between two airports
+     * @param source the source airport
+     * @param dest the destination airport
+     * @param g which graphics instance should be used
+     * 
+     * @author Marius Spix
+     */
     private void drawConnectionBetween(Airport source, Airport dest, Graphics g) {
        Point2D.Double sourceP, destP;
        //return if the source or the destination is null
@@ -211,6 +239,8 @@ public class ConnectionVisualization extends View implements ActionListener {
     @Override
     public void draw() {
         this.getContentPane().removeAll();
+        
+        reset();
         
         JPanel statusbar = new JPanel();
         statusbar.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -238,6 +268,28 @@ public class ConnectionVisualization extends View implements ActionListener {
         this.setVisible(true);
     }
     
+    /**
+     * reset
+     * <p>
+     * Resets metadata of the ConnectionVisualization instance
+     * (startAirport, destinationAirport and route respectively)
+     * 
+     * @author Marius Spix
+     */
+    public void reset() {
+        this.startAirport       = null;
+        this.destinationAirport = null;
+        this.route              = null;
+    }
+    
+    
+    /**
+     * getStatusText
+     * <p>
+     * Determines a text for the statusbar depending on which of the fields
+     * startAirport and destinationAirport are selected.
+     * @author Marius Spix
+     */
     public String getStatusText() {
         String statusTextValue;
         
@@ -254,7 +306,12 @@ public class ConnectionVisualization extends View implements ActionListener {
         return statusTextValue;
     }
     
-    
+    /**
+     * determinePoints
+     * <p>
+     * Determines the points where the airport images are put. They are arranged in a circle with the same distance to each neighbor
+     * @author Marius Spix
+     */
     //The controller may also call this method. So we make it public!
     public void determinePoints() {     
         Object[] airports    = controller.getModel().getAirportList().values().toArray();
