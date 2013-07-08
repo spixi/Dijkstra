@@ -313,7 +313,9 @@ public class ConnectionVisualization extends View implements ActionListener {
      * @author Marius Spix
      */
     //The controller may also call this method. So we make it public!
-    public void determinePoints() {     
+    public void determinePoints() {
+        //Here is a bug. After you change your selection it the Mainwindow selectboxes the points are invalid. Why???
+        
         Object[] airports    = controller.getModel().getAirportList().values().toArray();
         Point    panelCenter = new Point(this.getWidth()/2, this.getHeight()/2);
         

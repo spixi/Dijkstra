@@ -1,3 +1,11 @@
+/**
+ * ConnectionVisualizationMouseAdapter
+ * <p>
+ * Handler for mouse events on the ConnectionVisualization frame
+ * 
+ * @author Marius Spix
+ */
+
 package de.bwv_aachen.dijkstra.gui;
 
 import java.awt.Point;
@@ -37,7 +45,7 @@ public class ConnectionVisualizationMouseAdapter extends MouseAdapter {
                          if (ap == cv.getStartAirport()) {
                              //The destination airport is equal to the start airport
                              //Undo the selection
-                             cv.setStartAirport(null);
+                             cv.reset();
                          } else {
                              //Set the destination airport
                              cv.setDestinationAirport(ap);
@@ -45,9 +53,8 @@ public class ConnectionVisualizationMouseAdapter extends MouseAdapter {
                      }
                      
                      else {
-                         //another airport is clicked, simply repaint the connection visualization
-                         cv.setStartAirport(null);
-                         cv.setDestinationAirport(null);
+                         //another airport is clicked, reset the connection visualization
+                         cv.reset();
                      }
 
                      //repaint everything

@@ -28,11 +28,10 @@ public class ConnectionTableWindow extends JFrame {
 
     /**
      * ConnectionTableWindow
-     * 
+     * <p>
+     * Reads a file for the data model factory
      * @param rowData
      *            Vector of the rows which should be showed
-     *            <p>
-     *            Reads a file for the data model factory
      */
     public ConnectionTableWindow(Vector<Vector<Object>> rowData) {
         this.rowData = rowData;

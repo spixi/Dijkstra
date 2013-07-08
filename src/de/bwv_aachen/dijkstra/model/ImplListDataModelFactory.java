@@ -98,10 +98,8 @@ public class ImplListDataModelFactory {
     /**
      * cast
      * 
-     * @param o
-     *            : the object which should be casted
-     * @param expectedClass
-     *            : the expected class
+     * @param o the object which should be casted
+     * @param expectedClassthe expected class
      * @return the casted object
      * @throws BadFileFormatException
      *             <p>
