@@ -262,7 +262,8 @@ public class ConnectionVisualization extends View implements ActionListener {
             determinePoints();
         }
         
-        this.addMouseListener(mouseAdapter);
+        this.getContentPane().addMouseListener(mouseAdapter);
+        this.getContentPane().addMouseMotionListener(mouseAdapter);
         
         super.setLocationRelativeTo(null);
         this.setVisible(true);

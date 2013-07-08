@@ -8,11 +8,16 @@
 
 package de.bwv_aachen.dijkstra.gui;
 
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
+
+import javax.swing.JFrame;
 
 import de.bwv_aachen.dijkstra.model.Airport;
 
@@ -62,6 +67,29 @@ public class ConnectionVisualizationMouseAdapter extends MouseAdapter {
                 }
             }
       
+         }
+        
+        @Override
+        public void mouseMoved(MouseEvent me) {
+             Point movedTo = me.getPoint();
+             Component source = (Component) me.getSource();
+             
+             //The mouse has been moved
+             
+             //Has the mouse been moved to an airport?
+             for (Map.Entry<Rectangle2D.Double,Airport> entry : cv.getActionAreas().entrySet()) {
+                 Rectangle2D.Double area = entry.getKey();
+                 Airport            ap   = entry.getValue();
+                 
+                 //Yes, then use the hand cursor!
+                 if (area.contains(movedTo)) {
+                     source.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                     return;
+                 }
+             }
+             
+             //No, then use the default cursor!
+             source.setCursor(Cursor.getDefaultCursor());
          }
 
 }
