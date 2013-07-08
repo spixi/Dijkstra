@@ -60,6 +60,7 @@ public class ConnectionChangeButton extends JToggleButton implements ItemListene
         tx.setText(DateHelper.INSTANCE.durationToString(c.getDuration()));
         // styles
         this.setIcon(new ImageIcon("res/edit_icon.gif"));
+        this.setSelectedIcon(new ImageIcon("res/save_icon.png"));
         this.setBackground(new Color(0,0,0,0));
         this.setOpaque(false);
         this.setBorder(BorderFactory.createEmptyBorder());
