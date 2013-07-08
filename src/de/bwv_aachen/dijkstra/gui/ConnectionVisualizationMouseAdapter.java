@@ -63,7 +63,7 @@ public class ConnectionVisualizationMouseAdapter extends MouseAdapter {
                      }
 
                      //repaint everything
-                     cv.getContentPane().repaint();
+                     cv.getContentPane().repaint(0);
                 }
             }
       

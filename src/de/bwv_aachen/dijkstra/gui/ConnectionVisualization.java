@@ -59,6 +59,8 @@ public class ConnectionVisualization extends View implements ActionListener {
     
     private final double circleRadius = 200D;
     
+    private VisualizationPanel visualizationPanel;
+    
     public void setStartAirport(Airport ap) {
         this.startAirport = ap;
         this.route        = null;
@@ -104,6 +106,10 @@ public class ConnectionVisualization extends View implements ActionListener {
         calcButton   = new JButton("Berechnen");
         calcButton.setActionCommand("calculate");
         calcButton.addActionListener(this);
+        
+        visualizationPanel = new VisualizationPanel();
+        visualizationPanel.addMouseListener(mouseAdapter);
+        visualizationPanel.addMouseMotionListener(mouseAdapter);
     }
     
     class VisualizationPanel extends JPanel {
@@ -255,15 +261,12 @@ public class ConnectionVisualization extends View implements ActionListener {
         this.getContentPane().add(statusbar, BorderLayout.SOUTH);
         
         this.setMinimumSize(panelDimension);
-        this.getContentPane().add(new VisualizationPanel());
+        this.getContentPane().add(visualizationPanel);
         
         if ( points.isEmpty() ) {
             //determine the points for the airports
             determinePoints();
         }
-        
-        this.getContentPane().addMouseListener(mouseAdapter);
-        this.getContentPane().addMouseMotionListener(mouseAdapter);
         
         super.setLocationRelativeTo(null);
         this.setVisible(true);
