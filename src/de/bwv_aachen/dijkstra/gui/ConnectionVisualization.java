@@ -387,7 +387,11 @@ public class ConnectionVisualization extends View implements ActionListener {
 
     public void actionPerformed(ActionEvent ev) {
         switch (ev.getActionCommand()) {
-            case "calculate":                
+            case "calculate":
+                route = new Pathfinder(startAirport,points.keySet()).determineShortestPathTo(destinationAirport);
+                this.getContentPane().repaint();
+                
+                
                 Vector<Vector<Object>> tData = controller.getModel().getRoute(startAirport, destinationAirport);
                 new ConnectionTableWindow(tData).draw();
             break;
