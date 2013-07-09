@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -384,15 +385,14 @@ public class ConnectionVisualization extends View implements ActionListener {
         
     }
 
-    @Override
     public void actionPerformed(ActionEvent ev) {
         switch (ev.getActionCommand()) {
-        case "calculate": {
-                route = new Pathfinder(startAirport,points.keySet()).determineShortestPathTo(destinationAirport);
-                this.getContentPane().repaint();
-                break;
-               }
-            }
+            case "calculate":                
+                Vector<Vector<Object>> tData = controller.getModel().getRoute(startAirport, destinationAirport);
+                new ConnectionTableWindow(tData).draw();
+            break;
+
         }
-        
     }
+        
+}

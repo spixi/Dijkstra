@@ -149,17 +149,16 @@ public class Mainwindow extends View implements ActionListener {
         super.setVisible(true);
     }
 
-    @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
         case "calc": {
             Airport from = (Airport) leftList.getSelectedItem();
             Airport to = (Airport) rightList.getSelectedItem();
 
-            Vector<Vector<Object>> test = Controller.INSTANCE.getModel()
+            Vector<Vector<Object>> tableData = Controller.INSTANCE.getModel()
                     .getRoute(from, to);
 
-            new ConnectionTableWindow(test).draw();
+            new ConnectionTableWindow(tableData).draw();
             break;
         }
         

@@ -34,5 +34,12 @@ public interface ListDataModel extends JSONStreamAware {
      *         another.
      */
     public Vector<Vector<Object>> getRoute(Airport from, Airport to);
+    
+    /**
+     * findAirportByString: search function
+     * @param String airportName the Airport to search for
+     * @return Airport - the found Airport or nnull
+     */
+    public Airport findAirportByString(String airportName);
 
 }

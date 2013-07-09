@@ -31,7 +31,6 @@ public class ImplListDataModel implements ListDataModel {
         airportList = new HashMap<Long, Airport>();
     }
 
-    @Override
     public Vector<Airport> getLocations() {
         Vector<Airport> v = new Vector<Airport>();
         for (Airport a : airportList.values()) {
@@ -39,12 +38,24 @@ public class ImplListDataModel implements ListDataModel {
         }
         return v;
     }
+   
+    /**
+     * Helper Method for searching the data Model by String
+     * @param airportName
+     * @return Airport
+     */
+    public Airport findAirportByString(String airportName) {
+        for(Airport tempAp : this.getLocations()) {
+            if(tempAp.getName().equals(airportName))
+                return tempAp;
+        }
+        return null;
+    }
 
     public HashMap<Long, Airport> getAirportList() {
         return airportList;
     }
 
-    @Override
     public Vector<Vector<Object>> getRoute(Airport from, Airport to) {
         Pathfinder pf = new Pathfinder(from, airportList.values());
         Vector<Vector<Object>> routeHops = new Vector<Vector<Object>>();
@@ -85,7 +96,6 @@ public class ImplListDataModel implements ListDataModel {
     }
 
     @SuppressWarnings("unchecked")
-    @Override
     public void writeJSONString(Writer out) throws IOException {
         JSONArray baseArray = new JSONArray();
 
