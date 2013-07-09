@@ -55,9 +55,12 @@ public class ImplListDataModel implements ListDataModel {
     public HashMap<Long, Airport> getAirportList() {
         return airportList;
     }
-
+    
     public Vector<Vector<Object>> getRoute(Airport from, Airport to) {
-        Pathfinder pf = new Pathfinder(from, airportList.values());
+        return getRoute(new Pathfinder(from, airportList.values()), to);
+    }
+
+    public Vector<Vector<Object>> getRoute(Pathfinder pf, Airport to) {
         Vector<Vector<Object>> routeHops = new Vector<Vector<Object>>();
         Airport previous = null;
         Duration sum = Duration.ZERO;

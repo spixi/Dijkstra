@@ -13,6 +13,8 @@ import java.util.Vector;
 
 import org.json.simple.JSONStreamAware;
 
+import de.bwv_aachen.dijkstra.helpers.Pathfinder;
+
 public interface ListDataModel extends JSONStreamAware {
 
     /**
@@ -29,11 +31,20 @@ public interface ListDataModel extends JSONStreamAware {
     /**
      * getLocations()
      * <p>
-     * 
-     * @return see below Returns a table of the route from one airport to
+     * see below
+     * @return Returns a table of the route from one airport to
      *         another.
      */
     public Vector<Vector<Object>> getRoute(Airport from, Airport to);
+    
+    /**
+     * getLocations()
+     * <p>
+     * see below
+     * @return Returns a table of the route from one airport to
+     *         another.
+     */
+    public Vector<Vector<Object>> getRoute(Pathfinder pf, Airport destinationAirport);
     
     /**
      * findAirportByString: search function
@@ -41,5 +52,7 @@ public interface ListDataModel extends JSONStreamAware {
      * @return Airport - the found Airport or nnull
      */
     public Airport findAirportByString(String airportName);
+
+
 
 }
