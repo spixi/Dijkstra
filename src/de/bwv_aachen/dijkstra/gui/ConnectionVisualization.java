@@ -14,7 +14,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
@@ -117,7 +119,31 @@ public class ConnectionVisualization extends View implements ActionListener {
 
         @Override
         public void paint(Graphics g) {
-            //TODO: Replace with a Panel with an ImageIcon and a JLabel per Airport ???
+            
+            try {
+                //Some performance boosts (may lower the quality, will increase the performance)
+                Graphics2D g2d = (Graphics2D) g;
+            
+                g2d.setRenderingHint(
+                    RenderingHints.KEY_DITHERING,
+                    RenderingHints.VALUE_DITHER_DISABLE);
+            
+                g2d.setRenderingHint(
+                    RenderingHints.KEY_COLOR_RENDERING,
+                    RenderingHints.VALUE_COLOR_RENDER_SPEED);
+            
+                g2d.setRenderingHint(
+                    RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_OFF);
+            
+                g2d.setRenderingHint(
+                    RenderingHints.KEY_TEXT_ANTIALIASING,
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+            }
+            catch (ClassCastException e) {
+                
+            }
+
             
             super.paint(g); // call superclass's paint
             
