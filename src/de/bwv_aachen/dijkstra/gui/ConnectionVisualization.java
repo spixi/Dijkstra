@@ -388,10 +388,14 @@ public class ConnectionVisualization extends View implements ActionListener {
     public void actionPerformed(ActionEvent ev) {
         switch (ev.getActionCommand()) {
             case "calculate": {
+                //create a new Pathfinder
                 Pathfinder pf = new Pathfinder(startAirport,points.keySet());
+                
+                //draw the connection window
                 Vector<Vector<Object>> tData = controller.getModel().getRoute(pf, destinationAirport);
                 new ConnectionTableWindow(tData).draw();
                 
+                //reuse the pathfinder for painting an orange line between the airports
                 route = pf.determineShortestPathTo(destinationAirport);
                 this.getContentPane().repaint();
             }
