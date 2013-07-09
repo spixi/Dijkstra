@@ -198,11 +198,11 @@ public class ConnectionVisualization extends View implements ActionListener {
                 calcButton.setEnabled(true);
             }
 
-            //a given route is painted in green
+            //a given route is painted in orange
             if (route != null) {
                 Airport source = null, dest = null;
                 
-                g.setColor(Color.GREEN);
+                g.setColor(Color.ORANGE);
                 
                 Iterator<Airport> it = route.iterator();
                 while(it.hasNext()) {
