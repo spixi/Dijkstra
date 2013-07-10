@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -97,6 +98,19 @@ public class FileTest {
         // TODO: add an actual test here
         // TODO 2: check what happens when you put an " (double-quote) or an \
         // (backslash) in a Airport's name)
+    }
+    
+    @Test
+    public void JSONWriteTest2() throws IOException  {
+        StringWriter sw = new StringWriter();
+        
+        Map<Long,Airport> apList =  model.getAirportList();
+
+        apList.put(4711L, new Airport(4711L,"Köln\\Bonn"));
+        apList.put(4712L, new Airport(4712L,"\"Malle\""));
+        
+        model.writeJSONString(sw);
+        System.out.println(sw);
     }
 
 }

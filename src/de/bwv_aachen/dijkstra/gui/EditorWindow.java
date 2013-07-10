@@ -113,16 +113,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
         JPanel footerArea = new JPanel();
         footerArea.setLayout(new BorderLayout());
         footerArea.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-        
-        // Add button to footer
-        JButton saveDummy = new JButton("Speichern");
-        // NOTE: DONT REMOVE THE SAVE BUTTON AGAIN -> I added it so users dont get confused when editing forms
-        // for its not very common that changes are saved when u click the red X of the window... This is a
-        // look and feel Feature!
-        saveDummy.setActionCommand("saveButton");
-        saveDummy.addActionListener(this);
-        footerArea.add(saveDummy);
-        
+   
         // Add caption
         cp.add(headArea);
         cp.add(subHeaderArea);
@@ -196,7 +187,7 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
     public void actionPerformed(ActionEvent e) {
         //JButton button = (JButton)e.getSource();
         switch(e.getActionCommand()){
-            case "lAdd": // add FROM/source airport
+            case "lAdd": { // add FROM/source airport
                 String input = JOptionPane.showInputDialog("Name des Flughafens:");
                 if(input != null) { // prevents some nullpointer exceptions (which would not take any effect for the program, but disturbed me)
                     if(!input.equals("")) {
@@ -222,28 +213,28 @@ public class EditorWindow extends View  implements ActionListener, ListSelection
                         this.repaint();
                     }
                 }
+            }
             break;
             
-            case "lRem":
+            case "lRem": {
                 Airport oldAirport = lm.remove(this.locationJList.getSelectedIndex());
                 controller.getModel().getAirportList().remove(oldAirport.getId());
+            }
             break;
             
-            case "rAdd":
+            case "rAdd": {
                 // Show our self made selection box modal
                 this.airportSel = new EditorWindow_AirportSelector(controller, this);
                 this.airportSel.draw();
+            }
             break;
             
-            case "approveAPselection":
+            case "approveAPselection": {
                 int elem = this.lm.indexOf(locationJList.getSelectedValue());
                 Airport ap = this.lm.get(elem);
                 ap.getConnections().put(airportSel.getSelection(), new Connection(Duration.ZERO));
                 this.airportSel.dispose();
-            break;
-            
-            case "saveButton":
-                super.dispose();
+            }
             break;
         }
         int selection = this.locationJList.getSelectedIndex(); // repainting makes the form lose its selection so lets manually save and restore them

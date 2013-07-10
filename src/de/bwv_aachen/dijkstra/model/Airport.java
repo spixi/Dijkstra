@@ -7,6 +7,7 @@
  */
 package de.bwv_aachen.dijkstra.model;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import de.bwv_aachen.dijkstra.helpers.DateHelper;
 public class Airport implements JSONStreamAware, Comparable<Airport> {
     private Long                         id;
     private String                       name;
+    private JSONAwarePoint               position;
 
     // These are incoming connections, not outgoing connections!!!
     // In the file, however, the outgoing connections are saved.
@@ -64,6 +66,10 @@ public class Airport implements JSONStreamAware, Comparable<Airport> {
     public String toString() {
         return getName();
     }
+    
+    public Point2D.Double getPosition() {
+        return position;
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -90,20 +96,6 @@ public class Airport implements JSONStreamAware, Comparable<Airport> {
         airportObject.put("destinations", destinationsArray);
 
         JSONValue.writeJSONString(airportObject, out);
-
-        // TODO the output is a long string which is difficult to read
-        // We may need a helper class which writes to a file and reformats the
-        // file
-        //
-        // Here are some example implementations (but I think this would be much
-        // to much).
-        // The user still has the editor, so he will seldom directly open the
-        // file.
-        //
-        // jsonlint: Online reformatter: https://www.jsonlint.com/ || GitHub:
-        // https://github.com/zaach/jsonlint
-        // yajl: Console program json_reformatter || GitHub:
-        // https://github.com/lloyd/yajl (see reformatter)
     }
 
     @Override

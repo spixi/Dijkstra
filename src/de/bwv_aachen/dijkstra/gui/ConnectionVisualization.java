@@ -8,6 +8,7 @@
 
 package de.bwv_aachen.dijkstra.gui;
 
+import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,6 +16,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -140,13 +142,25 @@ public class ConnectionVisualization extends View implements ActionListener {
                 g2d.setRenderingHint(
                     RenderingHints.KEY_TEXT_ANTIALIASING,
                     RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+                
+                //set transparency
+                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.3F));
             }
             catch (ClassCastException e) {
                 
             }
-
             
             super.paint(g); // call superclass's paint
+            
+            //TODO Background image (as map)
+            try {
+                BufferedImage bi = ImageIO.read(new File("res/Plane.jpg"));
+                g.drawImage(bi, 0, 0, 660, 660, this);
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             
             //Causes recalculation on each change of the window size, position etc ...
             //determinePoints();
@@ -344,9 +358,9 @@ public class ConnectionVisualization extends View implements ActionListener {
      * @author Marius Spix
      */
     //The controller may also call this method. So we make it public!
+    
+    //TODO: get the x and y position of the airport
     public void determinePoints() {
-        //Here is a bug. After you change your selection it the Mainwindow selectboxes the points are invalid. Why???
-        
         Object[] airports    = controller.getModel().getAirportList().values().toArray();
         Point    panelCenter = new Point(this.getWidth()/2, this.getHeight()/2);
         
