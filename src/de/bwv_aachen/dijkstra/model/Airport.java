@@ -94,6 +94,7 @@ public class Airport implements JSONStreamAware, Comparable<Airport> {
         }
 
         airportObject.put("destinations", destinationsArray);
+        airportObject.put("position", position);
 
         JSONValue.writeJSONString(airportObject, out);
     }

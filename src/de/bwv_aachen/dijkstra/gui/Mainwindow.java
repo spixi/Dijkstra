@@ -175,7 +175,7 @@ public class Mainwindow extends View implements ActionListener {
                                              // redrawing the gui with new
                                              // data
                 file_changed = true;
-//                draw(); // repaint the gui!
+                draw(); // repaint the gui!
             }
             break;
         }
